@@ -96,6 +96,7 @@
 }
 
 .link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -111,6 +112,18 @@
 .isActive {
   color: var(--mauve);
   font-weight: 700;
+
+  // Bar under the current page, same color as the text: a second cue besides color and weight.
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 6px;
+    left: 0;
+    height: 3px;
+    border-radius: var(--radius-pill);
+    background: currentColor;
+  }
 }
 
 .actions {
