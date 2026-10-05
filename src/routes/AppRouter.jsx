@@ -3,6 +3,7 @@ import PublicLayout from '@/layouts/PublicLayout'
 import PrivateLayout from '@/layouts/PrivateLayout'
 import ProtectedRoute from './ProtectedRoute'
 import { PATHS } from './paths'
+import ComponentGallery from '@/pages/dev/ComponentGallery'
 import Home from '@/pages/public/Home'
 import Schedule from '@/pages/public/Schedule'
 import Trainers from '@/pages/public/Trainers'
@@ -75,6 +76,8 @@ export default function AppRouter() {
           <Route path={PATHS.adminProducts} element={<AdminProducts />} />
         </Route>
       </Route>
+
+      <Route path={PATHS.componentGallery} element={<ComponentGallery />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

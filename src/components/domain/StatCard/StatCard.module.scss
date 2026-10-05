@@ -1,6 +1,42 @@
-// StatCard styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
-@use 'mixins' as *;
-
 .root {
-  // TODO
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  min-width: 0;
+}
+
+.default {
+  background: var(--surface-raised);
+  color: var(--ink);
+}
+
+.tint {
+  background: var(--mauve-soft);
+  color: var(--mauve-ink);
+
+  .label,
+  .link {
+    color: var(--mauve-ink);
+  }
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.value {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.link {
+  font-size: 14px;
+  font-weight: 600;
 }

@@ -28,4 +28,7 @@ export const PATHS = {
   adminUsers: '/admin/usuarias',
   adminPlans: '/admin/planes',
   adminProducts: '/admin/productos',
+
+  // Component gallery for reviews and the demo (see pages/dev/ComponentGallery).
+  componentGallery: '/componentes',
 }
