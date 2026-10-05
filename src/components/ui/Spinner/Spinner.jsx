@@ -2,18 +2,16 @@ import styles from './Spinner.module.scss'
 
 /**
  * Spinner
- * Indicador de carga mientras llega la API.
+ * Loading indicator while the API answers. The label is read by screen readers
+ * and shown next to the spinner unless `hideLabel`.
  *
- * Props (proposal): label
- * Uses: — · Stories: HU-00 · Level: Básico
- * Design reference: Brava design system and the Claude Design canvas.
- *
- * TODO: implement. Styles only with design tokens (var(--…)); accessible markup.
+ * Props: label, hideLabel
  */
-export default function Spinner({ children, ...rest }) {
+export default function Spinner({ label = 'Cargando…', hideLabel = false }) {
   return (
-    <span className={styles.root} {...rest}>
-      {children}
+    <span className={styles.root} role="status">
+      <span className={styles.circle} aria-hidden="true" />
+      <span className={hideLabel ? styles.hiddenLabel : undefined}>{label}</span>
     </span>
   )
 }

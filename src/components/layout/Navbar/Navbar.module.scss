@@ -1,6 +1,136 @@
-// Navbar styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
 @use 'mixins' as *;
 
 .root {
-  // TODO
+  background: var(--surface);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-12);
+
+  @include mobile {
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    padding: var(--space-4);
+  }
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--ink);
+  }
+}
+
+.dot {
+  color: var(--mauve);
+}
+
+.menuButton {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  @include mobile {
+    display: inline-flex;
+  }
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex: 1;
+
+  @include mobile {
+    display: none;
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+  }
+}
+
+.isOpen {
+  @include mobile {
+    display: flex;
+  }
+}
+
+.links {
+  display: flex;
+  gap: var(--space-6);
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--mauve);
+  }
+}
+
+.isActive {
+  color: var(--mauve);
+  font-weight: 700;
+
+  // Bar under the current page, same color as the text: a second cue besides color and weight.
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 6px;
+    left: 0;
+    height: 3px;
+    border-radius: var(--radius-pill);
+    background: currentColor;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+
+  @include mobile {
+    flex-direction: column;
+  }
 }

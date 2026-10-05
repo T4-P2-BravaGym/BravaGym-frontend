@@ -1,6 +1,39 @@
-// Avatar styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
-@use 'mixins' as *;
-
 .root {
-  // TODO
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.sm {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+}
+
+.md {
+  width: 40px;
+  height: 40px;
+  font-size: 15px;
+}
+
+.lg {
+  width: 72px;
+  height: 72px;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.mauve {
+  background: var(--mauve-soft);
+  color: var(--mauve-ink);
+}
+
+.champagne {
+  background: var(--champagne);
+  color: var(--plum);
 }

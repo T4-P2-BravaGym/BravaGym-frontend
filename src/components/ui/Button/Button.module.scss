@@ -1,6 +1,92 @@
-// Button styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
 @use 'mixins' as *;
 
 .root {
-  // TODO
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid transparent;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    background: var(--neutral-soft);
+    color: var(--neutral-ink);
+    border-color: transparent;
+    cursor: not-allowed;
+  }
+}
+
+.primary {
+  background: var(--mauve);
+  color: var(--on-mauve);
+
+  &:hover:not(:disabled) {
+    background: var(--mauve-strong);
+    color: var(--on-mauve);
+  }
+}
+
+.secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+
+  &:hover:not(:disabled) {
+    background: var(--surface-sunken);
+    color: var(--ink);
+  }
+}
+
+.dark {
+  background: var(--plum);
+  color: var(--on-plum);
+
+  &:hover:not(:disabled) {
+    background: var(--plum-raised);
+    color: var(--on-plum);
+  }
+}
+
+.quiet {
+  background: transparent;
+  color: var(--mauve);
+  padding: 0 var(--space-2);
+
+  &:hover:not(:disabled) {
+    color: var(--mauve-strong);
+  }
+}
+
+.danger {
+  background: transparent;
+  color: var(--danger-ink);
+  padding: 0 var(--space-2);
+
+  &:hover:not(:disabled) {
+    background: var(--danger-soft);
+  }
+}
+
+.small {
+  min-height: 36px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+.fullWidth {
+  width: 100%;
 }

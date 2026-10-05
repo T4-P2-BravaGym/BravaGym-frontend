@@ -1,6 +1,46 @@
-// Badge styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
-@use 'mixins' as *;
-
 .root {
-  // TODO
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.success {
+  background: var(--success-soft);
+  color: var(--success-ink);
+}
+
+.wait {
+  background: var(--champagne-soft);
+  color: var(--champagne-ink);
+}
+
+.danger {
+  background: var(--danger-soft);
+  color: var(--danger-ink);
+}
+
+.neutral {
+  background: var(--neutral-soft);
+  color: var(--neutral-ink);
+}
+
+.brand {
+  background: var(--mauve-soft);
+  color: var(--mauve-ink);
+}
+
+.solid {
+  background: var(--mauve);
+  color: var(--on-mauve);
+}
+
+// On a tinted card (booked or waitlisted session) the badge needs a white base.
+.onSurface {
+  background: var(--surface-raised);
 }

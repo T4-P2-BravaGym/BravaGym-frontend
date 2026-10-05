@@ -28,4 +28,7 @@ export const PATHS = {
   adminUsers: '/admin/usuarias',
   adminPlans: '/admin/planes',
   adminProducts: '/admin/productos',
+
+  // Sandbox with every component, for the team (see pages/dev/Sandbox).
+  sandbox: '/sandbox',
 }
