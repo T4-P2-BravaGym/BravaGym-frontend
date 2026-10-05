@@ -30,6 +30,9 @@ const PATHS = {
   clock: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 7v5l3 2',
 }
 
+/** Every available icon name, for the sandbox page. */
+export const ICON_NAMES = Object.keys(PATHS)
+
 export default function Icon({ name, size = 20, label }) {
   const d = PATHS[name]
   if (!d) return null

@@ -29,6 +29,6 @@ export const PATHS = {
   adminPlans: '/admin/planes',
   adminProducts: '/admin/productos',
 
-  // Component gallery for reviews and the demo (see pages/dev/ComponentGallery).
-  componentGallery: '/componentes',
+  // Sandbox with every component, for the team (see pages/dev/Sandbox).
+  sandbox: '/sandbox',
 }

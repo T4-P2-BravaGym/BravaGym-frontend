@@ -3,7 +3,7 @@ import PublicLayout from '@/layouts/PublicLayout'
 import PrivateLayout from '@/layouts/PrivateLayout'
 import ProtectedRoute from './ProtectedRoute'
 import { PATHS } from './paths'
-import ComponentGallery from '@/pages/dev/ComponentGallery'
+import Sandbox from '@/pages/dev/Sandbox'
 import Home from '@/pages/public/Home'
 import Schedule from '@/pages/public/Schedule'
 import Trainers from '@/pages/public/Trainers'
@@ -77,7 +77,7 @@ export default function AppRouter() {
         </Route>
       </Route>
 
-      <Route path={PATHS.componentGallery} element={<ComponentGallery />} />
+      <Route path={PATHS.sandbox} element={<Sandbox />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

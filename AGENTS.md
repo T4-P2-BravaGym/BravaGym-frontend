@@ -97,6 +97,7 @@ src/
 Reglas del frontend:
 
 - **Componentes:** si algo se repite dos veces, es un componente. `ui/` no sabe nada de Brava (un Button vale para cualquier app); `domain/` monta piezas de Brava con los de `ui/`. Los nombres coinciden con los del sistema de diseño.
+- **Sandbox:** antes de crear un componente, búscalo en `/sandbox` (con `npm run dev`). Si creas uno nuevo, añade su ficha en `src/pages/dev/Sandbox/catalog.js` y su ejemplo en `demos.jsx`.
 - **Una responsabilidad por pieza:** las páginas montan componentes y piden datos a `services/`; los componentes reciben datos por props y no llaman a la API.
 - **SASS por componente** con CSS Modules (`Button.module.scss`); los estilos globales solo en `styles/`.
 - **Nombres de clases sin BEM en los módulos.** CSS Modules ya convierte cada clase en un nombre único (`.primary` pasa a ser `Button_primary__x7f2`), así que el bloque y el doble guion de BEM sobran. Dentro de cada `.module.scss`, clases cortas en camelCase que describen la parte o el estado: `.root`, `.title`, `.primary`, `.small`, `.isActive`, `.isDisabled`. En JSX se usan como `styles.primary`. Solo en `styles/` (globales) se usa BEM si hiciera falta. Las clases `bv-btn--primary` del sistema de diseño son la referencia visual; en React se reescriben como módulos.
