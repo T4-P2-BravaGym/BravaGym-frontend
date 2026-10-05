@@ -4,6 +4,8 @@
  */
 import TrainerCard from '@/components/domain/TrainerCard'
 import styles from './Trainers.module.scss'
+import { listTrainers } from '@/services/trainers'
+import { useEffect, useState } from 'react'
 
 const TRAINERS = [
   { id: 1, name: 'Nora', specialty: 'Fuerza y técnica', bio: 'Para que pierdas el miedo a la barra y entiendas cada movimiento.' },
@@ -12,15 +14,20 @@ const TRAINERS = [
 ]
 
 export default function Trainers() {
+  const [trainers, setTrainers] = useState(TRAINERS)
+  useEffect(() => {
+    listTrainers()
+      .then((data) => setTrainers(data))
+      .catch((error) => console.error(error))
+  }, [])
   return (
     <section>
       <h1>Entrenadoras</h1>
       <div className={styles.grid}>
-        {TRAINERS.map((trainer) => (
+        {trainers.map((trainer) => (
           <TrainerCard key={trainer.id} trainer={trainer} />
         ))}
       </div>
-
     </section>
   )
 }
