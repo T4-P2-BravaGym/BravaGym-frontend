@@ -1,19 +1,25 @@
+import { NavLink } from 'react-router-dom'
+import Icon from '@/components/ui/Icon'
+import cx from '@/utils/cx'
 import styles from './MobileTabBar.module.scss'
 
 /**
  * MobileTabBar
- * Barra inferior del móvil para las socias: Reservar, Rutina, Pagos, Tienda.
+ * Bottom bar on phones for members: Reservar, Rutina, Pagos, Tienda.
+ * Only visible at phone width; on larger screens the SideNav is enough.
  *
- * Props (proposal): items
- * Uses: — · Stories: HU-12 · Level: Medio
- * Design reference: Brava design system and the Claude Design canvas.
- *
- * TODO: implement. Styles only with design tokens (var(--…)); accessible markup.
+ * Props: items [{ to, label, icon }]
  */
-export default function MobileTabBar({ children, ...rest }) {
+export default function MobileTabBar({ items }) {
+  if (!items?.length) return null
   return (
-    <div className={styles.root} {...rest}>
-      {children}
-    </div>
+    <nav className={styles.root} aria-label="Accesos rápidos">
+      {items.map((item) => (
+        <NavLink key={item.to} to={item.to} className={({ isActive }) => cx(styles.item, isActive && styles.isActive)}>
+          <Icon name={item.icon} size={22} />
+          <span>{item.label}</span>
+        </NavLink>
+      ))}
+    </nav>
   )
 }

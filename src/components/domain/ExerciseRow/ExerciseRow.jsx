@@ -1,19 +1,24 @@
+import { formatRest } from '@/utils/format'
 import styles from './ExerciseRow.module.scss'
 
 /**
  * ExerciseRow
- * Una línea de la rutina: orden, ejercicio, series × repeticiones y descanso.
+ * One line of a routine: order, exercise, sets × reps and rest. Renders an <li>,
+ * so put it inside an <ol>.
  *
- * Props (proposal): exercise
- * Uses: — · Stories: HU-18 · Level: Básico
- * Design reference: Brava design system and the Claude Design canvas.
- *
- * TODO: implement. Styles only with design tokens (var(--…)); accessible markup.
+ * Props: line { position, exercise_name, sets, reps, rest_seconds }
  */
-export default function ExerciseRow({ children, ...rest }) {
+export default function ExerciseRow({ line }) {
   return (
-    <div className={styles.root} {...rest}>
-      {children}
-    </div>
+    <li className={styles.root}>
+      <span className={styles.position} aria-hidden="true">
+        {line.position}
+      </span>
+      <span className={styles.name}>{line.exercise_name}</span>
+      <span className={styles.dose}>
+        {line.sets} × {line.reps}
+        <span className={styles.rest}>descanso {formatRest(line.rest_seconds)}</span>
+      </span>
+    </li>
   )
 }

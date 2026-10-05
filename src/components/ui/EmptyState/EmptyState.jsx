@@ -2,18 +2,17 @@ import styles from './EmptyState.module.scss'
 
 /**
  * EmptyState
- * Mensaje amable cuando no hay datos ('Aún no tienes rutina').
+ * Friendly message when there is no data ("Aún no tienes rutina"),
+ * with an optional action that tells what to do next.
  *
- * Props (proposal): title, text, action
- * Uses: — · Stories: HU-18 · Level: Básico
- * Design reference: Brava design system and the Claude Design canvas.
- *
- * TODO: implement. Styles only with design tokens (var(--…)); accessible markup.
+ * Props: title, text, action
  */
-export default function EmptyState({ children, ...rest }) {
+export default function EmptyState({ title, text, action }) {
   return (
-    <div className={styles.root} {...rest}>
-      {children}
+    <div className={styles.root}>
+      <p className={styles.title}>{title}</p>
+      {text && <p className={styles.text}>{text}</p>}
+      {action && <div className={styles.action}>{action}</div>}
     </div>
   )
 }

@@ -1,19 +1,79 @@
+import { useEffect, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import Button from '@/components/ui/Button'
+import Icon from '@/components/ui/Icon'
+import useAuth from '@/hooks/useAuth'
+import { PATHS } from '@/routes/paths'
+import { areaFor, NAVIGATION } from '@/routes/navigation'
+import cx from '@/utils/cx'
 import styles from './Navbar.module.scss'
+
+const LINKS = [
+  { to: PATHS.schedule, label: 'Clases' },
+  { to: PATHS.trainers, label: 'Entrenadoras' },
+  { to: PATHS.pricing, label: 'Precios' },
+  { to: PATHS.shop, label: 'Tienda' },
+]
 
 /**
  * Navbar
- * Cabecera pública con logotipo, enlaces y botones Entrar / Empieza ahora; menú en móvil.
- *
- * Props (proposal): —
- * Uses: Button · Stories: HU-07 · Level: Medio
- * Design reference: Brava design system and the Claude Design canvas.
- *
- * TODO: implement. Styles only with design tokens (var(--…)); accessible markup.
+ * Header of the public website: logo, links and the session buttons
+ * (Entrar / Empieza ahora, or "Mi área" with a session). On phones the links fold into a menu.
  */
-export default function Navbar({ children, ...rest }) {
+export default function Navbar() {
+  const [open, setOpen] = useState(false)
+  const { isAuthenticated, role } = useAuth()
+  const location = useLocation()
+
+  // Close the phone menu after navigating.
+  useEffect(() => setOpen(false), [location.pathname])
+
+  const areaHome = NAVIGATION[areaFor(role)].items[0].to
+
   return (
-    <div className={styles.root} {...rest}>
-      {children}
-    </div>
+    <header className={styles.root}>
+      <div className={styles.inner}>
+        <Link to={PATHS.home} className={styles.logo} aria-label="Brava, inicio">
+          brava<span className={styles.dot}>.</span>
+        </Link>
+
+        <button
+          type="button"
+          className={styles.menuButton}
+          aria-expanded={open}
+          aria-controls="main-menu"
+          onClick={() => setOpen((value) => !value)}
+        >
+          <Icon name={open ? 'x' : 'menu'} />
+          <span>Menú</span>
+        </button>
+
+        <nav id="main-menu" className={cx(styles.menu, open && styles.isOpen)} aria-label="Principal">
+          <ul className={styles.links}>
+            {LINKS.map((link) => (
+              <li key={link.to}>
+                <NavLink to={link.to} className={({ isActive }) => cx(styles.link, isActive && styles.isActive)}>
+                  {link.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+          <div className={styles.actions}>
+            {isAuthenticated ? (
+              <Button to={areaHome} variant="dark">
+                Mi área
+              </Button>
+            ) : (
+              <>
+                <Button to={PATHS.login} variant="secondary">
+                  Entrar
+                </Button>
+                <Button to={PATHS.pricing}>Empieza ahora</Button>
+              </>
+            )}
+          </div>
+        </nav>
+      </div>
+    </header>
   )
 }

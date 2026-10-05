@@ -1,21 +1,39 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import SideNav from '@/components/layout/SideNav'
 import MobileTabBar from '@/components/layout/MobileTabBar'
+import useAuth from '@/hooks/useAuth'
+import { areaFor, NAVIGATION, ROLE_LABELS } from '@/routes/navigation'
+import { PATHS } from '@/routes/paths'
 import styles from './PrivateLayout.module.scss'
 
 /**
- * Private areas (member, trainer, admin): SideNav with the entries of the user's role
- * and the page content; MobileTabBar on phones.
- * TODO(HU-04): build the nav items from the role (one place, DRY), not one layout per role.
+ * Private areas (member, trainer, admin): SideNav with the entries of the area and the
+ * page content; members also get MobileTabBar on phones. The entries come from
+ * routes/navigation.js, so there is one layout for every role (DRY).
  */
 export default function PrivateLayout() {
+  const { user, role, logout } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const areaKey = areaFor(role, location.pathname)
+  const area = NAVIGATION[areaKey]
+
+  const sideUser = user
+    ? { name: [user.first_name, user.last_name].filter(Boolean).join(' ') || user.email, roleLabel: ROLE_LABELS[user.role] }
+    : null
+
+  function handleLogout() {
+    logout()
+    navigate(PATHS.home)
+  }
+
   return (
     <div className={styles.root}>
-      <SideNav />
+      <SideNav area={area} user={sideUser} onLogout={user ? handleLogout : undefined} />
       <main className={styles.content}>
         <Outlet />
       </main>
-      <MobileTabBar />
+      {areaKey === 'member' && <MobileTabBar items={area.items.filter((item) => item.mobile)} />}
     </div>
   )
 }

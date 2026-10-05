@@ -1,6 +1,61 @@
-// ProductCard styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
-@use 'mixins' as *;
-
 .root {
-  // TODO
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.image,
+.placeholder {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: var(--blush);
+  color: var(--mauve-ink);
+  font-size: 14px;
+  text-align: center;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+}
+
+.category {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  letter-spacing: 0;
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.price {
+  font-weight: 700;
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
 }

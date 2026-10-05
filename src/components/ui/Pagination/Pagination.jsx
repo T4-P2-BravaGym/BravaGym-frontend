@@ -1,19 +1,31 @@
+import Button from '@/components/ui/Button'
 import styles from './Pagination.module.scss'
 
 /**
  * Pagination
- * Anterior / siguiente y 'Mostrando 1–20 de 48' a partir de {items, total, page, size}.
+ * "Mostrando 1–20 de 48" plus previous / next, from the API's { page, size, total }.
  *
- * Props (proposal): page, size, total, onChange
- * Uses: Button · Stories: HU-06, HU-21, HU-26 · Level: Básico
- * Design reference: Brava design system and the Claude Design canvas.
- *
- * TODO: implement. Styles only with design tokens (var(--…)); accessible markup.
+ * Props: page, size, total, onChange(nextPage)
  */
-export default function Pagination({ children, ...rest }) {
+export default function Pagination({ page, size, total, onChange }) {
+  if (!total) return null
+  const lastPage = Math.max(1, Math.ceil(total / size))
+  const from = (page - 1) * size + 1
+  const to = Math.min(page * size, total)
+
   return (
-    <div className={styles.root} {...rest}>
-      {children}
-    </div>
+    <nav className={styles.root} aria-label="Paginación">
+      <span className={styles.summary} aria-live="polite">
+        Mostrando {from}–{to} de {total}
+      </span>
+      <div className={styles.buttons}>
+        <Button variant="secondary" size="sm" disabled={page <= 1} onClick={() => onChange(page - 1)}>
+          Anterior
+        </Button>
+        <Button variant="secondary" size="sm" disabled={page >= lastPage} onClick={() => onChange(page + 1)}>
+          Siguiente
+        </Button>
+      </div>
+    </nav>
   )
 }

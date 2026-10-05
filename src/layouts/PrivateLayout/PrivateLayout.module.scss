@@ -7,9 +7,17 @@
 
   @include mobile {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
   }
 }
 
 .content {
-  padding: var(--space-8) var(--space-12);
+  min-width: 0;
+  max-width: 1200px;
+  padding: var(--space-8) var(--space-12) var(--space-12);
+
+  @include mobile {
+    // Room for MobileTabBar at the bottom.
+    padding: var(--space-6) var(--space-4) calc(96px + env(safe-area-inset-bottom, 0px));
+  }
 }
