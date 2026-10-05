@@ -1,0 +1,15 @@
+@use 'mixins' as *;
+
+.root {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  min-height: 100vh;
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.content {
+  padding: var(--space-8) var(--space-12);
+}

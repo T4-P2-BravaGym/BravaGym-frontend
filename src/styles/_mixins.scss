@@ -1,0 +1,41 @@
+// Reusable patterns (not values: values live in _tokens.scss).
+// Use in a module with: @use 'mixins' as *;
+
+@mixin focus-ring {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@mixin display-text($size: 32px) {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: $size;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+@mixin eyebrow {
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mauve);
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+$breakpoint-md: 900px;
+
+@mixin mobile {
+  @media (max-width: $breakpoint-md) {
+    @content;
+  }
+}

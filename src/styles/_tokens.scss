@@ -1,0 +1,79 @@
+// Brava design system tokens (copied from the design system's tokens.json).
+// Use them everywhere: var(--mauve), var(--space-6), var(--radius-lg). Never loose hex values.
+
+:root {
+  --surface: #F4EFF1;
+  --surface-raised: #FFFFFF;
+  --surface-sunken: #ECE4E8;
+  --ink: #3B1F33;
+  --ink-muted: #6B5664;
+  --line: #E3D3DA;
+  --line-strong: #9A8090;
+  --plum: #3B1F33;
+  --plum-raised: #52304A;
+  --on-plum: #F4EFF1;
+  --on-plum-muted: #CDB8C5;
+  --mauve: #8E4A6B;
+  --mauve-strong: #763B58;
+  --on-mauve: #FFFFFF;
+  --mauve-soft: #EFDDE4;
+  --mauve-ink: #6E3452;
+  --blush: #E7C6CF;
+  --champagne: #D9B98C;
+  --champagne-soft: #F4EAD9;
+  --champagne-ink: #5A3F14;
+  --champagne-strong: #A87C3A;
+  --success-soft: #E2ECDF;
+  --success-ink: #34502F;
+  --success-strong: #4F7A47;
+  --danger-soft: #F6DEDE;
+  --danger-ink: #8A2B2B;
+  --neutral-soft: #ECE4E8;
+  --neutral-ink: #5E4757;
+  --focus-ring: var(--mauve);
+  --shadow-float: 0 12px 32px rgba(59, 31, 51, 0.14);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-20: 88px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-sans: "Figtree", system-ui, sans-serif;
+}
+
+[data-theme='dark'] {
+  --surface: #1C1219;
+  --surface-raised: #281A24;
+  --surface-sunken: #150D13;
+  --ink: #F4EBF0;
+  --ink-muted: #BFA9B6;
+  --line: #3D2B37;
+  --line-strong: #86707E;
+  --plum: #48283F;
+  --plum-raised: #5C3752;
+  --on-plum-muted: #D5C2CE;
+  --mauve: #D28CAC;
+  --mauve-strong: #E2A6C1;
+  --on-mauve: #2A1220;
+  --mauve-soft: #3E2433;
+  --mauve-ink: #F0C4D6;
+  --blush: #5A3348;
+  --champagne-soft: #3A2F1E;
+  --champagne-ink: #ECD3A8;
+  --champagne-strong: #C9A15F;
+  --success-soft: #22321F;
+  --success-ink: #B9D6AE;
+  --success-strong: #8DBB80;
+  --danger-soft: #3C1D1D;
+  --danger-ink: #F2B3B3;
+  --neutral-soft: #2F2229;
+  --neutral-ink: #D8C8D1;
+  --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
