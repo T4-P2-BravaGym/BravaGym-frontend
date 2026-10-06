@@ -105,6 +105,7 @@ Reglas del frontend:
 - **Tipografías:** Bricolage Grotesque en titulares y Figtree en el texto.
 - **Accesibilidad:** `<button>` y `<a href>` de verdad, `<label>` en cada campo, foco visible, contraste del sistema de diseño y controles de al menos 44 px.
 - **Estados de la API siempre igual:** el mismo estado (reservada, lista de espera, pagado, pendiente…) usa siempre el mismo componente `Badge` y el mismo tono.
+- Forms always use `noValidate` (no browser validation pop-ups). Validation lives in the API (Pydantic) and its message is shown with `Alert` or the `error` prop of `Field`.
 
 ## 7. Seguridad
 
