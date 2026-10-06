@@ -1,16 +1,14 @@
 /**
  * Entrenadoras
- * TODO(HU-15): build this page from components and load data through src/services.
  */
 import TrainerCard from '@/components/domain/TrainerCard'
 import styles from './Trainers.module.scss'
+import { PATHS } from '@/routes/paths'
 import { listTrainers } from '@/services/trainers'
 import { useEffect, useState } from 'react'
 import Alert from '@/components/ui/Alert'
 import EmptyState from '@/components/ui/EmptyState'
 import Spinner from '@/components/ui/Spinner'
-
-
 
 export default function Trainers() {
   const [trainers, setTrainers] = useState([])     
@@ -34,7 +32,7 @@ export default function Trainers() {
       )}
       <div className={styles.grid}>
         {trainers.map((trainer) => (
-          <TrainerCard key={trainer.id} trainer={trainer} />
+          <TrainerCard key={trainer.id} trainer={trainer} to={PATHS.personalTraining} />
         ))}
       </div>
     </section>
