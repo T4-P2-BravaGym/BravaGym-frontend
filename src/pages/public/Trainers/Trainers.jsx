@@ -6,23 +6,32 @@ import TrainerCard from '@/components/domain/TrainerCard'
 import styles from './Trainers.module.scss'
 import { listTrainers } from '@/services/trainers'
 import { useEffect, useState } from 'react'
+import Alert from '@/components/ui/Alert'
+import EmptyState from '@/components/ui/EmptyState'
+import Spinner from '@/components/ui/Spinner'
 
-const TRAINERS = [
-  { id: 1, name: 'Nora', specialty: 'Fuerza y técnica', bio: 'Para que pierdas el miedo a la barra y entiendas cada movimiento.' },
-  { id: 2, name: 'Laura', specialty: 'Iniciación a la fuerza', bio: 'Tu primera rutina, paso a paso y a tu ritmo.' },
-  { id: 3, name: 'Irene', specialty: 'Movilidad y halterofilia', bio: 'Movilidad, potencia y técnica olímpica para ir un paso más allá.' },
-]
+
 
 export default function Trainers() {
-  const [trainers, setTrainers] = useState(TRAINERS)
+  const [trainers, setTrainers] = useState([])     
+  const [loading, setLoading] = useState(true)     
+  const [error, setError] = useState(null)
   useEffect(() => {
     listTrainers()
       .then((data) => setTrainers(data))
-      .catch((error) => console.error(error))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false))
   }, [])
   return (
     <section>
       <h1>Entrenadoras</h1>
+      {loading && <Spinner />}
+
+      {error && <Alert tone="error" title="No hemos podido cargar las entrenadoras">{error}</Alert>}
+
+      {!loading && !error && trainers.length === 0 && (
+        <EmptyState title="Todavía no hay entrenadoras" />
+      )}
       <div className={styles.grid}>
         {trainers.map((trainer) => (
           <TrainerCard key={trainer.id} trainer={trainer} />
