@@ -74,4 +74,15 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
   gap: var(--space-6);
+  transition: opacity 150ms ease;
+}
+
+.isLoading {
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid {
+    transition: none;
+  }
 }

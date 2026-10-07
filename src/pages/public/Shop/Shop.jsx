@@ -9,12 +9,15 @@ import Field from '@/components/ui/Field'
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
+import useDebouncedValue from '@/hooks/useDebouncedValue'
 import { PATHS } from '@/routes/paths'
 import { listProductCategories, listProducts } from '@/services/shop'
+import cx from '@/utils/cx'
 import { eurosToCents } from '@/utils/format'
 import styles from './Shop.module.scss'
 
 const PAGE_SIZE = 12
+const SEARCH_DELAY_MS = 350
 const LOAD_ERROR = 'No se ha podido cargar la tienda. Inténtalo de nuevo.'
 const EMPTY_FILTERS = { q: '', minPrice: '', maxPrice: '' }
 
@@ -23,10 +26,11 @@ export default function Shop() {
   const { isAuthenticated } = useAuth()
   const [categories, setCategories] = useState([])
   const [categoryId, setCategoryId] = useState(null)
-  const [form, setForm] = useState(EMPTY_FILTERS) // what the user is typing
-  const [filters, setFilters] = useState(EMPTY_FILTERS) // what was applied with "Aplicar"
+  const [form, setForm] = useState(EMPTY_FILTERS)
+  const filters = useDebouncedValue(form, SEARCH_DELAY_MS)
   const [page, setPage] = useState(1)
   const [result, setResult] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -41,7 +45,7 @@ export default function Shop() {
 
   useEffect(() => {
     const controller = new AbortController()
-    setResult(null)
+    setLoading(true)
     setError(null)
 
     listProducts({
@@ -55,13 +59,18 @@ export default function Shop() {
     })
         .then(setResult)
         .catch((apiError) => {
-          if (apiError.name !== 'AbortError') setError(apiError.detail ?? LOAD_ERROR)
+          if (apiError.name === 'AbortError') return
+          setResult(null)
+          setError(apiError.detail ?? LOAD_ERROR)
+        })
+        .finally(() => {
+          if (!controller.signal.aborted) setLoading(false)
         })
 
     return () => controller.abort()
   }, [categoryId, filters, page])
 
-  const hasFilters = categoryId !== null || Boolean(filters.q || filters.minPrice || filters.maxPrice)
+  const hasFilters = categoryId !== null || Boolean(form.q || form.minPrice || form.maxPrice)
 
   function handleCategory(id) {
     setCategoryId(id)
@@ -71,18 +80,12 @@ export default function Shop() {
   function handleChange(event) {
     const { name, value } = event.target
     setForm((current) => ({ ...current, [name]: value }))
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault()
-    setFilters(form)
     setPage(1)
   }
 
   function handleClear() {
     setCategoryId(null)
     setForm(EMPTY_FILTERS)
-    setFilters(EMPTY_FILTERS)
     setPage(1)
   }
 
@@ -120,11 +123,18 @@ export default function Shop() {
             ))}
           </div>
 
-          <form className={styles.filters} onSubmit={handleSubmit} noValidate role="search" aria-label="Filtrar productos">
+          <form
+              className={styles.filters}
+              onSubmit={(event) => event.preventDefault()}
+              noValidate
+              role="search"
+              aria-label="Filtrar productos"
+          >
             <Field
                 className={styles.search}
                 label="Buscar"
                 name="q"
+                type="search"
                 value={form.q}
                 onChange={handleChange}
                 placeholder="Camiseta, proteína…"
@@ -143,22 +153,19 @@ export default function Shop() {
                 value={form.maxPrice}
                 onChange={handleChange}
             />
-            <div className={styles.actions}>
-              <Button type="submit" variant="secondary">
-                Aplicar
-              </Button>
-              {hasFilters && (
+            {hasFilters && (
+                <div className={styles.actions}>
                   <Button variant="quiet" onClick={handleClear}>
                     Quitar filtros
                   </Button>
-              )}
-            </div>
+                </div>
+            )}
           </form>
         </header>
 
         {error && <Alert tone="error">{error}</Alert>}
 
-        {!result && !error && <Spinner label="Cargando productos…" />}
+        {!result && !error && loading && <Spinner label="Cargando productos…" />}
 
         {result && result.items.length === 0 && (
             <EmptyState
@@ -176,7 +183,7 @@ export default function Shop() {
 
         {result && result.items.length > 0 && (
             <>
-              <div className={styles.grid}>
+              <div className={cx(styles.grid, loading && styles.isLoading)} aria-busy={loading}>
                 {result.items.map((product) => (
                     <ProductCard key={product.id} product={product} onAdd={handleAdd} />
                 ))}
