@@ -1,0 +1,163 @@
+@use 'mixins' as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 40rem;
+}
+
+.eyebrow {
+  @include eyebrow;
+}
+
+.title {
+  @include display-text(40px);
+  margin: 0;
+  color: var(--ink);
+
+  @include mobile {
+    @include display-text(32px);
+  }
+}
+
+.lead {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.alertAction {
+  margin-top: var(--space-3);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionIntro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 40rem;
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.sectionTitle {
+  @include display-text(28px);
+  margin: 0;
+  color: var(--ink);
+
+  @include mobile {
+    @include display-text(24px);
+  }
+}
+
+.sectionLead {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.weekNav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.weekLabel {
+  margin: 0;
+  min-width: 10rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--ink);
+  text-transform: capitalize;
+}
+
+.bookingList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.bookingItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+}
+
+.bookingMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1;
+}
+
+.bookingName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.bookingMeta {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.bookingAside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.bookingBadge {
+  flex-shrink: 0;
+}
+
+.bookingNote {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
