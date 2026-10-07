@@ -13,21 +13,34 @@ import useDebouncedValue from '@/hooks/useDebouncedValue'
 import { PATHS } from '@/routes/paths'
 import { listProductCategories, listProducts } from '@/services/shop'
 import cx from '@/utils/cx'
-import { eurosToCents } from '@/utils/format'
 import styles from './Shop.module.scss'
 
 const PAGE_SIZE = 12
 const SEARCH_DELAY_MS = 350
 const LOAD_ERROR = 'No se ha podido cargar la tienda. Inténtalo de nuevo.'
-const EMPTY_FILTERS = { q: '', minPrice: '', maxPrice: '' }
+
+const PRICE_RANGES = [
+  { id: 'under-10', label: 'Menos de 10 €', max_price: 999 },
+  { id: '10-30', label: 'De 10 a 30 €', min_price: 1000, max_price: 2999 },
+  { id: 'over-30', label: '30 € o más', min_price: 3000 },
+]
+
+const SORT_OPTIONS = [
+  { value: 'name', label: 'Nombre (A-Z)' },
+  { value: 'price_asc', label: 'Precio: de menor a mayor' },
+  { value: 'price_desc', label: 'Precio: de mayor a menor' },
+]
+const DEFAULT_SORT = 'name'
 
 export default function Shop() {
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
   const [categories, setCategories] = useState([])
   const [categoryId, setCategoryId] = useState(null)
-  const [form, setForm] = useState(EMPTY_FILTERS)
-  const filters = useDebouncedValue(form, SEARCH_DELAY_MS)
+  const [priceRangeId, setPriceRangeId] = useState(null)
+  const [sort, setSort] = useState(DEFAULT_SORT)
+  const [search, setSearch] = useState('')
+  const q = useDebouncedValue(search, SEARCH_DELAY_MS)
   const [page, setPage] = useState(1)
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -45,14 +58,16 @@ export default function Shop() {
 
   useEffect(() => {
     const controller = new AbortController()
+    const range = PRICE_RANGES.find((item) => item.id === priceRangeId)
     setLoading(true)
     setError(null)
 
     listProducts({
       category_id: categoryId ?? undefined,
-      min_price: eurosToCents(filters.minPrice),
-      max_price: eurosToCents(filters.maxPrice),
-      q: filters.q.trim() || undefined,
+      min_price: range?.min_price,
+      max_price: range?.max_price,
+      q: q.trim() || undefined,
+      sort,
       page,
       size: PAGE_SIZE,
       signal: controller.signal,
@@ -68,24 +83,25 @@ export default function Shop() {
         })
 
     return () => controller.abort()
-  }, [categoryId, filters, page])
+  }, [categoryId, priceRangeId, sort, q, page])
 
-  const hasFilters = categoryId !== null || Boolean(form.q || form.minPrice || form.maxPrice)
+  const hasFilters = categoryId !== null || priceRangeId !== null || search !== ''
 
-  function handleCategory(id) {
-    setCategoryId(id)
-    setPage(1)
+  function changeFilter(setter) {
+    return (value) => {
+      setter(value)
+      setPage(1)
+    }
   }
-
-  function handleChange(event) {
-    const { name, value } = event.target
-    setForm((current) => ({ ...current, [name]: value }))
-    setPage(1)
-  }
+  const handleCategory = changeFilter(setCategoryId)
+  const handlePriceRange = changeFilter(setPriceRangeId)
+  const handleSort = changeFilter(setSort)
+  const handleSearch = changeFilter(setSearch)
 
   function handleClear() {
     setCategoryId(null)
-    setForm(EMPTY_FILTERS)
+    setPriceRangeId(null)
+    setSearch('')
     setPage(1)
   }
 
@@ -108,23 +124,8 @@ export default function Shop() {
             </p>
           </div>
 
-          <div className={styles.chips} role="group" aria-label="Categoría">
-            <Chip selected={categoryId === null} onClick={() => handleCategory(null)}>
-              Todas
-            </Chip>
-            {categories.map((category) => (
-                <Chip
-                    key={category.id}
-                    selected={categoryId === category.id}
-                    onClick={() => handleCategory(category.id)}
-                >
-                  {category.name}
-                </Chip>
-            ))}
-          </div>
-
           <form
-              className={styles.filters}
+              className={styles.toolbar}
               onSubmit={(event) => event.preventDefault()}
               noValidate
               role="search"
@@ -133,34 +134,75 @@ export default function Shop() {
             <Field
                 className={styles.search}
                 label="Buscar"
-                name="q"
                 type="search"
-                value={form.q}
-                onChange={handleChange}
+                value={search}
+                onChange={(event) => handleSearch(event.target.value)}
                 placeholder="Camiseta, proteína…"
             />
             <Field
-                label="Precio mínimo (€)"
-                name="minPrice"
-                inputMode="decimal"
-                value={form.minPrice}
-                onChange={handleChange}
-            />
-            <Field
-                label="Precio máximo (€)"
-                name="maxPrice"
-                inputMode="decimal"
-                value={form.maxPrice}
-                onChange={handleChange}
-            />
-            {hasFilters && (
-                <div className={styles.actions}>
-                  <Button variant="quiet" onClick={handleClear}>
-                    Quitar filtros
-                  </Button>
-                </div>
-            )}
+                className={styles.sort}
+                as="select"
+                label="Ordenar por"
+                value={sort}
+                onChange={(event) => handleSort(event.target.value)}
+            >
+              {SORT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+              ))}
+            </Field>
           </form>
+
+          <div className={styles.filterGroups}>
+            <div className={styles.filterGroup}>
+              <p className={styles.groupLabel} id="shop-category-label">
+                Categoría
+              </p>
+              <div className={styles.chips} role="group" aria-labelledby="shop-category-label">
+                <Chip selected={categoryId === null} onClick={() => handleCategory(null)}>
+                  Todas
+                </Chip>
+                {categories.map((category) => (
+                    <Chip
+                        key={category.id}
+                        selected={categoryId === category.id}
+                        onClick={() => handleCategory(category.id)}
+                    >
+                      {category.name}
+                    </Chip>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.filterGroup}>
+              <p className={styles.groupLabel} id="shop-price-label">
+                Precio
+              </p>
+              <div className={styles.chips} role="group" aria-labelledby="shop-price-label">
+                <Chip selected={priceRangeId === null} onClick={() => handlePriceRange(null)}>
+                  Todos los precios
+                </Chip>
+                {PRICE_RANGES.map((range) => (
+                    <Chip
+                        key={range.id}
+                        selected={priceRangeId === range.id}
+                        onClick={() => handlePriceRange(range.id)}
+                    >
+                      {range.label}
+                    </Chip>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {hasFilters && (
+              <div>
+                <Button variant="quiet" size="sm" onClick={handleClear}>
+                  Quitar filtros
+                </Button>
+              </div>
+          )}
         </header>
 
         {error && <Alert tone="error">{error}</Alert>}

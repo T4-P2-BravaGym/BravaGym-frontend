@@ -48,10 +48,3 @@ export function dayKey(isoUtc) {
     new Date(isoUtc),
   )
 }
-
-export function eurosToCents(text) {
-  const value = String(text ?? '').trim()
-  if (!value) return undefined
-  const number = Number(value.replace(',', '.'))
-  return Number.isFinite(number) ? Math.round(number * 100) : value
-}
