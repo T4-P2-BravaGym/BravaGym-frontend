@@ -24,6 +24,8 @@ export function toSessionCard(session) {
     free_spots: session.free_spots,
     capacity: session.capacity,
     trainer_id: session.trainer_id,
+    class_type_id: session.class_type_id ?? session.class_type?.id ?? null,
+    class_type: session.class_type ?? null,
     extra_price_cents: session.extra_price_cents ?? session.class_type?.extra_price_cents ?? 0,
     class_type_name: session.class_type_name ?? session.class_type?.name ?? 'Clase',
     trainer_name: session.trainer_name ?? session.trainer?.name ?? 'Entrenadora',
@@ -64,4 +66,28 @@ export function listSessions({
     })}`,
     { auth: false, signal },
   )
+}
+
+/**
+ * createSession({ class_type_id, starts_at, duration_minutes, capacity })
+ * Trainer / superadmin (api.md). RN-09 overlap → 409.
+ */
+export function createSession(body) {
+  return apiRequest('/sessions', { method: 'POST', body })
+}
+
+/**
+ * updateSession(id, { class_type_id?, starts_at?, duration_minutes?, capacity? })
+ * Trainer (own) / superadmin (api.md). RN-10 ownership → 403; RN-09 overlap → 409.
+ */
+export function updateSession(id, body) {
+  return apiRequest(`/sessions/${id}`, { method: 'PATCH', body })
+}
+
+/**
+ * cancelSession(id)
+ * Trainer (own) / superadmin. Confirmed bookings become cancelled (HU-11).
+ */
+export function cancelSession(id) {
+  return apiRequest(`/sessions/${id}/cancel`, { method: 'POST' })
 }
