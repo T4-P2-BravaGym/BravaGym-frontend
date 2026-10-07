@@ -167,6 +167,15 @@ export const COMPONENTS = [
     tip: 'featured solo en un plan por página.',
   },
   {
+    id: 'subscription-card',
+    name: 'SubscriptionCard',
+    group: 'domain',
+    use: 'La suscripción de la socia en "Mi área": plan, precio, estado y fecha de alta.',
+    avoid: 'Para elegir o cambiar de plan usa PricingCard.',
+    props: 'subscription (o null), pricingTo, paymentsTo',
+    tip: 'Con subscription={null} invita a ver los planes.',
+  },
+  {
     id: 'trainer-card',
     name: 'TrainerCard',
     group: 'domain',

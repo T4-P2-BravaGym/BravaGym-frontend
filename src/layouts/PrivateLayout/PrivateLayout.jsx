@@ -19,7 +19,7 @@ export default function PrivateLayout() {
   const area = NAVIGATION[areaKey]
 
   const sideUser = user
-    ? { name: [user.first_name, user.last_name].filter(Boolean).join(' ') || user.email, roleLabel: ROLE_LABELS[user.role] }
+    ? { name: [user.first_name, user.last_name].filter(Boolean).join(' ') || user.email || 'Mi cuenta', roleLabel: ROLE_LABELS[user.role] }
     : null
 
   function handleLogout() {

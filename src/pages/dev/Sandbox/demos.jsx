@@ -28,6 +28,7 @@ import WeekSchedule from '@/components/domain/WeekSchedule'
 import Footer from '@/components/layout/Footer'
 import Navbar from '@/components/layout/Navbar'
 import SideNav from '@/components/layout/SideNav'
+import SubscriptionCard from '@/components/domain/SubscriptionCard'
 import { NAVIGATION } from '@/routes/navigation'
 import { PATHS } from '@/routes/paths'
 import { formatDateTime, formatEuros } from '@/utils/format'
@@ -293,6 +294,15 @@ function PricingCardDemo() {
   )
 }
 
+function SubscriptionCardDemo() {
+    return (
+        <div className={styles.grid3}>
+            <SubscriptionCard subscription={sample.MY_SUBSCRIPTION} paymentsTo={PATHS.myPayments} />
+            <SubscriptionCard subscription={null} pricingTo={PATHS.pricing} />
+        </div>
+    )
+}
+
 function TrainerCardDemo() {
   return (
     <div className={styles.grid3}>
@@ -426,6 +436,7 @@ export const DEMOS = {
   'capacity-bar': CapacityBarDemo,
   'stat-card': StatCardDemo,
   'pricing-card': PricingCardDemo,
+  'subscription-card': SubscriptionCardDemo,
   'trainer-card': TrainerCardDemo,
   'product-card': ProductCardDemo,
   'cart-summary': CartSummaryDemo,

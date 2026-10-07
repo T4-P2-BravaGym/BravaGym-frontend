@@ -97,3 +97,11 @@ export const REQUESTS = [
   { id: 1, member_name: 'Elena Vidal', plan_name: 'Básico', requested_at: day(-2, 9), reason: 'Me cambio de ciudad el mes que viene.', status: 'pending' },
   { id: 2, member_name: 'Paula Sanz', plan_name: 'Completo', requested_at: day(-9, 9), reason: 'Por horarios no puedo venir este trimestre.', status: 'rejected', admin_notes: 'Le ofrecemos pausar la cuota dos meses.' },
 ]
+
+export const MY_SUBSCRIPTION = {
+  id: 1,
+  status: 'active',
+  start_date: '2026-10-06',
+  end_date: null,
+  plan: PLANS[2],
+}

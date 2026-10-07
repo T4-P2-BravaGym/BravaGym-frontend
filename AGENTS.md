@@ -105,6 +105,7 @@ Reglas del frontend:
 - **Tipografías:** Bricolage Grotesque en titulares y Figtree en el texto.
 - **Accesibilidad:** `<button>` y `<a href>` de verdad, `<label>` en cada campo, foco visible, contraste del sistema de diseño y controles de al menos 44 px.
 - **Estados de la API siempre igual:** el mismo estado (reservada, lista de espera, pagado, pendiente…) usa siempre el mismo componente `Badge` y el mismo tono.
+- Forms always use `noValidate` (no browser validation pop-ups). Validation lives in the API (Pydantic) and its message is shown with `Alert` or the `error` prop of `Field`.
 
 ## 7. Seguridad
 
@@ -183,9 +184,9 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
 ## 8. Forma de trabajar con Git
 
 - **Ramas:**
-  - `main` es lo entregado y `develop` es la integración.
+  - `main` es lo entregado y `dev` es la integración.
   - Nadie hace push directo a ninguna de las dos.
-  - Cada tarea va en su propia rama, creada desde `develop`: `feature/hu-12-book-class` o `fix/hu-13-cancel-deadline`.
+  - Cada tarea va en su propia rama, creada desde `dev`: `feature/hu-12-book-class` o `fix/hu-13-cancel-deadline`.
 - **Commits** en inglés con [Conventional Commits](https://www.conventionalcommits.org/):
   - **Formato:** `type(scope): description`.
     - La descripción va en imperativo, en minúscula y sin punto final.
@@ -211,7 +212,7 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
   - **Commits pequeños,** uno por cambio con sentido; no un único commit al final de la tarea.
   - Sin líneas de coautoría de la IA.
 - **PR:**
-  - Siempre hacia `develop`.
+  - Siempre hacia `dev`.
   - Descripción en inglés y con `Closes #NN` para cerrar la issue. Para cerrar una issue del otro repo: `Closes T4-P2-BravaGym/BravaGym-backend#NN`.
   - Otra compañera la revisa y la aprueba antes del merge.
 - **Definition of Done** de cada historia:
@@ -221,7 +222,7 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
   - Endpoint documentado en Swagger.
   - Log en las operaciones que cambian datos.
   - Pantalla conectada, si la tiene.
-  - Mergeada a `develop`.
+  - Mergeada a `dev`.
 
 ## 9. Cuando te pidan ayuda con una issue
 
