@@ -1,6 +1,5 @@
 /**
  * Mi rutina
- * TODO(HU-18): build this page from components and load data through src/services.
  */
 import { useEffect, useState } from 'react'
 import Alert from '@/components/ui/Alert'
