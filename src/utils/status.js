@@ -3,6 +3,8 @@
  * One place for all of them (DRY): the same status looks the same everywhere.
  */
 export const STATUS = {
+  // sessions
+  scheduled: { label: 'Programada', tone: 'success' },
   // bookings
   confirmed: { label: 'Reservada', tone: 'success' },
   waitlisted: { label: 'Lista de espera', tone: 'wait' },
