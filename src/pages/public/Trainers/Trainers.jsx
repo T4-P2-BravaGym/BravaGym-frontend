@@ -32,7 +32,11 @@ export default function Trainers() {
       )}
       <div className={styles.grid}>
         {trainers.map((trainer) => (
-          <TrainerCard key={trainer.id} trainer={trainer} to={PATHS.personalTraining} />
+          <TrainerCard
+            key={trainer.id}
+            trainer={trainer}
+            to={`${PATHS.personalTraining}?entrenadora=${trainer.id}`}
+          />
         ))}
       </div>
     </section>
