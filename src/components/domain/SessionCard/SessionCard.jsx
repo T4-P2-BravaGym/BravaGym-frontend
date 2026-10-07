@@ -54,18 +54,18 @@ export default function SessionCard({ session, booking = null, now, busy = false
             Unirme a la lista
           </Button>
         )}
-        {state === 'booked' && (
-          <Button variant="secondary" size="sm" fullWidth disabled={busy} onClick={() => onCancel?.(booking)}>
+        {state === 'booked' && onCancel && (
+          <Button variant="secondary" size="sm" fullWidth disabled={busy} onClick={() => onCancel(booking)}>
             Cancelar
           </Button>
         )}
-        {state === 'bookedLocked' && (
+        {state === 'bookedLocked' && onCancel && (
           <Button variant="secondary" size="sm" fullWidth disabled>
             Ya no se puede cancelar
           </Button>
         )}
-        {state === 'waitlisted' && (
-          <Button variant="secondary" size="sm" fullWidth disabled={busy} onClick={() => onLeaveWaitlist?.(booking)}>
+        {state === 'waitlisted' && onLeaveWaitlist && (
+          <Button variant="secondary" size="sm" fullWidth disabled={busy} onClick={() => onLeaveWaitlist(booking)}>
             Salir de la lista
           </Button>
         )}
