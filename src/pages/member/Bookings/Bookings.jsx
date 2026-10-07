@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import WeekSchedule from '@/components/domain/WeekSchedule'
+import { canCancelBooking } from '@/components/domain/SessionCard/sessionState'
 import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
@@ -11,6 +12,7 @@ import {
   bookSession,
   bookingsBySessionId,
   bookingSessionId,
+  cancelBooking,
   listMyBookings,
 } from '@/services/bookings'
 import { listSessions, toSessionCard } from '@/services/sessions'
@@ -24,11 +26,15 @@ const NO_SUBSCRIPTION =
   'Necesitas una suscripción activa para reservar. Elige un plan en Precios.'
 const DUPLICATE_BOOKING = 'Ya tienes una reserva en esta clase.'
 const GENERIC_BOOK_ERROR = 'No se ha podido completar la reserva. Inténtalo de nuevo.'
+const GENERIC_CANCEL_ERROR = 'No se ha podido cancelar. Inténtalo de nuevo.'
+const CANCEL_TOO_LATE =
+  'Solo puedes cancelar hasta 1 hora antes del inicio de la clase.'
 
 /**
- * Reservar clases (HU-12.4).
- * Week schedule with book / waitlist actions (POST /sessions/{id}/bookings)
- * and "Mis reservas" from GET /bookings/me. Cancel is HU-13.
+ * Reservar y cancelar clases (HU-12.4, HU-13.4).
+ * Week schedule with book / waitlist / cancel / leave-waitlist actions,
+ * and "Mis reservas" from GET /bookings/me.
+ * Cancel deadline (RN-05) is mirrored in the UI; the API still enforces it.
  */
 export default function Bookings() {
   const [weekAnchor, setWeekAnchor] = useState(() => new Date())
@@ -105,6 +111,31 @@ export default function Bookings() {
     }
   }
 
+  async function handleCancel(booking) {
+    await runCancel(booking, 'Reserva cancelada.')
+  }
+
+  async function handleLeaveWaitlist(booking) {
+    await runCancel(booking, 'Has salido de la lista de espera.')
+  }
+
+  async function runCancel(booking, successText) {
+    if (!booking?.id) return
+    setActionError(null)
+    setFlash(null)
+    const sessionId = bookingSessionId(booking)
+    setBusyId(sessionId ?? booking.id)
+    try {
+      await cancelBooking(booking.id)
+      setFlash(successText)
+      await Promise.all([loadBookings(), loadSessions()])
+    } catch (error) {
+      setActionError(cancelErrorMessage(error))
+    } finally {
+      setBusyId(null)
+    }
+  }
+
   const bookingMap = bookingsBySessionId(bookings ?? [])
   const upcomingBookings = (bookings ?? [])
     .filter((booking) => booking.status === 'confirmed' || booking.status === 'waitlisted')
@@ -168,7 +199,14 @@ export default function Bookings() {
         {upcomingBookings.length > 0 && (
           <ul className={styles.bookingList}>
             {upcomingBookings.map((booking) => (
-              <BookingRow key={booking.id} booking={booking} />
+              <BookingRow
+                key={booking.id}
+                booking={booking}
+                now={now}
+                busy={busyId === bookingSessionId(booking) || busyId === booking.id}
+                onCancel={handleCancel}
+                onLeaveWaitlist={handleLeaveWaitlist}
+              />
             ))}
           </ul>
         )}
@@ -211,6 +249,8 @@ export default function Bookings() {
             now={now}
             busyId={busyId}
             onBook={handleBook}
+            onCancel={handleCancel}
+            onLeaveWaitlist={handleLeaveWaitlist}
           />
         )}
       </section>
@@ -218,7 +258,7 @@ export default function Bookings() {
   )
 }
 
-function BookingRow({ booking }) {
+function BookingRow({ booking, now, busy, onCancel, onLeaveWaitlist }) {
   const session = booking.session ?? null
   const title =
     booking.class_type_name ??
@@ -230,6 +270,9 @@ function BookingRow({ booking }) {
   const startsAt = booking.starts_at ?? session?.starts_at ?? null
   const duration = booking.duration_minutes ?? session?.duration_minutes ?? null
   const sessionId = bookingSessionId(booking)
+  const isWaitlisted = booking.status === 'waitlisted'
+  const cancelAllowed = canCancelBooking(booking, startsAt, now)
+  const showLockedCancel = booking.status === 'confirmed' && !cancelAllowed
 
   return (
     <li className={styles.bookingItem}>
@@ -240,15 +283,45 @@ function BookingRow({ booking }) {
           {trainer ? ` · ${trainer}` : ''}
           {duration ? ` · ${duration} min` : ''}
         </p>
+        {showLockedCancel && (
+          <p className={styles.bookingNote}>Falta menos de 1 hora. Ya no se puede cancelar.</p>
+        )}
       </div>
-      <div className={styles.bookingBadge}>
-        {booking.status === 'waitlisted' ? (
-          <Badge status="waitlisted">
-            Lista de espera
-            {booking.waitlist_position ? ` · ${booking.waitlist_position}.º` : ''}
-          </Badge>
-        ) : (
-          <Badge status={booking.status} />
+      <div className={styles.bookingAside}>
+        <div className={styles.bookingBadge}>
+          {isWaitlisted ? (
+            <Badge status="waitlisted">
+              Lista de espera
+              {booking.waitlist_position ? ` · ${booking.waitlist_position}.º` : ''}
+            </Badge>
+          ) : (
+            <Badge status={booking.status} />
+          )}
+        </div>
+        {isWaitlisted && (
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={busy}
+            onClick={() => onLeaveWaitlist(booking)}
+          >
+            Salir de la lista
+          </Button>
+        )}
+        {booking.status === 'confirmed' && cancelAllowed && (
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={busy}
+            onClick={() => onCancel(booking)}
+          >
+            Cancelar
+          </Button>
+        )}
+        {showLockedCancel && (
+          <Button variant="secondary" size="sm" disabled>
+            Ya no se puede cancelar
+          </Button>
         )}
       </div>
     </li>
@@ -289,6 +362,24 @@ function bookErrorMessage(error) {
   return {
     title: 'No se pudo reservar',
     text: error.detail || GENERIC_BOOK_ERROR,
+    showPricing: false,
+  }
+}
+
+function cancelErrorMessage(error) {
+  if (!(error instanceof ApiError)) {
+    return { title: 'Error', text: GENERIC_CANCEL_ERROR, showPricing: false }
+  }
+  if (error.status === 409) {
+    return {
+      title: 'No se pudo cancelar',
+      text: error.detail || CANCEL_TOO_LATE,
+      showPricing: false,
+    }
+  }
+  return {
+    title: 'No se pudo cancelar',
+    text: error.detail || GENERIC_CANCEL_ERROR,
     showPricing: false,
   }
 }
