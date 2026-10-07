@@ -194,15 +194,13 @@ export default function Shop() {
                 ))}
               </div>
             </div>
-          </div>
 
-          {hasFilters && (
-              <div>
-                <Button variant="quiet" size="sm" onClick={handleClear}>
+            {hasFilters && (
+                <Button className={styles.clear} variant="secondary" size="sm" onClick={handleClear}>
                   Quitar filtros
                 </Button>
-              </div>
-          )}
+            )}
+          </div>
         </header>
 
         {error && <Alert tone="error">{error}</Alert>}
