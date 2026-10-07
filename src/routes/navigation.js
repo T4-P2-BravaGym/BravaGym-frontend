@@ -1,10 +1,12 @@
 import { PATHS } from './paths'
 
-/**
- * Navigation of each private area, in one place (DRY).
- * PrivateLayout picks the area from the user's role (or from the URL while there is no login).
- * `icon` names an icon of MobileTabBar; `mobile: true` puts the entry in the phone tab bar.
- */
+export const PUBLIC_LINKS = [
+  { to: PATHS.schedule, label: 'Clases' },
+  { to: PATHS.trainers, label: 'Entrenadoras' },
+  { to: PATHS.pricing, label: 'Precios' },
+  { to: PATHS.shop, label: 'Tienda' },
+]
+
 export const NAVIGATION = {
   member: {
     eyebrow: null,
@@ -44,7 +46,6 @@ export const NAVIGATION = {
   },
 }
 
-// superadmin sees the admin area; trainer tools are reachable from the URL.
 const AREA_BY_ROLE = { member: 'member', trainer: 'trainer', admin: 'admin', superadmin: 'admin' }
 
 export const ROLE_LABELS = {
@@ -54,7 +55,6 @@ export const ROLE_LABELS = {
   superadmin: 'Superadmin',
 }
 
-/** The area for this role, or (before login exists) the one the URL belongs to. */
 export function areaFor(role, pathname = '') {
   if (pathname.startsWith('/entrenadora')) return 'trainer'
   if (pathname.startsWith('/admin')) return 'admin'
