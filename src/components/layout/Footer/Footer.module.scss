@@ -38,5 +38,22 @@
 .links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-4);
+  gap: 0 var(--space-6);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--mauve);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
 }
