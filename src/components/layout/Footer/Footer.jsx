@@ -1,25 +1,27 @@
 import { Link } from 'react-router-dom'
+import { PUBLIC_LINKS } from '@/routes/navigation'
 import { PATHS } from '@/routes/paths'
 import styles from './Footer.module.scss'
 
-/**
- * Footer
- * Footer of the public website. The address is a placeholder until the gym has one.
- */
 export default function Footer() {
   return (
-    <footer className={styles.root}>
-      <div className={styles.inner}>
+      <footer className={styles.root}>
+        <div className={styles.inner}>
         <span className={styles.logo}>
           brava<span className={styles.dot}>.</span>
         </span>
-        <p className={styles.text}>[Dirección del gimnasio] · Abierto todos los días</p>
-        <nav aria-label="Pie de página" className={styles.links}>
-          <Link to={PATHS.pricing}>Precios</Link>
-          <Link to={PATHS.schedule}>Horario</Link>
-          <Link to={PATHS.login}>Área de socias</Link>
-        </nav>
-      </div>
-    </footer>
+          <p className={styles.text}>Gimnasio de fuerza para mujeres · Abierto todos los días</p>
+          <nav aria-label="Pie de página" className={styles.links}>
+            {PUBLIC_LINKS.map((link) => (
+                <Link key={link.to} to={link.to} className={styles.link}>
+                  {link.label}
+                </Link>
+            ))}
+            <Link to={PATHS.login} className={styles.link}>
+              Área de socias
+            </Link>
+          </nav>
+        </div>
+      </footer>
   )
 }
