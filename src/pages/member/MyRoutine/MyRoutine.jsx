@@ -8,6 +8,8 @@ import Spinner from '@/components/ui/Spinner'
 import Tabs from '@/components/ui/Tabs'
 import ExerciseRow from '@/components/domain/ExerciseRow'
 import { myRoutine } from '@/services/routines'
+import { formatDate } from '@/utils/format'
+import styles from './MyRoutine.module.scss'
 
 export default function MyRoutine() {
   const [routine, setRoutine] = useState(null)      
@@ -28,8 +30,15 @@ export default function MyRoutine() {
   const tabs = days.map((day) => ({ id: day.day_number, label: `Día ${day.day_number}` }))
   const currentDay = days.find((day) => day.day_number === activeDay) ?? days[0]
   return (
-    <section>
-      <h1>Mi rutina</h1>
+    <section className={styles.root}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Mi rutina</h1>
+        {routine && (
+          <span className={styles.meta}>
+            por {routine.trainer_name} · desde el {formatDate(routine.start_date)}
+          </span>
+        )}
+      </div>
 
       {loading && <Spinner />}
 
