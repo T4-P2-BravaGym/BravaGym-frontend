@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import Alert from '@/components/ui/Alert'
 import Tabs from '@/components/ui/Tabs'
-import ProductForm from '@/components/domain/ProductForm'
 import { listProductCategories } from '@/services/shop'
 import CategoriesTab from './CategoriesTab'
 import ProductsTab from './ProductsTab'

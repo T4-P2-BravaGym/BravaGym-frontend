@@ -7,11 +7,11 @@ import Modal from '@/components/ui/Modal'
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import Table from '@/components/ui/Table'
+import ProductForm from '@/components/domain/ProductForm'
 import useDebouncedValue from '@/hooks/useDebouncedValue'
 import { createProduct, deactivateProduct, listAdminProducts, updateProduct } from '@/services/shop'
 import { formatEuros } from '@/utils/format'
 import { adminErrorMessage } from './errors'
-import ProductForm from '../../../components/domain/ProductForm/ProductForm.jsx'
 import styles from './AdminProducts.module.scss'
 
 const PAGE_SIZE = 20
