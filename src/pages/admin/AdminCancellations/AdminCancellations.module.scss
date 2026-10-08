@@ -1,0 +1,41 @@
+@use 'mixins' as *;
+
+.root {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.header {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.eyebrow {
+  @include eyebrow;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+}
+
+.lead {
+  margin: 0;
+  color: var(--ink-muted);
+  max-width: 42rem;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer {
+  display: grid;
+  gap: var(--space-3);
+}
