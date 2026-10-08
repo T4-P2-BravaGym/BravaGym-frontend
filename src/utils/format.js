@@ -7,6 +7,18 @@ export function formatEuros(cents) {
   return euros.format((Number(cents) || 0) / 100)
 }
 
+export function centsToEurosInput(cents) {
+  if (cents === null || cents === undefined) return ''
+  return (Number(cents) / 100).toFixed(2).replace('.', ',')
+}
+
+export function eurosToCents(text) {
+  const clean = String(text ?? '').replace(/[\s€]/g, '').replace(',', '.')
+  if (clean === '') return null
+  const value = Number(clean)
+  return Number.isFinite(value) ? Math.round(value * 100) : text
+}
+
 export function formatTime(isoUtc) {
   return new Intl.DateTimeFormat(LOCALE, { hour: '2-digit', minute: '2-digit', timeZone: TIME_ZONE }).format(
     new Date(isoUtc),
