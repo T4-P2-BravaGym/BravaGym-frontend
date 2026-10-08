@@ -57,3 +57,12 @@
     @include focus-ring;
   }
 }
+
+.minimal {
+  justify-content: center;
+
+  .text {
+    flex: wrap;
+  }
+}
+
