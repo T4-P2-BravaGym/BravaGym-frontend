@@ -43,9 +43,9 @@ export default function CancellationRequestCard({ request, busy = false, onAppro
             label="Notas de administración"
             as="textarea"
             rows={2}
-            maxLength={500}
+            maxLength={2000}
             value={notes}
-            hint="Obligatorias para rechazar."
+            hint="Obligatorias para rechazar. Opcionales al aprobar."
             error={error}
             disabled={busy}
             onChange={(e) => {

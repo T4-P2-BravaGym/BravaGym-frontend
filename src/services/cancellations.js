@@ -44,7 +44,8 @@ export async function getMyCancellationRequest({ signal } = {}) {
 /**
  * listCancellationRequests({ status, page, size, signal })
  * Admin inbox. Response: { items, total, page, size }.
- * Each item is normalised with member_name / plan_name for CancellationRequestCard.
+ * BE HU-20 returns flat member_name / member_email / plan_name; we also accept
+ * nested user/plan shapes and normalise them for CancellationRequestCard.
  */
 export async function listCancellationRequests({ status, page = 1, size = 20, signal } = {}) {
   const data = await apiRequest(
