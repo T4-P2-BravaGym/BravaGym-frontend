@@ -53,6 +53,24 @@ export const PRODUCTS = [
   { id: 3, name: 'Botella térmica', category_name: 'Accesorios', price_cents: 1890, stock: 0 },
 ]
 
+export const PRODUCT_CATEGORIES = [
+  { id: 1, name: 'Accesorios' },
+  { id: 2, name: 'Ropa' },
+  { id: 3, name: 'Suplementos' },
+]
+
+export const ADMIN_PRODUCT = {
+  id: 1,
+  category_id: 3,
+  category_name: 'Suplementos',
+  name: 'Proteína whey · vainilla',
+  description: 'Bote de 1 kg.',
+  price_cents: 3490,
+  stock: 12,
+  in_stock: true,
+  is_active: true,
+}
+
 export const CART = [
   { product_id: 1, name: 'Proteína whey · vainilla', unit_price_cents: 3490, quantity: 1, stock: 12 },
   { product_id: 2, name: 'Leggings de entreno', unit_price_cents: 4200, quantity: 2, stock: 5 },

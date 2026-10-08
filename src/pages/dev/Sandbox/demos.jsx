@@ -20,6 +20,7 @@ import DiscountCodeInput from '@/components/domain/DiscountCodeInput'
 import ExerciseRow from '@/components/domain/ExerciseRow'
 import PricingCard from '@/components/domain/PricingCard'
 import ProductCard from '@/components/domain/ProductCard'
+import ProductForm from '@/components/domain/ProductForm'
 import RoutineEditor from '@/components/domain/RoutineEditor'
 import SessionCard from '@/components/domain/SessionCard'
 import StatCard from '@/components/domain/StatCard'
@@ -323,6 +324,31 @@ function ProductCardDemo() {
   )
 }
 
+function ProductFormDemo() {
+    const [product, setProduct] = useState(sample.ADMIN_PRODUCT)
+    const [body, setBody] = useState(null)
+    return (
+        <>
+            <div className={styles.row}>
+                <Button variant="secondary" size="sm" onClick={() => { setProduct(sample.ADMIN_PRODUCT); setBody(null) }}>
+                    Editar
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => { setProduct(null); setBody(null) }}>
+                    Nuevo
+                </Button>
+            </div>
+            <ProductForm
+                key={product?.id ?? 'new'}
+                product={product}
+                categories={sample.PRODUCT_CATEGORIES}
+                onSubmit={setBody}
+                onCancel={() => setBody(null)}
+            />
+            {body && <p className={styles.muted}>onSubmit recibe: {JSON.stringify(body)}</p>}
+        </>
+    )
+}
+
 function CartSummaryDemo() {
   const [cart, setCart] = useState(sample.CART)
   return (
@@ -439,6 +465,7 @@ export const DEMOS = {
   'subscription-card': SubscriptionCardDemo,
   'trainer-card': TrainerCardDemo,
   'product-card': ProductCardDemo,
+  'product-form': ProductFormDemo,
   'cart-summary': CartSummaryDemo,
   'discount-code-input': DiscountCodeInputDemo,
   'exercise-row': ExerciseRowDemo,
