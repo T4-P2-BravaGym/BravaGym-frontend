@@ -40,6 +40,9 @@ export default function AppRouter() {
         <Route path={PATHS.trainers} element={<Trainers />} />
         <Route path={PATHS.pricing} element={<Pricing />} />
         <Route path={PATHS.shop} element={<Shop />} />
+      </Route>
+
+      <Route element={<PublicLayout minimal />}>
         <Route path={PATHS.login} element={<Login />} />
         <Route path={PATHS.register} element={<Register />} />
       </Route>
