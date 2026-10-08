@@ -10,8 +10,9 @@ import { PATHS } from '@/routes/paths'
 import { formatDateTime } from '@/utils/format'
 import styles from './CancellationPanel.module.scss'
 
-const REASON_MAX = 500
-const REASON_MIN = 10
+/** Matches BE CancellationRequestCreate (HU-19.1): min_length=1, max_length=2000. */
+const REASON_MAX = 2000
+const REASON_MIN = 1
 
 /**
  * CancellationPanel
@@ -42,12 +43,8 @@ export default function CancellationPanel({
 
   function validate() {
     const trimmed = reason.trim()
-    if (!trimmed) {
+    if (!trimmed || trimmed.length < REASON_MIN) {
       setFieldError('Cuéntanos el motivo de la baja.')
-      return null
-    }
-    if (trimmed.length < REASON_MIN) {
-      setFieldError(`El motivo debe tener al menos ${REASON_MIN} caracteres.`)
       return null
     }
     if (trimmed.length > REASON_MAX) {

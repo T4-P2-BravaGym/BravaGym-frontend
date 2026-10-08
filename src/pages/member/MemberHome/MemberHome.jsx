@@ -14,8 +14,7 @@ import styles from './MemberHome.module.scss'
 const LOAD_REQUEST_ERROR = 'No se ha podido cargar tu solicitud de baja. Inténtalo de nuevo.'
 const GENERIC_SUBMIT_ERROR = 'No se ha podido enviar la solicitud. Inténtalo de nuevo.'
 const ALREADY_PENDING = 'Ya tienes una solicitud de baja pendiente.'
-const NO_ACTIVE_SUBSCRIPTION =
-  'Necesitas una suscripción activa para solicitar la baja. Elige un plan en Precios.'
+const NO_ACTIVE_SUBSCRIPTION = 'No tienes una suscripción activa.'
 const SUCCESS_MESSAGE =
   'Solicitud enviada. Sigues activa hasta que administración la revise.'
 
@@ -159,7 +158,8 @@ function submitErrorMessage(error) {
   if (!(error instanceof ApiError)) {
     return { title: 'Error', text: GENERIC_SUBMIT_ERROR, showPricing: false }
   }
-  if (error.status === 403) {
+  // BE returns 404 when there is no active subscription (NotFoundError).
+  if (error.status === 404 || error.status === 403) {
     return {
       title: 'No puedes solicitar la baja',
       text: error.detail || NO_ACTIVE_SUBSCRIPTION,
