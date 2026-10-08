@@ -73,9 +73,10 @@ export default function CancellationPanel({
     try {
       await onSubmit?.(trimmed)
       setReason('')
-      setConfirmOpen(false)
     } catch {
-      // Parent keeps the error Alert; leave the modal open so she can retry or close.
+      // Parent keeps the error Alert on the page.
+    } finally {
+      setConfirmOpen(false)
     }
   }
 
