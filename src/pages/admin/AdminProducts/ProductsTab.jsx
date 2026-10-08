@@ -22,10 +22,18 @@ const PRODUCT_HINT =
     'Revisa el formulario: el nombre y la categoría son obligatorios, el precio va en euros ' +
     '(por ejemplo 34,90) y ni el precio ni el stock pueden ser negativos.'
 
+const STATUS_OPTIONS = [
+    { value: '', label: 'Todos los estados' },
+    { value: 'active', label: 'Activos' },
+    { value: 'inactive', label: 'Desactivados' },
+    { value: 'out_of_stock', label: 'Sin stock' },
+]
+
 export default function ProductsTab({ categories }) {
     const [search, setSearch] = useState('')
     const q = useDebouncedValue(search, SEARCH_DELAY_MS)
     const [categoryId, setCategoryId] = useState('')
+    const [status, setStatus] = useState('')
     const [page, setPage] = useState(1)
     const [reloadKey, setReloadKey] = useState(0)
     const [result, setResult] = useState(null)
@@ -47,6 +55,7 @@ export default function ProductsTab({ categories }) {
         listAdminProducts({
             category_id: categoryId || undefined,
             q: q.trim() || undefined,
+            status: status || undefined,
             page,
             size: PAGE_SIZE,
             signal: controller.signal,
@@ -62,13 +71,20 @@ export default function ProductsTab({ categories }) {
             })
 
         return () => controller.abort()
-    }, [categoryId, q, page, reloadKey])
+    }, [categoryId, q, status, page, reloadKey])
 
     const formOpen = editing !== undefined
-    const hasFilters = Boolean(categoryId || q.trim())
+    const hasFilters = Boolean(categoryId || status || q.trim())
 
     function reload() {
         setReloadKey((key) => key + 1)
+    }
+
+    function changeFilter(setter) {
+        return (event) => {
+            setter(event.target.value)
+            setPage(1)
+        }
     }
 
     function clearMessages() {
@@ -179,24 +195,20 @@ export default function ProductsTab({ categories }) {
                     type="search"
                     value={search}
                     maxLength={60}
-                    onChange={(event) => {
-                        setSearch(event.target.value)
-                        setPage(1)
-                    }}
+                    onChange={changeFilter(setSearch)}
                 />
-                <Field
-                    label="Categoría"
-                    as="select"
-                    value={categoryId}
-                    onChange={(event) => {
-                        setCategoryId(event.target.value)
-                        setPage(1)
-                    }}
-                >
+                <Field label="Categoría" as="select" value={categoryId} onChange={changeFilter(setCategoryId)}>
                     <option value="">Todas</option>
                     {categories.map((category) => (
                         <option key={category.id} value={category.id}>
                             {category.name}
+                        </option>
+                    ))}
+                </Field>
+                <Field label="Estado" as="select" value={status} onChange={changeFilter(setStatus)}>
+                    {STATUS_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
                         </option>
                     ))}
                 </Field>
@@ -238,7 +250,7 @@ export default function ProductsTab({ categories }) {
                         columns={columns}
                         rows={result.items}
                         emptyTitle={hasFilters ? 'No hay productos con estos filtros' : 'Aún no hay productos'}
-                        emptyText={hasFilters ? 'Prueba con otra búsqueda o con otra categoría.' : 'Crea el primero con «Nuevo producto».'}
+                        emptyText={hasFilters ? 'Prueba con otra búsqueda o quita algún filtro.' : 'Crea el primero con «Nuevo producto».'}
                     />
                     <Pagination page={result.page} size={result.size} total={result.total} onChange={setPage} />
                 </>

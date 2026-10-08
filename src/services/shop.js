@@ -14,8 +14,8 @@ export function listProductCategories({ signal } = {}) {
     })
 }
 
-export function listAdminProducts({ category_id, q, page = 1, size = 20, signal } = {}) {
-    return apiRequest(`/products/admin${buildQuery({ category_id, q, page, size })}`, {
+export function listAdminProducts({ category_id, q, status, page = 1, size = 20, signal } = {}) {
+    return apiRequest(`/products/admin${buildQuery({ category_id, q, status, page, size })}`, {
         signal
     })
 }
