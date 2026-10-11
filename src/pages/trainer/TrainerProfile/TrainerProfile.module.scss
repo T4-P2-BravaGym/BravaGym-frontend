@@ -1,0 +1,35 @@
+@use 'mixins' as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+// Same block as the design: avatar, fields and the button, side by side
+.card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+}
+
+.fields {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 260px;
+}
+
+.title {
+  @include display-text(22px);
+  margin: 0;
+}
+
+.save {
+  align-self: flex-end;
+}
