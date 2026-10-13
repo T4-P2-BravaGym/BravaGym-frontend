@@ -48,9 +48,29 @@ export const TRAINERS = [
 ]
 
 export const PRODUCTS = [
-  { id: 1, name: 'Proteína whey · vainilla', category_name: 'Suplementos', price_cents: 3490, stock: 12 },
-  { id: 2, name: 'Leggings de entreno', category_name: 'Ropa', price_cents: 4200, stock: 5 },
-  { id: 3, name: 'Botella térmica', category_name: 'Accesorios', price_cents: 1890, stock: 0 },
+  {
+    id: 1,
+    name: 'Proteína whey · vainilla',
+    category_name: 'Suplementos',
+    price_cents: 3490,
+    stock: 12 },
+  {
+    id: 2,
+    name: 'Leggings de entreno',
+    category_name: 'Ropa',
+    price_cents: 4200,
+    stock: 5,
+    sizes: [
+      { id: 1, size: 'S', stock: 2 },
+      { id: 2, size: 'M', stock: 3 },
+      { id: 3, size: 'L', stock: 0 },
+    ],
+  },
+  { id: 3,
+    name: 'Botella térmica',
+    category_name: 'Accesorios',
+    price_cents: 1890,
+    stock: 0 },
 ]
 
 export const PRODUCT_CATEGORIES = [
@@ -72,8 +92,8 @@ export const ADMIN_PRODUCT = {
 }
 
 export const CART = [
-  { product_id: 1, name: 'Proteína whey · vainilla', unit_price_cents: 3490, quantity: 1, stock: 12 },
-  { product_id: 2, name: 'Leggings de entreno', unit_price_cents: 4200, quantity: 2, stock: 5 },
+  { key: '1', product_id: 1, size: null, name: 'Proteína whey · vainilla', unit_price_cents: 3490, quantity: 1, stock: 12 },
+  { key: '2:M', product_id: 2, size: 'M', name: 'Leggings de entreno', unit_price_cents: 4200, quantity: 2, stock: 3 },
 ]
 
 export const ORDERS = [
@@ -83,7 +103,7 @@ export const ORDERS = [
     created_at: '2026-10-08T10:30:00Z',
     items: [
       { product_id: 1, product_name: 'Proteína whey · vainilla', quantity: 2, unit_price_cents: 3490, subtotal_cents: 6980 },
-      { product_id: 2, product_name: 'Leggings de entreno', quantity: 1, unit_price_cents: 4200, subtotal_cents: 4200 },
+      { product_id: 2, product_name: 'Leggings de entreno', quantity: 1, size: 'M', unit_price_cents: 4200, subtotal_cents: 4200 },
     ],
     total_cents: 11180,
     payment_id: 15,

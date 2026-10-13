@@ -59,3 +59,23 @@
   font-size: 18px;
   font-variant-numeric: tabular-nums;
 }
+
+.sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.sizes .sizeChip {
+  min-width: 44px;
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 14px;
+
+  &:disabled {
+    opacity: 0.45;
+    text-decoration: line-through;
+    cursor: not-allowed;
+  }
+}

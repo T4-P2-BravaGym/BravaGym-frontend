@@ -186,8 +186,8 @@ export const COMPONENTS = [
     id: 'product-card',
     name: 'ProductCard',
     group: 'domain',
-    use: 'Un producto de la tienda con su botón Añadir (o Agotado).',
-    props: 'product, busy, onAdd(product)',
+    use: 'Un producto de la tienda con su botón Añadir (o Agotado). La ropa con tallas pide elegir una antes de añadir.',
+    props: 'product (con sizes si tiene tallas), busy, onAdd(product, size)',
   },
   {
     id: 'product-form',
@@ -203,7 +203,7 @@ export const COMPONENTS = [
     name: 'CartSummary',
     group: 'domain',
     use: 'El carrito: cantidades, total estimado y confirmar el pedido.',
-    props: 'items, busy, onChangeQuantity(id, quantity), onRemove(id), onCheckout',
+    props: 'items (cada línea con key, size…), busy, onChangeQuantity(key, quantity), onRemove(key), onCheckout',
   },
   {
     id: 'order-card',

@@ -109,7 +109,7 @@ export default function Shop() {
     setPage(1)
   }
 
-  function handleAdd(product) {
+  function handleAdd(product, size = null) {
     if (!isAuthenticated) {
       navigate(PATHS.login, { state: { from: PATHS.shop } })
       return
@@ -118,13 +118,14 @@ export default function Shop() {
       setNotice({ tone: 'info', text: MEMBERS_ONLY, cartLink: false })
       return
     }
-    const added = addItem(product)
+    const label = size ? `«${product.name}» en talla ${size}` : `«${product.name}»`
+    const added = addItem(product, size)
     setNotice(
         added
-            ? { tone: 'success', text: `«${product.name}» está en tu carrito.`, cartLink: true }
+            ? { tone: 'success', text: `${label} está en tu carrito.`, cartLink: true }
             : {
               tone: 'info',
-              text: `Ya tienes en el carrito todas las unidades disponibles de «${product.name}».`,
+              text: `Ya tienes en el carrito todas las unidades disponibles de ${label}.`,
               cartLink: true,
             },
     )

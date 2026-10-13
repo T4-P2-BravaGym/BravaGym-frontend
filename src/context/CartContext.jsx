@@ -5,11 +5,23 @@ export const CartContext = createContext(null)
 
 const STORAGE_PREFIX = 'brava.cart.'
 
+export function lineKey(productId, size) {
+    return size ? `${productId}:${size}` : String(productId)
+}
+
+function normalize(items) {
+    return items.map((item) => ({
+        ...item,
+        size: item.size ?? null,
+        key: item.key ?? lineKey(item.product_id, item.size),
+    }))
+}
+
 function readCart(key) {
     if (!key) return []
     try {
         const parsed = JSON.parse(localStorage.getItem(key) ?? '[]')
-        return Array.isArray(parsed) ? parsed : []
+        return Array.isArray(parsed) ? normalize(parsed) : []
     } catch {
         return []
     }
@@ -23,6 +35,11 @@ function writeCart(key, items) {
     }
 }
 
+/**
+ * The member's cart: [{ key, product_id, size, name, unit_price_cents, quantity, stock }].
+ * Saved per member in localStorage, only as a convenience: the API recomputes
+ * prices and checks the stock of each size when the order is placed (RN-17, RN-20).
+ */
 export function CartProvider({ children }) {
     const { user, role } = useAuth()
     const storageKey = role === 'member' && user?.id ? `${STORAGE_PREFIX}${user.id}` : null
@@ -42,21 +59,28 @@ export function CartProvider({ children }) {
     }, [])
 
     const addItem = useCallback(
-        (product) => {
-            const line = items.find((item) => item.product_id === product.id)
-            if (line && line.quantity >= product.stock) return false
+        (product, size = null) => {
+            const key = lineKey(product.id, size)
+            const stock = size
+                ? (product.sizes?.find((item) => item.size === size)?.stock ?? 0)
+                : product.stock
+            const line = items.find((item) => item.key === key)
+            if (stock <= 0 || (line && line.quantity >= stock)) return false
+
             update((current) => {
                 const fresh = {
+                    key,
                     product_id: product.id,
+                    size,
                     name: product.name,
                     unit_price_cents: product.price_cents,
-                    stock: product.stock,
+                    stock,
                 }
-                if (!current.some((item) => item.product_id === product.id)) {
+                if (!current.some((item) => item.key === key)) {
                     return [...current, { ...fresh, quantity: 1 }]
                 }
                 return current.map((item) =>
-                    item.product_id === product.id ? { ...item, ...fresh, quantity: item.quantity + 1 } : item,
+                    item.key === key ? { ...item, ...fresh, quantity: item.quantity + 1 } : item,
                 )
             })
             return true
@@ -65,12 +89,10 @@ export function CartProvider({ children }) {
     )
 
     const setQuantity = useCallback(
-        (productId, quantity) => {
+        (key, quantity) => {
             update((current) =>
                 current.map((item) =>
-                    item.product_id === productId
-                        ? { ...item, quantity: Math.max(1, Math.min(quantity, item.stock)) }
-                        : item,
+                    item.key === key ? { ...item, quantity: Math.max(1, Math.min(quantity, item.stock)) } : item,
                 ),
             )
         },
@@ -78,7 +100,7 @@ export function CartProvider({ children }) {
     )
 
     const removeItem = useCallback(
-        (productId) => update((current) => current.filter((item) => item.product_id !== productId)),
+        (key) => update((current) => current.filter((item) => item.key !== key)),
         [update],
     )
 
