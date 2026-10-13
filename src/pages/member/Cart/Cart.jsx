@@ -76,7 +76,7 @@ export default function Cart() {
     setActionError(null)
     try {
       await cancelOrder(toCancel.id)
-      setFlash(`Pedido n.º ${toCancel.id} cancelado. Los productos vuelven a la tienda.`)
+      setFlash(`Has cancelado el pedido n.º ${toCancel.id}. No tienes que pagar nada.`)
       await loadOrders()
     } catch (apiError) {
       setActionError(apiError.detail ?? CANCEL_ERROR)
@@ -164,14 +164,14 @@ export default function Cart() {
 
         <Modal
             open={toCancel !== null}
-            title="¿Cancelar el pedido?"
+            title="¿Cancelar este pedido?"
             description={
               toCancel
-                  ? `Pedido n.º ${toCancel.id} · ${formatEuros(toCancel.total_cents)}. Los productos vuelven a la tienda y el pago pendiente se anula.`
+                  ? `Pedido n.º ${toCancel.id} · ${formatEuros(toCancel.total_cents)}. No tendrás que pagarlo y los productos volverán a estar disponibles en la tienda.`
                   : undefined
             }
-            confirmLabel="Cancelar pedido"
-            cancelLabel="Volver"
+            confirmLabel="Sí, cancelar pedido"
+            cancelLabel="No, mantenerlo"
             tone="danger"
             busy={cancelling}
             onConfirm={handleConfirmCancel}
