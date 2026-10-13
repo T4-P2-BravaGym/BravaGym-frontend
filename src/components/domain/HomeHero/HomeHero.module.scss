@@ -1,0 +1,117 @@
+@use "mixins" as *;
+
+// Two columns on desktop: text on the left, photo + card on the right
+.root {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-12);
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-12) var(--space-20);
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr); // one column on small screens
+    padding: var(--space-8) var(--space-4) var(--space-12);
+  }
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+// Pill label above the title
+.tag {
+  align-self: flex-start;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--mauve-soft);
+  color: var(--mauve-ink);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.title {
+  @include display-text(84px);
+  margin: 0;
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+
+  @include mobile {
+    font-size: 48px;
+  }
+}
+
+.accent {
+  color: var(--mauve);
+}
+
+.intro {
+  margin: 0;
+  max-width: 520px;
+  font-size: 19px;
+  color: var(--neutral-ink);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+// Right column: relative so the card can float over the photo
+.media {
+  position: relative;
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover; 
+  border-radius: var(--radius-lg);
+  background: var(--blush); 
+}
+
+.nextCard {
+  position: absolute;
+  left: calc(
+    var(--space-8) * -1
+  ); // sticks out of the photo, like the prototype
+  bottom: 40px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-float);
+
+  @include mobile {
+    left: var(
+      --space-4
+    ); // no negative margin on mobile: it would overflow the screen
+    bottom: var(--space-4);
+  }
+}
+
+.eyebrow {
+  @include eyebrow;
+}
+
+.nextName {
+  @include display-text(22px);
+}
+
+.nextMeta {
+  color: var(--neutral-ink);
+}
+
+.nextBadge {
+  align-self: flex-start;
+  margin-top: 6px;
+}
