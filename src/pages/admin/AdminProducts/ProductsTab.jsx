@@ -155,7 +155,12 @@ export default function ProductsTab({ categories }) {
             key: 'stock',
             header: 'Stock',
             align: 'right',
-            render: (product) => (product.in_stock ? product.stock : <Badge tone="wait">Agotado</Badge>),
+            render: (product) => {
+                if (!product.in_stock) return <Badge tone="wait">Agotado</Badge>
+                if (!product.sizes?.length) return product.stock
+                const bySize = product.sizes.map((item) => `${item.size}: ${item.stock}`).join(', ')
+                return `${product.stock} (${bySize})`
+            },
         },
         {
             key: 'is_active',

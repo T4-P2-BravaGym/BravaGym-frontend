@@ -5,13 +5,33 @@ import Field from '@/components/ui/Field'
 import { centsToEurosInput, eurosToCents } from '@/utils/format'
 import styles from './ProductForm.module.scss'
 
+const PRODUCT_SIZES = ['XS', 'S', 'M', 'L', 'XL']
+
+/**
+ * ProductForm
+ * Create or edit a product (HU-22). Clothing can have sizes (HU-37, RN-20): then the
+ * stock goes in each size and an empty size is not sold. Validation happens in the API.
+ *
+ * Props: product (null to create), categories, busy, error { title, text }, onSubmit(body), onCancel
+ */
 export default function ProductForm({ product, categories, busy = false, error, onSubmit, onCancel }) {
     const headingId = useId()
+    const sizesHintId = useId()
     const [form, setForm] = useState(() => toFormValues(product))
     const isEdit = Boolean(product?.id)
 
     function update(name) {
         return (event) => setForm((current) => ({ ...current, [name]: event.target.value }))
+    }
+
+    function updateSize(size) {
+        return (event) =>
+            setForm((current) => ({ ...current, sizeStock: { ...current.sizeStock, [size]: event.target.value } }))
+    }
+
+    function toggleSizes(event) {
+        const checked = event.target.checked
+        setForm((current) => ({ ...current, hasSizes: checked }))
     }
 
     function handleSubmit(event) {
@@ -60,17 +80,47 @@ export default function ProductForm({ product, categories, busy = false, error, 
                         onChange={update('price')}
                         disabled={busy}
                     />
-                    <Field
-                        label="Stock"
-                        name="stock"
-                        type="number"
-                        inputMode="numeric"
-                        hint="Unidades disponibles"
-                        value={form.stock}
-                        onChange={update('stock')}
-                        disabled={busy}
-                    />
+                    {!form.hasSizes && (
+                        <Field
+                            label="Stock"
+                            name="stock"
+                            type="number"
+                            inputMode="numeric"
+                            hint="Unidades disponibles"
+                            value={form.stock}
+                            onChange={update('stock')}
+                            disabled={busy}
+                        />
+                    )}
                 </div>
+
+                <label className={styles.check}>
+                    <input type="checkbox" checked={form.hasSizes} onChange={toggleSizes} disabled={busy} />
+                    <span>Tiene tallas</span>
+                </label>
+
+                {form.hasSizes && (
+                    <fieldset className={styles.sizes} aria-describedby={sizesHintId}>
+                        <legend className={styles.legend}>Stock por talla</legend>
+                        <p id={sizesHintId} className={styles.hint}>
+                            Deja vacía una talla que no vendas. Si quitas una talla, deja de verse en la tienda.
+                        </p>
+                        <div className={styles.sizeGrid}>
+                            {PRODUCT_SIZES.map((size) => (
+                                <Field
+                                    key={size}
+                                    label={size}
+                                    name={`stock-${size}`}
+                                    type="number"
+                                    inputMode="numeric"
+                                    value={form.sizeStock[size]}
+                                    onChange={updateSize(size)}
+                                    disabled={busy}
+                                />
+                            ))}
+                        </div>
+                    </fieldset>
+                )}
 
                 <Field
                     label="Descripción (opcional)"
@@ -96,12 +146,17 @@ export default function ProductForm({ product, categories, busy = false, error, 
 }
 
 function toFormValues(product) {
+    const sizes = product?.sizes ?? []
     return {
         name: product?.name ?? '',
         category_id: product?.category_id ? String(product.category_id) : '',
         price: centsToEurosInput(product?.price_cents),
-        stock: product ? String(product.stock) : '0',
+        stock: product && !sizes.length ? String(product.stock) : '0',
         description: product?.description ?? '',
+        hasSizes: sizes.length > 0,
+        sizeStock: Object.fromEntries(
+            PRODUCT_SIZES.map((size) => [size, String(sizes.find((item) => item.size === size)?.stock ?? '')]),
+        ),
     }
 }
 
@@ -112,11 +167,17 @@ function toNumberOrRaw(text) {
 }
 
 function toProductBody(form) {
-    return {
+    const body = {
         name: form.name,
         category_id: toNumberOrRaw(form.category_id),
         price_cents: eurosToCents(form.price),
-        stock: toNumberOrRaw(form.stock),
         description: form.description.trim() ? form.description : null,
     }
+    if (!form.hasSizes) return { ...body, stock: toNumberOrRaw(form.stock), sizes: [] }
+
+    const sizes = PRODUCT_SIZES.filter((size) => form.sizeStock[size].trim() !== '').map((size) => ({
+        size,
+        stock: toNumberOrRaw(form.sizeStock[size]),
+    }))
+    return { ...body, sizes }
 }

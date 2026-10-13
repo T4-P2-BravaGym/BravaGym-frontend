@@ -91,6 +91,23 @@ export const ADMIN_PRODUCT = {
   is_active: true,
 }
 
+export const ADMIN_CLOTHING = {
+  id: 2,
+  category_id: 2,
+  category_name: 'Ropa',
+  name: 'Camiseta Brava',
+  description: null,
+  price_cents: 2200,
+  stock: 18,
+  sizes: [
+    { id: 1, size: 'S', stock: 10 },
+    { id: 2, size: 'M', stock: 0 },
+    { id: 3, size: 'L', stock: 8 },
+  ],
+  in_stock: true,
+  is_active: true,
+}
+
 export const CART = [
   { key: '1', product_id: 1, size: null, name: 'Proteína whey · vainilla', unit_price_cents: 3490, quantity: 1, stock: 12 },
   { key: '2:M', product_id: 2, size: 'M', name: 'Leggings de entreno', unit_price_cents: 4200, quantity: 2, stock: 3 },

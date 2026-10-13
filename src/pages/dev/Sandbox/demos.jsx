@@ -347,6 +347,9 @@ function ProductFormDemo() {
                 <Button variant="secondary" size="sm" onClick={() => { setProduct(null); setBody(null) }}>
                     Nuevo
                 </Button>
+                <Button variant="secondary" size="sm" onClick={() => { setProduct(sample.ADMIN_CLOTHING); setBody(null) }}>
+                    Editar ropa
+                </Button>
             </div>
             <ProductForm
                 key={product?.id ?? 'new'}
