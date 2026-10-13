@@ -80,6 +80,50 @@ export async function apiRequest(path, { method = 'GET', body, form, auth = true
   return data
 }
 
+/**
+ * apiDownload('/payments/export?status=paid')
+ * Fetches a non-JSON body (CSV, file) as a Blob. Same auth and error rules as apiRequest.
+ * Returns `{ blob, filename }` — filename comes from Content-Disposition when present.
+ */
+export async function apiDownload(path, { method = 'GET', auth = true, signal, fallbackFilename = 'download' } = {}) {
+  const headers = { Accept: '*/*' }
+  const token = auth ? getToken() : null
+  if (token) headers.Authorization = `Bearer ${token}`
+
+  let response
+  try {
+    response = await fetch(`${API_URL}${path}`, { method, headers, signal })
+  } catch (error) {
+    if (error.name === 'AbortError') throw error
+    throw new ApiError(0, NETWORK_ERROR, 'network_error')
+  }
+
+  if (!response.ok) {
+    if (response.status === 401 && auth) onUnauthorized()
+    const isJson = response.headers.get('content-type')?.includes('application/json')
+    const data = isJson ? await response.json().catch(() => null) : null
+    throw new ApiError(response.status, readDetail(data), data?.code)
+  }
+
+  const blob = await response.blob()
+  const filename = filenameFromContentDisposition(response.headers.get('content-disposition')) ?? fallbackFilename
+  return { blob, filename }
+}
+
+function filenameFromContentDisposition(header) {
+  if (!header) return null
+  const utf = /filename\*=UTF-8''([^;]+)/i.exec(header)
+  if (utf?.[1]) {
+    try {
+      return decodeURIComponent(utf[1].trim())
+    } catch {
+      return utf[1].trim()
+    }
+  }
+  const plain = /filename="?([^";]+)"?/i.exec(header)
+  return plain?.[1]?.trim() || null
+}
+
 // FastAPI sends a string, or a list of field errors for 422.
 function readDetail(data) {
   const detail = data?.detail
