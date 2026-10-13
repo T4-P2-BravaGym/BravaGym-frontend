@@ -1,0 +1,49 @@
+@use 'mixins' as *;
+
+// Same max width as the hero, centered on the page
+.root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-12) var(--space-20);
+
+  @include mobile {
+    padding: 0 var(--space-4) var(--space-12);
+  }
+}
+
+.hiddenTitle {
+  @include visually-hidden; // in the DOM for screen readers, invisible on screen
+}
+
+// Reset the default list styles and lay out 3 columns
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+// Gold line on top of each column, like the prototype
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-8) var(--space-6);
+  border-top: 2px solid var(--champagne);
+}
+
+.title {
+  @include display-text(22px);
+  margin: 0;
+}
+
+.text {
+  margin: 0;
+  color: var(--neutral-ink);
+}
