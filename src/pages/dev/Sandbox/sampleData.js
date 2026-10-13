@@ -76,6 +76,30 @@ export const CART = [
   { product_id: 2, name: 'Leggings de entreno', unit_price_cents: 4200, quantity: 2, stock: 5 },
 ]
 
+export const ORDERS = [
+  {
+    id: 7,
+    status: 'pending',
+    created_at: '2026-10-08T10:30:00Z',
+    items: [
+      { product_id: 1, product_name: 'Proteína whey · vainilla', quantity: 2, unit_price_cents: 3490, subtotal_cents: 6980 },
+      { product_id: 2, product_name: 'Leggings de entreno', quantity: 1, unit_price_cents: 4200, subtotal_cents: 4200 },
+    ],
+    total_cents: 11180,
+    payment_id: 15,
+    payment_status: 'pending',
+  },
+  {
+    id: 5,
+    status: 'cancelled',
+    created_at: '2026-10-02T17:05:00Z',
+    items: [{ product_id: 1, product_name: 'Proteína whey · vainilla', quantity: 1, unit_price_cents: 3490, subtotal_cents: 3490 }],
+    total_cents: 3490,
+    payment_id: 11,
+    payment_status: 'cancelled',
+  },
+]
+
 export const ROUTINE_LINES = [
   { position: 1, exercise_name: 'Sentadilla goblet', sets: 4, reps: 10, rest_seconds: 90 },
   { position: 2, exercise_name: 'Peso muerto rumano', sets: 3, reps: 10, rest_seconds: 90 },

@@ -43,7 +43,7 @@ export default function PaymentCard({
           </p>
           {!isPending && usedCode && <p className={styles.meta}>Código {usedCode}</p>}
         </div>
-        <Badge status={payment.status} />
+        <Badge status={payment.status}>{payment.status === 'cancelled' ? 'Anulado' : undefined}</Badge>
       </div>
 
       <div className={styles.amounts}>

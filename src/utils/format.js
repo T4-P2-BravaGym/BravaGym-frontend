@@ -3,6 +3,14 @@ const TIME_ZONE = 'Europe/Madrid'
 
 const euros = new Intl.NumberFormat(LOCALE, { style: 'currency', currency: 'EUR' })
 
+export function parseApiDate(value) {
+  if (value instanceof Date) return value
+  const text = String(value ?? '')
+  const hasTime = /T\d{2}:\d{2}/.test(text)
+  const hasZone = /([zZ]|[+-]\d{2}:?\d{2})$/.test(text)
+  return new Date(hasTime && !hasZone ? `${text}Z` : text)
+}
+
 export function formatEuros(cents) {
   return euros.format((Number(cents) || 0) / 100)
 }
@@ -21,7 +29,7 @@ export function eurosToCents(text) {
 
 export function formatTime(isoUtc) {
   return new Intl.DateTimeFormat(LOCALE, { hour: '2-digit', minute: '2-digit', timeZone: TIME_ZONE }).format(
-    new Date(isoUtc),
+      parseApiDate(isoUtc),
   )
 }
 
@@ -57,7 +65,7 @@ export function initials(name = '') {
 
 export function dayKey(isoUtc) {
   return new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: TIME_ZONE }).format(
-    new Date(isoUtc),
+      parseApiDate(isoUtc),
   )
 }
 
@@ -110,7 +118,7 @@ export function madridInputToUtcIso(localValue) {
  */
 export function utcIsoToMadridInput(isoUtc) {
   if (!isoUtc) return ''
-  const date = new Date(isoUtc)
+  const date = parseApiDate(isoUtc)
   if (Number.isNaN(date.getTime())) return ''
   const parts = Object.fromEntries(
     new Intl.DateTimeFormat('en-CA', {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import ProductCard from '@/components/domain/ProductCard'
 import Alert from '@/components/ui/Alert'
 import Button from '@/components/ui/Button'
@@ -9,6 +9,7 @@ import Field from '@/components/ui/Field'
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
+import useCart from '@/hooks/useCart'
 import useDebouncedValue from '@/hooks/useDebouncedValue'
 import { PATHS } from '@/routes/paths'
 import { listProductCategories, listProducts } from '@/services/shop'
@@ -18,6 +19,7 @@ import styles from './Shop.module.scss'
 const PAGE_SIZE = 12
 const SEARCH_DELAY_MS = 350
 const LOAD_ERROR = 'No se ha podido cargar la tienda. Inténtalo de nuevo.'
+const MEMBERS_ONLY = 'Los pedidos de la tienda son para socias. Entra con tu cuenta de socia para comprar.'
 
 const PRICE_RANGES = [
   { id: 'under-10', label: 'Menos de 10 €', max_price: 999 },
@@ -34,7 +36,8 @@ const DEFAULT_SORT = 'name'
 
 export default function Shop() {
   const navigate = useNavigate()
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, role } = useAuth()
+  const { addItem } = useCart()
   const [categories, setCategories] = useState([])
   const [categoryId, setCategoryId] = useState(null)
   const [priceRangeId, setPriceRangeId] = useState(null)
@@ -45,6 +48,7 @@ export default function Shop() {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [notice, setNotice] = useState(null)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -105,12 +109,25 @@ export default function Shop() {
     setPage(1)
   }
 
-  function handleAdd() {
+  function handleAdd(product) {
     if (!isAuthenticated) {
       navigate(PATHS.login, { state: { from: PATHS.shop } })
       return
     }
-    // TODO(HU-23): add the product to the cart.
+    if (role !== 'member') {
+      setNotice({ tone: 'info', text: MEMBERS_ONLY, cartLink: false })
+      return
+    }
+    const added = addItem(product)
+    setNotice(
+        added
+            ? { tone: 'success', text: `«${product.name}» está en tu carrito.`, cartLink: true }
+            : {
+              tone: 'info',
+              text: `Ya tienes en el carrito todas las unidades disponibles de «${product.name}».`,
+              cartLink: true,
+            },
+    )
   }
 
   return (
@@ -202,6 +219,18 @@ export default function Shop() {
             )}
           </div>
         </header>
+
+        {notice && (
+            <Alert tone={notice.tone} onClose={() => setNotice(null)}>
+              {notice.text}
+              {notice.cartLink && (
+                  <>
+                    {' '}
+                    <Link to={PATHS.cart}>Ver carrito</Link>
+                  </>
+              )}
+            </Alert>
+        )}
 
         {error && <Alert tone="error">{error}</Alert>}
 
