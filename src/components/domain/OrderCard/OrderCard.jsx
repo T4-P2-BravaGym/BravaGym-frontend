@@ -10,10 +10,6 @@ const ORDER_STATUS = {
     cancelled: { label: 'Cancelado', tone: 'neutral' },
 }
 
-function asUtc(iso) {
-    return /([zZ]|[+-]\d\d:\d\d)$/.test(iso) ? iso : `${iso}Z`
-}
-
 export default function OrderCard({ order, busy = false, onCancel }) {
     const info = ORDER_STATUS[order.status] ?? { label: order.status, tone: 'neutral' }
     const canCancel = order.status === 'pending' && (order.payment_status ?? 'pending') === 'pending'
@@ -23,7 +19,7 @@ export default function OrderCard({ order, busy = false, onCancel }) {
             <header className={styles.head}>
                 <div>
                     <h3 className={styles.title}>Pedido n.º {order.id}</h3>
-                    <p className={styles.meta}>{formatDateTime(asUtc(order.created_at))}</p>
+                    <p className={styles.meta}>{formatDateTime(order.created_at)}</p>
                 </div>
                 <Badge tone={info.tone}>{info.label}</Badge>
             </header>

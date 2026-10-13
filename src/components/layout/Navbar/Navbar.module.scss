@@ -132,17 +132,17 @@
   @include mobile {
     flex-direction: column;
   }
+}
 
-  .cart {
-    order: 1;
+.cart {
+  order: 1;
 
-    @include mobile {
-      order: 0;
-      margin-left: auto;
-    }
+  @include mobile {
+    order: 0;
+    margin-left: auto;
   }
+}
 
-  .cart ~ .menuButton {
-    margin-left: 0;
-  }
+.cart ~ .menuButton {
+  margin-left: 0;
 }
