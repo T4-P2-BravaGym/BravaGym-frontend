@@ -3,7 +3,11 @@ import { apiRequest, buildQuery } from './api'
 export function placeOrder(items) {
     return apiRequest('/orders', {
         method: 'POST',
-        body: { items: items.map(({ product_id, quantity }) => ({ product_id, quantity })) },
+        body: {
+            items: items.map(({ product_id, size, quantity }) =>
+                size ? { product_id, size, quantity } : { product_id, quantity },
+            ),
+        },
     })
 }
 

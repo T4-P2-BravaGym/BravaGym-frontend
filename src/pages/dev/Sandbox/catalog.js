@@ -186,8 +186,8 @@ export const COMPONENTS = [
     id: 'product-card',
     name: 'ProductCard',
     group: 'domain',
-    use: 'Un producto de la tienda con su botón Añadir (o Agotado).',
-    props: 'product, busy, onAdd(product)',
+    use: 'Un producto de la tienda con su botón Añadir (o Agotado). La ropa con tallas pide elegir una antes de añadir.',
+    props: 'product (con sizes si tiene tallas), busy, onAdd(product, size)',
   },
   {
     id: 'product-form',
@@ -196,14 +196,14 @@ export const COMPONENTS = [
     use: 'Crear o editar un producto en el panel de administración (HU-22).',
     avoid: 'No llama a la API: la página guarda con lo que recibe en onSubmit.',
     props: 'product (null para crear), categories, busy, error { title, text }, onSubmit(body), onCancel',
-    tip: 'El precio se escribe en euros (34,90) y onSubmit lo recibe en céntimos. Móntalo con key={product?.id ?? "new"}.',
+    tip: 'El precio se escribe en euros (34,90) y onSubmit lo recibe en céntimos. Con "Tiene tallas", onSubmit recibe sizes y no stock. Móntalo con key={product?.id ?? "new"}.',
   },
   {
     id: 'cart-summary',
     name: 'CartSummary',
     group: 'domain',
     use: 'El carrito: cantidades, total estimado y confirmar el pedido.',
-    props: 'items, busy, onChangeQuantity(id, quantity), onRemove(id), onCheckout',
+    props: 'items (cada línea con key, size…), busy, onChangeQuantity(key, quantity), onRemove(key), onCheckout',
   },
   {
     id: 'order-card',

@@ -347,6 +347,9 @@ function ProductFormDemo() {
                 <Button variant="secondary" size="sm" onClick={() => { setProduct(null); setBody(null) }}>
                     Nuevo
                 </Button>
+                <Button variant="secondary" size="sm" onClick={() => { setProduct(sample.ADMIN_CLOTHING); setBody(null) }}>
+                    Editar ropa
+                </Button>
             </div>
             <ProductForm
                 key={product?.id ?? 'new'}
@@ -365,8 +368,8 @@ function CartSummaryDemo() {
   return (
     <CartSummary
       items={cart}
-      onChangeQuantity={(id, quantity) => setCart((items) => items.map((i) => (i.product_id === id ? { ...i, quantity } : i)))}
-      onRemove={(id) => setCart((items) => items.filter((i) => i.product_id !== id))}
+      onChangeQuantity={(key, quantity) => setCart((items) => items.map((i) => (i.key === key ? { ...i, quantity } : i)))}
+      onRemove={(key) => setCart((items) => items.filter((i) => i.key !== key))}
       onCheckout={() => {}}
     />
   )

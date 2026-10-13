@@ -26,7 +26,11 @@ export default function OrderCard({ order, busy = false, onCancel }) {
 
             <ul className={styles.lines}>
                 {order.items.map((item) => (
-                    <li key={item.product_id} className={styles.line}>
+                    <li key={`${item.product_id}-${item.size ?? ''}`} className={styles.line}>
+                        <span>
+                            {item.quantity} × {item.product_name}
+                            {item.size ? ` · talla ${item.size}` : ''}
+                        </span>
             <span>
               {item.quantity} × {item.product_name}
             </span>
