@@ -206,6 +206,14 @@ export const COMPONENTS = [
     props: 'items, busy, onChangeQuantity(id, quantity), onRemove(id), onCheckout',
   },
   {
+    id: 'order-card',
+    name: 'OrderCard',
+    group: 'domain',
+    use: 'Un pedido de la socia: líneas, total, estado y Cancelar mientras está pendiente de pago (HU-23).',
+    avoid: 'No llama a la API: la página confirma con Modal y cancela con lo que recibe en onCancel.',
+    props: 'order { id, status, created_at, items, total_cents, payment_status }, busy, onCancel(order)',
+  },
+  {
     id: 'discount-code-input',
     name: 'DiscountCodeInput',
     group: 'domain',

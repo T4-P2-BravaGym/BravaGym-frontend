@@ -4,14 +4,6 @@ import Icon from '@/components/ui/Icon'
 import { formatEuros } from '@/utils/format'
 import styles from './CartSummary.module.scss'
 
-/**
- * CartSummary
- * The cart: lines with quantity (never above stock), estimated total and checkout.
- * The real total is computed by the API from its own prices (never trust the client's).
- *
- * Props: items [{ product_id, name, unit_price_cents, quantity, stock }], busy,
- *        onChangeQuantity(productId, quantity), onRemove(productId), onCheckout
- */
 export default function CartSummary({ items, busy = false, onChangeQuantity, onRemove, onCheckout }) {
   if (!items.length) {
     return <EmptyState title="Tu carrito está vacío" text="Añade productos desde la tienda y recógelos en recepción." />
@@ -68,7 +60,7 @@ export default function CartSummary({ items, busy = false, onChangeQuantity, onR
         <span>Total estimado</span>
         <span className={styles.totalAmount}>{formatEuros(estimated)}</span>
       </div>
-      <p className={styles.note}>El importe final se calcula al confirmar, con los precios y descuentos vigentes.</p>
+      <p className={styles.note}>El total final se calcula al confirmar, con los precios del momento. Los códigos de descuento se aplican al pagar, en Mis pagos.</p>
       <Button fullWidth disabled={busy} onClick={onCheckout}>
         {busy ? 'Confirmando…' : 'Confirmar pedido'}
       </Button>

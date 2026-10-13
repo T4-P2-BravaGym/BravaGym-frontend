@@ -1,0 +1,68 @@
+@use 'mixins' as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 40rem;
+}
+
+.eyebrow {
+  @include eyebrow;
+}
+
+.title {
+  @include display-text(40px);
+  margin: 0;
+  color: var(--ink);
+
+  @include mobile {
+    @include display-text(32px);
+  }
+}
+
+.lead {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.sectionTitle {
+  @include display-text(28px);
+  margin: 0;
+  color: var(--ink);
+
+  @include mobile {
+    @include display-text(24px);
+  }
+}
+
+.orderList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

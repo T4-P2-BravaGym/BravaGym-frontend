@@ -30,6 +30,7 @@ import Footer from '@/components/layout/Footer'
 import Navbar from '@/components/layout/Navbar'
 import SideNav from '@/components/layout/SideNav'
 import SubscriptionCard from '@/components/domain/SubscriptionCard'
+import OrderCard from '@/components/domain/OrderCard'
 import { NAVIGATION } from '@/routes/navigation'
 import { PATHS } from '@/routes/paths'
 import { formatDateTime, formatEuros } from '@/utils/format'
@@ -361,6 +362,18 @@ function CartSummaryDemo() {
   )
 }
 
+function OrderCardDemo() {
+    const [cancelledId, setCancelledId] = useState(null)
+    return (
+        <>
+            {sample.ORDERS.map((order) => (
+                <OrderCard key={order.id} order={order} onCancel={(o) => setCancelledId(o.id)} />
+            ))}
+            {cancelledId && <p className={styles.muted}>onCancel recibe el pedido n.º {cancelledId}</p>}
+        </>
+    )
+}
+
 function DiscountCodeInputDemo() {
   const [discount, setDiscount] = useState(null)
   return (
@@ -467,6 +480,7 @@ export const DEMOS = {
   'product-card': ProductCardDemo,
   'product-form': ProductFormDemo,
   'cart-summary': CartSummaryDemo,
+  'order-card': OrderCardDemo,
   'discount-code-input': DiscountCodeInputDemo,
   'exercise-row': ExerciseRowDemo,
   'routine-editor': RoutineEditorDemo,
