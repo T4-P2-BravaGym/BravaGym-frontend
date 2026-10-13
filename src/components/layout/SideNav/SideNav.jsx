@@ -7,7 +7,7 @@ import cx from '@/utils/cx'
 import styles from './SideNav.module.scss'
 
 /**
- * Props: area { eyebrow, label, items: [{ to, label, end }] }, user { name, roleLabel }, onLogout
+ * Props: area { eyebrow, label, items: [{ to, label, end, count }] }, user { name, roleLabel }, onLogout
  */
 export default function SideNav({ area, user, onLogout }) {
     const [open, setOpen] = useState(false)
@@ -55,7 +55,8 @@ export default function SideNav({ area, user, onLogout }) {
                             end={item.end}
                             className={({ isActive }) => cx(styles.link, isActive && styles.isActive)}
                         >
-                            {item.label}
+                            <span>{item.label}</span>
+                            {item.count > 0 && <span className={styles.count}>{item.count}</span>}
                         </NavLink>
                     ))}
                 </nav>

@@ -26,6 +26,7 @@ import SessionCard from '@/components/domain/SessionCard'
 import StatCard from '@/components/domain/StatCard'
 import TrainerCard from '@/components/domain/TrainerCard'
 import WeekSchedule from '@/components/domain/WeekSchedule'
+import CartLink from '@/components/layout/CartLink'
 import Footer from '@/components/layout/Footer'
 import Navbar from '@/components/layout/Navbar'
 import SideNav from '@/components/layout/SideNav'
@@ -147,6 +148,15 @@ function ModalDemo() {
       />
     </div>
   )
+}
+
+function CartLinkDemo() {
+    return (
+        <>
+            <CartLink count={0} />
+            <CartLink count={3} />
+        </>
+    )
 }
 
 const PAYMENT_COLUMNS = [
@@ -491,4 +501,5 @@ export const DEMOS = {
   'mobile-tab-bar': MobileTabBarDemo,
   'public-layout': PublicLayoutDemo,
   'private-layout': PrivateLayoutDemo,
+  'cart-link': CartLinkDemo,
 }

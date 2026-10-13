@@ -118,6 +118,9 @@
 }
 
 .link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   padding: 11px 12px;
   border-radius: 12px;
   color: var(--on-plum-muted);
@@ -183,5 +186,20 @@
   &:focus-visible {
     outline: 2px solid var(--champagne);
     outline-offset: 2px;
+  }
+
+  .count {
+    margin-left: auto;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: var(--radius-pill);
+    background: var(--champagne);
+    color: var(--plum);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 22px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
   }
 }

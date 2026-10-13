@@ -17,7 +17,7 @@ export const NAVIGATION = {
       { to: PATHS.personalTraining, label: 'Entrenamiento personal', icon: 'user' },
       { to: PATHS.myRoutine, label: 'Mi rutina', icon: 'dumbbell', mobile: true },
       { to: PATHS.myPayments, label: 'Mis pagos', icon: 'card', mobile: true },
-      { to: PATHS.cart, label: 'Tienda', icon: 'bag', mobile: true },
+      { to: PATHS.cart, label: 'Carrito', icon: 'bag', mobile: true },
       { to: PATHS.profile, label: 'Mi perfil', icon: 'user' },
     ],
   },

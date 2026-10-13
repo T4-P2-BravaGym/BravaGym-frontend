@@ -277,6 +277,13 @@ export const COMPONENTS = [
     props: 'items [{ to, label, icon }]',
     tip: 'Las entradas con mobile: true en routes/navigation.js salen aquí.',
   },
+  {
+    id: 'cart-link',
+    name: 'CartLink',
+    group: 'layout',
+    use: 'Icono del carrito con el número de unidades. Ya está en Navbar para las socias.',
+    props: 'count, className',
+  },
 
   // ── Layouts ──────────────────────────────────────────────────
   {
