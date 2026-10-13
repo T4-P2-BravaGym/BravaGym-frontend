@@ -1,17 +1,22 @@
 import { useEffect, useState } from 'react'
 import Alert from '@/components/ui/Alert'
+import Badge from '@/components/ui/Badge'
+import Pagination from '@/components/ui/Pagination'
 import Button from '@/components/ui/Button'
 import Field from '@/components/ui/Field'
 import Modal from '@/components/ui/Modal'
 import Spinner from '@/components/ui/Spinner'
 import Table from '@/components/ui/Table'
-import { createPlan, deactivatePlan, listPlans, updatePlan } from '@/services/plans'
+import { createPlan, deactivatePlan, listAdminPlans, updatePlan } from '@/services/plans'
 import { centsToEurosInput, eurosToCents } from '@/utils/format'
 import styles from './AdminPlans.module.scss'
 
 const COLUMNS = [
   { key: 'name', header: 'Plan' },
   { key: 'monthly_price_formatted', header: 'Cuota mensual', align: 'right' },
+  { key: 'is_active', header: 'Estado', render: (plan) => (
+    <Badge tone={plan.is_active ? 'success' : 'neutral'}>{plan.is_active ? 'Activo' : 'Desactivado'}</Badge>
+  ) },
   {
     key: 'includes_personal_training',
     header: 'Entrenamiento personal',
@@ -21,6 +26,7 @@ const COLUMNS = [
 
 export default function AdminPlans() {
   const [plans, setPlans] = useState(null)
+  const [page, setPage] = useState(1)
   const [error, setError] = useState(null)
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState(null)
@@ -36,7 +42,7 @@ export default function AdminPlans() {
     let cancelled = false
     setError(null)
 
-    listPlans()
+    listAdminPlans({ page })
       .then((data) => {
         if (!cancelled) setPlans(data)
       })
@@ -49,7 +55,7 @@ export default function AdminPlans() {
     return () => {
       cancelled = true
     }
-  }, [reloadKey])
+  }, [reloadKey, page])
 
   function openForm(plan = null) {
     setEditing(plan)
@@ -121,9 +127,9 @@ export default function AdminPlans() {
           <Button variant="secondary" size="sm" onClick={() => openForm(plan)} disabled={busy || formOpen} aria-label={`Editar ${plan.name}`}>
             Editar
           </Button>
-          <Button variant="secondary" size="sm" onClick={() => { setActionError(null); setDeactivateTarget(plan) }} disabled={busy || formOpen} aria-label={`Desactivar ${plan.name}`}>
+          {plan.is_active && <Button variant="secondary" size="sm" onClick={() => { setActionError(null); setDeactivateTarget(plan) }} disabled={busy || formOpen} aria-label={`Desactivar ${plan.name}`}>
             Desactivar
-          </Button>
+          </Button>}
         </div>
       ),
     },
@@ -133,7 +139,7 @@ export default function AdminPlans() {
     <div className={styles.root}>
       <header>
         <h1>Planes</h1>
-        <p>Planes activos disponibles para las socias.</p>
+        <p>Gestiona los planes activos y desactivados. Solo los activos aparecen en precios.</p>
       </header>
 
       <div>
@@ -165,12 +171,15 @@ export default function AdminPlans() {
       {!plans && !error && <Spinner label="Cargando planes…" />}
 
       {plans && (
+        <>
         <Table
-          caption="Planes activos del gimnasio"
+          caption="Planes del gimnasio"
           columns={columns}
-          rows={plans}
-          emptyTitle="No hay planes activos"
+          rows={plans.items}
+          emptyTitle="No hay planes"
         />
+        <Pagination page={plans.page} size={plans.size} total={plans.total} onChange={setPage} />
+        </>
       )}
 
       <Modal
