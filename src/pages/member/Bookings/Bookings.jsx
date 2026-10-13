@@ -6,6 +6,7 @@ import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
 import Spinner from '@/components/ui/Spinner'
+import useSessionUpdates from '@/hooks/useSessionUpdates'
 import { PATHS } from '@/routes/paths'
 import { ApiError } from '@/services/api'
 import {
@@ -95,6 +96,15 @@ export default function Bookings() {
     loadBookings(controller.signal)
     return () => controller.abort()
   }, [loadBookings])
+
+  // HU-16: when someone books or cancels a class on screen, reload its free spots and my bookings
+  useSessionUpdates(
+    (sessions ?? []).map((session) => session.id),
+    () => {
+      loadSessions()
+      loadBookings()
+    },
+  )
 
   async function handleBook(session) {
     setActionError(null)
