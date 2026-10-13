@@ -1,3 +1,5 @@
+@use 'mixins' as *;
+
 .root {
   display: flex;
   flex-direction: column;
@@ -20,8 +22,16 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  min-height: 44px;
+  min-height: var(--space-12);
   cursor: pointer;
+
+  input {
+    accent-color: var(--mauve);
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+  }
 }
 
 .actions {
@@ -29,4 +39,8 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--space-3);
+}
+
+.rowAction {
+  min-height: var(--space-12);
 }

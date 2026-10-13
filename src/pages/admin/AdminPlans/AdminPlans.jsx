@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
 import Pagination from '@/components/ui/Pagination'
@@ -37,6 +37,19 @@ export default function AdminPlans() {
   const [reloadKey, setReloadKey] = useState(0)
   const [deactivateTarget, setDeactivateTarget] = useState(null)
   const [actionError, setActionError] = useState(null)
+  const formRef = useRef(null)
+  const formTriggerRef = useRef(null)
+  const restoreFormFocusRef = useRef(false)
+
+  useEffect(() => {
+    if (formOpen && !restoreFormFocusRef.current) {
+      formRef.current?.querySelector('[name="name"]')?.focus()
+      restoreFormFocusRef.current = true
+    } else if (!formOpen && !busy && restoreFormFocusRef.current) {
+      formTriggerRef.current?.focus()
+      restoreFormFocusRef.current = false
+    }
+  }, [formOpen, busy])
 
   useEffect(() => {
     let cancelled = false
@@ -57,7 +70,8 @@ export default function AdminPlans() {
     }
   }, [reloadKey, page])
 
-  function openForm(plan = null) {
+  function openForm(plan = null, trigger) {
+    formTriggerRef.current = trigger
     setEditing(plan)
     setForm({
       name: plan?.name ?? '',
@@ -124,10 +138,10 @@ export default function AdminPlans() {
       align: 'right',
       render: (plan) => (
         <div className={styles.actions}>
-          <Button variant="secondary" size="sm" onClick={() => openForm(plan)} disabled={busy || formOpen} aria-label={`Editar ${plan.name}`}>
+          <Button variant="secondary" size="sm" className={styles.rowAction} onClick={(event) => openForm(plan, event.currentTarget)} disabled={busy || formOpen} aria-label={`Editar ${plan.name}`}>
             Editar
           </Button>
-          {plan.is_active && <Button variant="secondary" size="sm" onClick={() => { setActionError(null); setDeactivateTarget(plan) }} disabled={busy || formOpen} aria-label={`Desactivar ${plan.name}`}>
+          {plan.is_active && <Button variant="secondary" size="sm" className={styles.rowAction} onClick={() => { setActionError(null); setDeactivateTarget(plan) }} disabled={busy || formOpen} aria-label={`Desactivar ${plan.name}`}>
             Desactivar
           </Button>}
         </div>
@@ -143,7 +157,7 @@ export default function AdminPlans() {
       </header>
 
       <div>
-        <Button onClick={() => openForm()} disabled={formOpen}>Nuevo plan</Button>
+        <Button onClick={(event) => openForm(null, event.currentTarget)} disabled={formOpen}>Nuevo plan</Button>
       </div>
       {success && <Alert tone="success" onClose={() => setSuccess(null)}>{success}</Alert>}
 
@@ -151,7 +165,7 @@ export default function AdminPlans() {
         <section className={styles.formSection} aria-labelledby="new-plan-title">
           <h2 id="new-plan-title">{editing ? `Editar «${editing.name}»` : 'Nuevo plan'}</h2>
           {formError && <Alert tone="error">{formError}</Alert>}
-          <form className={styles.form} onSubmit={handleSave} noValidate>
+          <form ref={formRef} className={styles.form} onSubmit={handleSave} noValidate>
             <Field label="Nombre" name="name" value={form.name} onChange={updateField('name')} disabled={busy} />
             <Field label="Cuota mensual (€)" name="price" inputMode="decimal" hint="Por ejemplo, 45,90" value={form.price} onChange={updateField('price')} disabled={busy} />
             <Field label="Descripción (opcional)" as="textarea" name="description" rows={3} value={form.description} onChange={updateField('description')} disabled={busy} />
