@@ -60,9 +60,10 @@
 
 .minimal {
   justify-content: center;
+  text-align: center;
 
   .text {
-    flex: wrap;
+    flex: 0 1 auto;
   }
 }
 
