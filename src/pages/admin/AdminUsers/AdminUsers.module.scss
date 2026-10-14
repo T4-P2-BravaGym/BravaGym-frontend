@@ -110,3 +110,13 @@
   font-size: 13px;
   white-space: nowrap;
 }
+
+// HU-05: the role select in the table, as small as the cell text
+.roleSelect {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+}
