@@ -47,11 +47,10 @@ Aquí escribes el código tú, pero el alcance lo pone la spec y la persona resp
 - **Comandos:**
 
 ```bash
-  npm install
-  cp .env.example .env    # apunta a la API en http://localhost:8000
-  npm run dev             # http://localhost:5173
-  npm run build           # tiene que pasar antes de abrir una PR
-  npm run preview
+npm install
+npm run dev
+npm run build
+npm run preview
 ```
 
 Todavía no hay lint (T-04) ni tests (T-10). Cuando los haya, se añaden aquí.
