@@ -58,3 +58,18 @@ export function deleteCategory(categoryId) {
         method: 'DELETE'
     })
 }
+
+export function uploadProductImage(productId, file) {
+    const formData = new FormData()
+    formData.append('file', file)
+    return apiRequest(`/products/${productId}/image`, {
+        method: 'PUT',
+        formData
+    })
+}
+
+export function deleteProductImage(productId) {
+    return apiRequest(`/products/${productId}/image`, {
+        method: 'DELETE'
+    })
+}

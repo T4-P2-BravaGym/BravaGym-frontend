@@ -3,10 +3,16 @@
  *
  * - Base URL from VITE_API_URL.
  * - Adds "Authorization: Bearer <token>" when there is a session.
+ * - Sends JSON (body), a urlencoded form (form) or a multipart form with files (formData).
  * - Throws ApiError with the API's { detail, code } on any error.
  * - On 401 it calls the unauthorized handler (AuthContext logs out).
+ * - mediaUrl() turns the /media/... paths the API returns into full URLs (HU-30).
  */
 export const API_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api/v1').replace(/\/$/, '')
+
+// Host of the API without /api/v1: uploaded files (HU-30) are served from /media there.
+// The base makes it work too if VITE_API_URL is ever a relative path behind a proxy.
+export const API_ORIGIN = new URL(API_URL, window.location.origin).origin
 
 const GENERIC_ERROR = 'Ha ocurrido un error inesperado. Inténtalo de nuevo.'
 const NETWORK_ERROR = 'No se ha podido conectar con el servidor. Comprueba tu conexión.'
@@ -30,6 +36,15 @@ export function configureApi({ tokenGetter, unauthorizedHandler }) {
   if (unauthorizedHandler) onUnauthorized = unauthorizedHandler
 }
 
+/**
+ * mediaUrl('/media/products/a.webp') -> 'http://localhost:8000/media/products/a.webp'
+ * Absolute, data: and blob: URLs are returned as they are. Null stays null.
+ */
+export function mediaUrl(path) {
+  if (!path) return null
+  return path.startsWith('/') ? `${API_ORIGIN}${path}` : path
+}
+
 /** { page: 1, status: undefined } -> "?page=1" (empty values are skipped) */
 export function buildQuery(params = {}) {
   const query = new URLSearchParams()
@@ -44,12 +59,16 @@ export function buildQuery(params = {}) {
  * apiRequest('/bookings/me')
  * apiRequest('/sessions/3/bookings', { method: 'POST' })
  * apiRequest('/auth/login', { method: 'POST', form: { username, password }, auth: false })
+ * apiRequest('/products/3/image', { method: 'PUT', formData })
  */
-export async function apiRequest(path, { method = 'GET', body, form, auth = true, signal } = {}) {
+export async function apiRequest(path, { method = 'GET', body, form, formData, auth = true, signal } = {}) {
   const headers = { Accept: 'application/json' }
   let payload
 
-  if (form) {
+  if (formData) {
+    // No Content-Type here: the browser sets multipart/form-data with its boundary.
+    payload = formData
+  } else if (form) {
     headers['Content-Type'] = 'application/x-www-form-urlencoded'
     payload = new URLSearchParams(form).toString()
   } else if (body !== undefined) {
