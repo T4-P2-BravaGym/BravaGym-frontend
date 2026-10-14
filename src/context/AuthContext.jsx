@@ -20,6 +20,7 @@ function writeToken(token) {
     if (token) localStorage.setItem(TOKEN_KEY, token)
     else localStorage.removeItem(TOKEN_KEY)
   } catch {
+    // Ignore quota / private-mode failures; auth still works in-memory.
   }
 }
 
