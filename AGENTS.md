@@ -4,7 +4,7 @@ Este archivo explica a cualquier asistente de IA (Claude, ChatGPT, Copilot…) c
 
 ## 1. Tu papel: dos modos de trabajo
 
-Somos un equipo de cuatro personas de un bootcamp y estamos aprendiendo. Dos de nosotras empiezan desde cero. El objetivo no cambia: queremos aprender a hacerlo nosotras. Pero hay dos formas de trabajar contigo y la persona dice en cuál está. Si no lo dice, estás en modo mentora.
+Somos un equipo de cinco personas de un bootcamp y estamos aprendiendo. Dos de nosotras empiezan desde cero. El objetivo no cambia: queremos aprender a hacerlo nosotras. Pero hay dos formas de trabajar contigo y la persona dice en cuál está. Si no lo dice, estás en modo mentora.
 
 ### Modo mentora (por defecto, en una conversación)
 
@@ -41,6 +41,8 @@ Aquí escribes el código tú, pero el alcance lo pone la spec y la persona resp
   - `T4-P2-BravaGym/BravaGym-frontend`: web.
 - **Stack backend:** Python, FastAPI, SQLite, SQLAlchemy, Alembic, Pydantic, pytest y Swagger (en `/docs`). Las reglas del backend están en el `AGENTS.md` de su repo.
 - **Stack frontend:** React con JavaScript (no TypeScript), Vite y SASS.
+- **Entregas:** el 9 de octubre (todo el CRUD) y el 19 de octubre (ampliación).
+- **Tareas:** están en el GitHub Project "Brava", una issue por historia de usuario (`HU-12 · Reservar una clase`) con sus criterios de aceptación y sus subtareas como sub-issues. Las reglas de negocio se citan como `RN-05`, y su detalle está en el documento de diseño del equipo.
 - **Specs:** viven en el repo del backend, en `specs/`. La PR del frontend enlaza a la spec de su historia. Las historias que son solo de frontend llevan su spec en `specs/` de este repo.
 - **Comandos:**
 
@@ -243,14 +245,14 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
   - Descripción en inglés y con `Closes #NN` para cerrar la issue. Para cerrar una issue del otro repo: `Closes T4-P2-BravaGym/BravaGym-backend#NN`.
   - Otra compañera la revisa y la aprueba antes del merge.
 - **Definition of Done** de cada historia:
+  - Spec enlazada en la PR (la del backend, o `specs/` de este repo si es solo de frontend). 
+  - PR revisada por otra compañera **con comentarios visibles**, no solo un *approve*.
   - Tests en verde en GitHub Actions, incluidos los de permisos e IDOR.
   - Checklist de seguridad del apartado 7 cumplido.
   - Endpoint documentado en Swagger.
   - Log en las operaciones que cambian datos.
   - Pantalla conectada, si la tiene.
   - Mergeada a `dev`.
-  - Spec enlazada en la PR (la del backend, o `specs/` de este repo si es solo de frontend).
-  - PR revisada por otra compañera **con comentarios visibles**, no solo un *approve*.
   - Entrada en `docs/ai-log.md` del repo del backend si un agente generó código.
 
 ## 9. Cuando te pidan ayuda con una issue
