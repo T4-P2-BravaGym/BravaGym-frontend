@@ -10,16 +10,16 @@ import Table from '@/components/ui/Table'
 import useAuth from '@/hooks/useAuth'
 import useDebouncedValue from '@/hooks/useDebouncedValue'
 import { ROLE_LABELS } from '@/routes/navigation'
-import { deactivateUser, getUser, listUsers, updateUser } from '@/services/users'
-import { canManage } from './canManage'
+import { changeRole, deactivateUser, getUser, listUsers, updateUser } from '@/services/users'
+import { canManage, roleChoices } from './canManage'
 import UserPanel from './UserPanel'
 import styles from './AdminUsers.module.scss'
 
 /**
- * Usuarias y roles (HU-06, HU-31)
+ * Usuarias y roles (HU-05, HU-06, HU-31)
  * Admins search users by name or email and filter by role and status.
+ * HU-05: change the role from the table, after a confirmation.
  * HU-31: view, edit and deactivate a user from the table.
- * TODO(HU-05): change the role from this table.
  */
 const PAGE_SIZE = 20
 const SEARCH_DELAY_MS = 350
@@ -64,6 +64,7 @@ export default function AdminUsers() {
   const [mode, setMode] = useState('view')
   const [panelError, setPanelError] = useState(null)
   const [deactivateTarget, setDeactivateTarget] = useState(null)
+  const [roleChange, setRoleChange] = useState(null) // HU-05: { user, role } waiting for confirmation
   const [busy, setBusy] = useState(false)
   const [flash, setFlash] = useState(null)
   const [actionError, setActionError] = useState(null)
@@ -157,8 +158,46 @@ export default function AdminUsers() {
     }
   }
 
+  async function handleRoleChange() {
+    clearMessages()
+    setBusy(true)
+    const { user, role: newRole } = roleChange
+    try {
+      await changeRole(user.id, newRole)
+      setFlash(`${user.first_name} ${user.last_name} ahora es ${ROLE_LABELS[newRole]}.`)
+      if (selected?.id === user.id) closePanel()
+      setReloadKey((key) => key + 1)
+    } catch (apiError) {
+      setActionError(apiError.detail ?? SAVE_ERROR)
+    } finally {
+      setRoleChange(null)
+      setBusy(false)
+    }
+  }
+
+  // HU-05: a select in the "Rol" column when she can manage that user (not herself, only active users)
+  function renderRole(user) {
+    const label = ROLE_LABELS[user.role] ?? user.role
+    if (!canManage(me, user) || user.id === me?.id || !user.is_active) return label
+    return (
+      <select
+        className={styles.roleSelect}
+        aria-label={`Rol de ${user.first_name} ${user.last_name}`}
+        value={user.role}
+        disabled={busy}
+        onChange={(event) => setRoleChange({ user, role: event.target.value })}
+      >
+        {roleChoices(me).map((value) => (
+          <option key={value} value={value}>
+            {ROLE_LABELS[value]}
+          </option>
+        ))}
+      </select>
+    )
+  }
+
   const columns = [
-    ...COLUMNS,
+    ...COLUMNS.map((column) => (column.key === 'role' ? { ...column, render: renderRole } : column)),
     {
       key: 'actions',
       header: <span className={styles.actionsHeader}>Acciones</span>,
@@ -279,6 +318,20 @@ export default function AdminUsers() {
         busy={busy}
         onConfirm={handleDeactivate}
         onClose={() => setDeactivateTarget(null)}
+      />
+
+      <Modal
+        open={Boolean(roleChange)}
+        title="¿Cambiar el rol?"
+        description={
+          roleChange
+            ? `${roleChange.user.first_name} ${roleChange.user.last_name} pasará de ${ROLE_LABELS[roleChange.user.role]} a ${ROLE_LABELS[roleChange.role]}.`
+            : undefined
+        }
+        confirmLabel="Cambiar rol"
+        busy={busy}
+        onConfirm={handleRoleChange}
+        onClose={() => setRoleChange(null)}
       />
     </div>
   )

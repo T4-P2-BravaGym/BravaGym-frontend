@@ -9,3 +9,9 @@ export function canManage(actor, user) {
   if (actor.role === 'superadmin') return true
   return !STAFF_ROLES.includes(user.role)
 }
+
+/** Roles each actor may give (RN-18): an admin only switches between member and trainer. */
+export function roleChoices(actor) {
+  if (actor?.role === 'superadmin') return ['member', 'trainer', 'admin', 'superadmin']
+  return ['member', 'trainer']
+}
