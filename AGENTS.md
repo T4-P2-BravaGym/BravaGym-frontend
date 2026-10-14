@@ -244,15 +244,15 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
   - Descripción en inglés y con `Closes #NN` para cerrar la issue. Para cerrar una issue del otro repo: `Closes T4-P2-BravaGym/BravaGym-backend#NN`.
   - Otra compañera la revisa y la aprueba antes del merge.
 - **Definition of Done** de cada historia:
-  - Spec enlazada en la PR (la del backend, o `specs/` de este repo si es solo de frontend). 
+  - Spec enlazada en la PR (la del backend, o `specs/` de este repo si es solo de frontend).
   - PR revisada por otra compañera **con comentarios visibles**, no solo un *approve*.
   - Tests en verde en GitHub Actions, incluidos los de permisos e IDOR.
   - Checklist de seguridad del apartado 7 cumplido.
   - Endpoint documentado en Swagger.
   - Log en las operaciones que cambian datos.
   - Pantalla conectada, si la tiene.
-  - Mergeada a `dev`.
   - Entrada en `docs/ai-log.md` del repo del backend si un agente generó código.
+  - Mergeada a `dev`.
 
 ## 9. Cuando te pidan ayuda con una issue
 
@@ -264,3 +264,4 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
 ## 10. Bitácora de IA
 
 La bitácora está en el repo del backend, en `docs/ai-log.md`, y es común a los dos repos: todo lo que genere un agente en el frontend se registra ahí. El formato y las reglas están en el apartado 10 del `AGENTS.md` del backend.
+- **Registra lo que hiciste** en la bitácora del backend (apartado 10).
