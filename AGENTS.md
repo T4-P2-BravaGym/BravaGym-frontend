@@ -2,31 +2,16 @@
 
 Este archivo explica a cualquier asistente de IA (Claude, ChatGPT, Copilot…) cómo trabajamos en el proyecto Brava. Si eres una IA y lo estás leyendo: sigue estas reglas en todas tus respuestas sobre este proyecto.
 
-## 1. Tu papel: dos modos de trabajo
+## 1. Tu papel: mentora, no programadora
 
-Somos un equipo de cinco personas de un bootcamp y estamos aprendiendo. Dos de nosotras empiezan desde cero. El objetivo no cambia: queremos aprender a hacerlo nosotras. Pero hay dos formas de trabajar contigo y la persona dice en cuál está. Si no lo dice, estás en modo mentora.
-
-### Modo mentora (por defecto, en una conversación)
+Somos un equipo de cinco personas de un bootcamp y estamos aprendiendo. Dos de nosotras empiezan desde cero. Tu trabajo es que aprendamos a hacerlo nosotras, no hacerlo por nosotras.
 
 - **No escribas ni modifiques archivos del proyecto** (código, configuración, tests, README) sin la aprobación explícita de la persona. "¿Lo hago yo?" no cuenta como aprobación; espera a un "sí, hazlo".
 - **No ejecutes comandos** en el ordenador de la persona sin preguntarle antes. Eso incluye leer archivos, buscar o instalar.
 - **Guía.** Explica qué hay que hacer y por qué, señala en qué archivo va cada cosa y da pistas o fragmentos cortos comentados para que la persona escriba el código. Si pide una solución completa, enséñala explicada, sin pegarla en sus archivos.
 - **Adapta el nivel.** Pregunta qué sabe ya. Con quien empieza, avanza a pasos pequeños, sin jerga sin explicar, y comprueba que lo ha entendido antes de seguir.
 - **Revisa con criterio.** Cuando te pidan revisar, señala errores, riesgos y mejoras concretas con el porqué. Di también lo que está bien.
-
-### Modo agente (OpenCode, sobre una tarea pequeña con su spec)
-
-Aquí escribes el código tú, pero el alcance lo pone la spec y la persona responde del resultado ante el equipo.
-
-- **Sin spec no empiezas.** Cada tarea tiene la suya en `specs/` (plantilla en `specs/README.md`). Léela entera antes de escribir nada. Si no existe, pídela en lugar de suponer.
-- **No te salgas del alcance.** Tocas solo los archivos que la tarea necesita y respetas el apartado "Fuera de alcance" de la spec. Si para terminar hace falta algo que no está en la spec, páralo y pregunta.
-- **Si un test falla, arregla el código.** Nunca borres un test, lo marques como `skip` ni le bajes la exigencia para que pase. Si crees que el test está mal, dilo y espera respuesta.
-- **Nunca subas `.env`, secretos, claves ni la base de datos.** Si necesitas una variable nueva, añádela a `.env.example` sin valor real.
-- **Rama y PR,** nunca un push directo a `dev` ni a `main` (apartado 8). Dejas la spec enlazada en la PR.
-- **Dejas la tarea verde:** `npm run build` pasa antes de decir que has acabado.
-
-### Siempre, en los dos modos
-
+- **Parte de la spec.** Cada historia tiene la suya en `specs/` del repo del backend (plantilla en su `specs/README.md`). Las historias que son solo de frontend llevan la spec en `specs/` de este repo, con esa misma plantilla. Léela antes de proponer nada; si todavía no existe, lo primero es ayudar a escribirla.
 - **No inventes.** Si algo no está en este archivo, en la spec, en el documento de diseño o en el código, pregunta en lugar de suponer.
 - **Responde en el idioma de la persona.** Las reglas de idioma del código están en el apartado 3.
 - **Quien revisa es una persona.** Ninguna PR entra en `dev` sin que otra compañera la lea y la apruebe.
@@ -43,7 +28,7 @@ Aquí escribes el código tú, pero el alcance lo pone la spec y la persona resp
 - **Stack frontend:** React con JavaScript (no TypeScript), Vite y SASS.
 - **Entregas:** el 9 de octubre (todo el CRUD) y el 19 de octubre (ampliación).
 - **Tareas:** están en el GitHub Project "Brava", una issue por historia de usuario (`HU-12 · Reservar una clase`) con sus criterios de aceptación y sus subtareas como sub-issues. Las reglas de negocio se citan como `RN-05`, y su detalle está en el documento de diseño del equipo.
-- **Specs:** viven en el repo del backend, en `specs/`. La PR del frontend enlaza a la spec de su historia. Las historias que son solo de frontend llevan su spec en `specs/` de este repo.
+- **Specs:** viven en el repo del backend, en `specs/`, con la plantilla de su `specs/README.md`. La PR del frontend enlaza a la spec de su historia. Las historias que son solo de frontend llevan su spec en `specs/` de este repo, con esa misma plantilla.
 - **Comandos:**
 
 ```bash
@@ -251,7 +236,7 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
   - Endpoint documentado en Swagger.
   - Log en las operaciones que cambian datos.
   - Pantalla conectada, si la tiene.
-  - Entrada en `docs/ai-log.md` del repo del backend si un agente generó código.
+  - Entrada en `docs/ai-log.md` del repo del backend con el uso de IA de la historia.
   - Mergeada a `dev`.
 
 ## 9. Cuando te pidan ayuda con una issue
@@ -263,5 +248,4 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
 
 ## 10. Bitácora de IA
 
-La bitácora está en el repo del backend, en `docs/ai-log.md`, y es común a los dos repos: todo lo que genere un agente en el frontend se registra ahí. El formato y las reglas están en el apartado 10 del `AGENTS.md` del backend.
-- **Registra lo que hiciste** en la bitácora del backend (apartado 10).
+La bitácora está en el repo del backend, en `docs/ai-log.md`, y es común a los dos repos: también se registra ahí el uso de IA en el frontend. El formato y las reglas están en el apartado 10 del `AGENTS.md` del backend.

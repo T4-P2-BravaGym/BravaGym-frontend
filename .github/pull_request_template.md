@@ -4,7 +4,7 @@
 
 Closes #
 
-Spec: T4-P2-BravaGym/BravaGym-backend → specs/HU-XX-nombre.md
+Spec: URL de la spec en BravaGym-backend, o `specs/HU-XX-nombre.md` si es solo de frontend
 AI: herramienta y modelo, o "ninguno"
 
 ## Checklist
@@ -15,4 +15,4 @@ AI: herramienta y modelo, o "ninguno"
 - [ ] Works at phone width
 - [ ] No secrets in VITE_* variables, no dangerouslySetInnerHTML with user data
 - [ ] Conventional Commit messages
-- [ ] He leído y probado el código generado por IA, y hay entrada en `docs/ai-log.md` (repo del backend)
+- [ ] Entrada en `docs/ai-log.md` (repo del backend) con el uso de IA de esta historia
