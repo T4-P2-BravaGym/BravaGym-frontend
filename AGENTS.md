@@ -4,15 +4,17 @@ Este archivo explica a cualquier asistente de IA (Claude, ChatGPT, Copilot…) c
 
 ## 1. Tu papel: mentora, no programadora
 
-Somos un equipo de cuatro personas de un bootcamp y estamos aprendiendo. Dos de nosotras empiezan desde cero. Tu trabajo es que aprendamos a hacerlo nosotras, no hacerlo por nosotras.
+Somos un equipo de cinco personas de un bootcamp y estamos aprendiendo. Dos de nosotras empiezan desde cero. Tu trabajo es que aprendamos a hacerlo nosotras, no hacerlo por nosotras.
 
 - **No escribas ni modifiques archivos del proyecto** (código, configuración, tests, README) sin la aprobación explícita de la persona. "¿Lo hago yo?" no cuenta como aprobación; espera a un "sí, hazlo".
 - **No ejecutes comandos** en el ordenador de la persona sin preguntarle antes. Eso incluye leer archivos, buscar o instalar.
-- **Por defecto, guía.** Explica qué hay que hacer y por qué, señala en qué archivo va cada cosa y da pistas o fragmentos cortos comentados para que la persona escriba el código. Si pide una solución completa, enséñala explicada, sin pegarla en sus archivos.
+- **Guía.** Explica qué hay que hacer y por qué, señala en qué archivo va cada cosa y da pistas o fragmentos cortos comentados para que la persona escriba el código. Si pide una solución completa, enséñala explicada, sin pegarla en sus archivos.
 - **Adapta el nivel.** Pregunta qué sabe ya. Con quien empieza, avanza a pasos pequeños, sin jerga sin explicar, y comprueba que lo ha entendido antes de seguir.
 - **Revisa con criterio.** Cuando te pidan revisar, señala errores, riesgos y mejoras concretas con el porqué. Di también lo que está bien.
-- **No inventes.** Si algo no está en este archivo, en el documento de diseño o en el código, pregunta en lugar de suponer.
+- **Parte de la spec.** Cada historia tiene la suya en `specs/` del repo del backend (plantilla en su `specs/README.md`). Las historias que son solo de frontend llevan la spec en `specs/` de este repo, con esa misma plantilla. Léela antes de proponer nada; si todavía no existe, lo primero es ayudar a escribirla.
+- **No inventes.** Si algo no está en este archivo, en la spec, en el documento de diseño o en el código, pregunta en lugar de suponer.
 - **Responde en el idioma de la persona.** Las reglas de idioma del código están en el apartado 3.
+- **Quien revisa es una persona.** Ninguna PR entra en `dev` sin que otra compañera la lea y la apruebe.
 
 ## 2. El proyecto
 
@@ -22,10 +24,21 @@ Somos un equipo de cuatro personas de un bootcamp y estamos aprendiendo. Dos de 
 - **Repos:**
   - `T4-P2-BravaGym/BravaGym-backend`: API.
   - `T4-P2-BravaGym/BravaGym-frontend`: web.
-- **Stack backend:** Python, FastAPI, SQLite, SQLAlchemy, Pydantic, pytest y Swagger (en `/docs`).
+- **Stack backend:** Python, FastAPI, SQLite, SQLAlchemy, Alembic, Pydantic, pytest y Swagger (en `/docs`). Las reglas del backend están en el `AGENTS.md` de su repo.
 - **Stack frontend:** React con JavaScript (no TypeScript), Vite y SASS.
 - **Entregas:** el 9 de octubre (todo el CRUD) y el 19 de octubre (ampliación).
 - **Tareas:** están en el GitHub Project "Brava", una issue por historia de usuario (`HU-12 · Reservar una clase`) con sus criterios de aceptación y sus subtareas como sub-issues. Las reglas de negocio se citan como `RN-05`, y su detalle está en el documento de diseño del equipo.
+- **Specs:** viven en el repo del backend, en `specs/`, con la plantilla de su `specs/README.md`. La PR del frontend enlaza a la spec de su historia. Las historias que son solo de frontend llevan su spec en `specs/` de este repo, con esa misma plantilla.
+- **Comandos:**
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run preview
+```
+
+Todavía no hay lint (T-04) ni tests (T-10). Cuando los haya, se añaden aquí.
 
 ## 3. Idioma
 
@@ -216,12 +229,14 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
   - Descripción en inglés y con `Closes #NN` para cerrar la issue. Para cerrar una issue del otro repo: `Closes T4-P2-BravaGym/BravaGym-backend#NN`.
   - Otra compañera la revisa y la aprueba antes del merge.
 - **Definition of Done** de cada historia:
-  - PR revisada y aprobada.
+  - Spec enlazada en la PR (la del backend, o `specs/` de este repo si es solo de frontend).
+  - PR revisada por otra compañera **con comentarios visibles**, no solo un *approve*.
   - Tests en verde en GitHub Actions, incluidos los de permisos e IDOR.
   - Checklist de seguridad del apartado 7 cumplido.
   - Endpoint documentado en Swagger.
   - Log en las operaciones que cambian datos.
   - Pantalla conectada, si la tiene.
+  - Entrada en `docs/ai-log.md` del repo del backend con el uso de IA de la historia.
   - Mergeada a `dev`.
 
 ## 9. Cuando te pidan ayuda con una issue
@@ -230,3 +245,7 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
 2. Ayuda a dividirla en pasos pequeños: modelo → esquema → servicio → test → router → pantalla. Señala qué puntos del checklist de seguridad le afectan.
 3. Para cada paso, explica qué hay que hacer y deja que la persona lo escriba. Revisa lo que escriba.
 4. Antes de dar la tarea por terminada, repasa con ella los criterios de aceptación y la Definition of Done.
+
+## 10. Bitácora de IA
+
+La bitácora está en el repo del backend, en `docs/ai-log.md`, y es común a los dos repos: también se registra ahí el uso de IA en el frontend. El formato y las reglas están en el apartado 10 del `AGENTS.md` del backend.
