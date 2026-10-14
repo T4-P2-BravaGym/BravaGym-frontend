@@ -72,11 +72,11 @@ function BadgeDemo() {
       ))}
       <span className={styles.labelled}>
         <Badge tone="brand">+5,00 €</Badge>
-        <code className={styles.caption}>tone="brand"</code>
+        <code className={styles.caption}>{'tone="brand"'}</code>
       </span>
       <span className={styles.labelled}>
         <Badge tone="solid">La más elegida</Badge>
-        <code className={styles.caption}>tone="solid"</code>
+        <code className={styles.caption}>{'tone="solid"'}</code>
       </span>
     </div>
   )
