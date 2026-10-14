@@ -4,6 +4,9 @@
 
 Closes #
 
+Spec: T4-P2-BravaGym/BravaGym-backend → specs/HU-XX-nombre.md
+AI: herramienta y modelo, o "ninguno"
+
 ## Checklist
 
 - [ ] `npm run build` passes
@@ -12,3 +15,4 @@ Closes #
 - [ ] Works at phone width
 - [ ] No secrets in VITE_* variables, no dangerouslySetInnerHTML with user data
 - [ ] Conventional Commit messages
+- [ ] He leído y probado el código generado por IA, y hay entrada en `docs/ai-log.md` (repo del backend)
