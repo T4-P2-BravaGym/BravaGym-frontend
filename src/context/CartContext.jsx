@@ -32,6 +32,7 @@ function writeCart(key, items) {
         if (items.length) localStorage.setItem(key, JSON.stringify(items))
         else localStorage.removeItem(key)
     } catch {
+        // Ignore quota / private-mode failures; cart still works in-memory.
     }
 }
 
