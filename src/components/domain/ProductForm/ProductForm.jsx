@@ -1,24 +1,38 @@
-import { useId, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import Alert from '@/components/ui/Alert'
 import Button from '@/components/ui/Button'
 import Field from '@/components/ui/Field'
+import { mediaUrl } from '@/services/api'
 import { centsToEurosInput, eurosToCents } from '@/utils/format'
 import styles from './ProductForm.module.scss'
 
 const PRODUCT_SIZES = ['XS', 'S', 'M', 'L', 'XL']
+// Only filters the file picker; the API checks the real type (HU-30).
+const PHOTO_TYPES = 'image/jpeg,image/png,image/webp'
 
 /**
  * ProductForm
  * Create or edit a product (HU-22). Clothing can have sizes (HU-37, RN-20): then the
- * stock goes in each size and an empty size is not sold. Validation happens in the API.
+ * stock goes in each size and an empty size is not sold. It can also take a photo
+ * (HU-30), which is sent apart from the product body. Validation happens in the API.
  *
- * Props: product (null to create), categories, busy, error { title, text }, onSubmit(body), onCancel
+ * Props: product (null to create), categories, busy, error { title, text },
+ *        onSubmit(body, photo), onCancel
+ *        photo is null (no change), { file } (upload it) or { remove: true }
  */
 export default function ProductForm({ product, categories, busy = false, error, onSubmit, onCancel }) {
     const headingId = useId()
     const sizesHintId = useId()
+    const photoLabelId = useId()
+    const photoHintId = useId()
+    const fileInputRef = useRef(null)
     const [form, setForm] = useState(() => toFormValues(product))
+    // null = keep the saved photo, { file, preview } = a new one, { remove: true } = remove it
+    const [photo, setPhoto] = useState(null)
     const isEdit = Boolean(product?.id)
+
+    const savedPhotoUrl = mediaUrl(product?.image_url)
+    const previewUrl = photo?.file ? photo.preview : photo?.remove ? null : savedPhotoUrl
 
     function update(name) {
         return (event) => setForm((current) => ({ ...current, [name]: event.target.value }))
@@ -34,9 +48,23 @@ export default function ProductForm({ product, categories, busy = false, error, 
         setForm((current) => ({ ...current, hasSizes: checked }))
     }
 
+    function choosePhoto(event) {
+        const file = event.target.files?.[0]
+        // Reset the input so the same file can be chosen again after "Quitar foto".
+        event.target.value = ''
+        if (!file) return
+        const reader = new FileReader()
+        reader.onload = () => setPhoto({ file, preview: reader.result })
+        reader.readAsDataURL(file)
+    }
+
+    function removePhoto() {
+        setPhoto(savedPhotoUrl ? { remove: true } : null)
+    }
+
     function handleSubmit(event) {
         event.preventDefault()
-        onSubmit(toProductBody(form))
+        onSubmit(toProductBody(form), toPhotoChange(photo))
     }
 
     return (
@@ -132,6 +160,48 @@ export default function ProductForm({ product, categories, busy = false, error, 
                     disabled={busy}
                 />
 
+                <div className={styles.photo} role="group" aria-labelledby={photoLabelId}>
+                    <span id={photoLabelId} className={styles.legend}>
+                        Foto (opcional)
+                    </span>
+                    <div className={styles.photoRow}>
+                        <div className={styles.preview}>
+                            {previewUrl ? <img src={previewUrl} alt="Vista previa de la foto" /> : <span>Sin foto</span>}
+                        </div>
+                        <div className={styles.photoControls}>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept={PHOTO_TYPES}
+                                hidden
+                                onChange={choosePhoto}
+                                disabled={busy}
+                            />
+                            <div className={styles.photoButtons}>
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    disabled={busy}
+                                    aria-describedby={photoHintId}
+                                >
+                                    {previewUrl ? 'Cambiar foto' : 'Elegir foto'}
+                                </Button>
+                                {previewUrl && (
+                                    <Button variant="secondary" size="sm" onClick={removePhoto} disabled={busy}>
+                                        Quitar foto
+                                    </Button>
+                                )}
+                            </div>
+                            <p id={photoHintId} className={styles.hint}>
+                                {photo?.file
+                                    ? `${photo.file.name} · se sube al guardar.`
+                                    : 'JPEG, PNG o WebP, hasta 2 MB.'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <div className={styles.actions}>
                     <Button variant="secondary" onClick={onCancel} disabled={busy}>
                         Cancelar
@@ -180,4 +250,10 @@ function toProductBody(form) {
         stock: toNumberOrRaw(form.sizeStock[size]),
     }))
     return { ...body, sizes }
+}
+
+function toPhotoChange(photo) {
+    if (photo?.file) return { file: photo.file }
+    if (photo?.remove) return { remove: true }
+    return null
 }
