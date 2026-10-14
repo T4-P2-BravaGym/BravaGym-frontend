@@ -1,23 +1,30 @@
 import { useEffect, useState } from 'react'
 import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
+import Button from '@/components/ui/Button'
 import Field from '@/components/ui/Field'
+import Modal from '@/components/ui/Modal'
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import Table from '@/components/ui/Table'
+import useAuth from '@/hooks/useAuth'
 import useDebouncedValue from '@/hooks/useDebouncedValue'
 import { ROLE_LABELS } from '@/routes/navigation'
-import { listUsers } from '@/services/users'
+import { deactivateUser, getUser, listUsers, updateUser } from '@/services/users'
+import { canManage } from './canManage'
+import UserPanel from './UserPanel'
 import styles from './AdminUsers.module.scss'
 
 /**
- * Usuarias y roles (HU-06)
+ * Usuarias y roles (HU-06, HU-31)
  * Admins search users by name or email and filter by role and status.
+ * HU-31: view, edit and deactivate a user from the table.
  * TODO(HU-05): change the role from this table.
  */
 const PAGE_SIZE = 20
 const SEARCH_DELAY_MS = 350
 const LOAD_ERROR = 'No se han podido cargar las usuarias. Inténtalo de nuevo.'
+const SAVE_ERROR = 'No se ha podido guardar. Inténtalo de nuevo.'
 
 // Status filter: the select works with strings, the API expects true/false
 const STATUS_OPTIONS = [
@@ -50,6 +57,17 @@ export default function AdminUsers() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  // HU-31: the user open in the panel, and the deactivation waiting for confirmation
+  const { user: me } = useAuth()
+  const [reloadKey, setReloadKey] = useState(0)
+  const [selected, setSelected] = useState(null)
+  const [mode, setMode] = useState('view')
+  const [panelError, setPanelError] = useState(null)
+  const [deactivateTarget, setDeactivateTarget] = useState(null)
+  const [busy, setBusy] = useState(false)
+  const [flash, setFlash] = useState(null)
+  const [actionError, setActionError] = useState(null)
+
   // Reload whenever a filter or the page changes
   useEffect(() => {
     const controller = new AbortController() // cancels the old request if filters change fast
@@ -75,7 +93,7 @@ export default function AdminUsers() {
       })
 
     return () => controller.abort()
-  }, [role, isActive, q, page])
+  }, [role, isActive, q, page, reloadKey])
 
   // Any filter change goes back to page 1, or she could land on an empty page
   function changeFilter(setter) {
@@ -84,6 +102,91 @@ export default function AdminUsers() {
       setPage(1)
     }
   }
+
+  function clearMessages() {
+    setFlash(null)
+    setActionError(null)
+    setPanelError(null)
+  }
+
+  // "Ver" and "Editar" load her latest data first (GET /users/{id})
+  async function openPanel(user, nextMode) {
+    clearMessages()
+    try {
+      setSelected(await getUser(user.id))
+      setMode(nextMode)
+    } catch (apiError) {
+      setActionError(apiError.detail ?? LOAD_ERROR)
+    }
+  }
+
+  function closePanel() {
+    setSelected(null)
+    setPanelError(null)
+  }
+
+  async function handleSave(changes) {
+    clearMessages()
+    setBusy(true)
+    try {
+      const saved = await updateUser(selected.id, changes)
+      setSelected(saved)
+      setMode('view')
+      setFlash(`Datos de ${saved.first_name} guardados.`)
+      setReloadKey((key) => key + 1)
+    } catch (apiError) {
+      setPanelError({ title: 'Revisa los datos', text: apiError.detail ?? SAVE_ERROR })
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function handleDeactivate() {
+    clearMessages()
+    setBusy(true)
+    try {
+      await deactivateUser(deactivateTarget.id)
+      setFlash(`${deactivateTarget.first_name} ${deactivateTarget.last_name} ya no puede entrar en Brava.`)
+      if (selected?.id === deactivateTarget.id) closePanel()
+      setReloadKey((key) => key + 1)
+    } catch (apiError) {
+      setActionError(apiError.detail ?? SAVE_ERROR)
+    } finally {
+      setDeactivateTarget(null)
+      setBusy(false)
+    }
+  }
+
+  const columns = [
+    ...COLUMNS,
+    {
+      key: 'actions',
+      header: <span className={styles.actionsHeader}>Acciones</span>,
+      render: (user) => (
+        <div className={styles.rowActions}>
+          <Button variant="secondary" size="sm" onClick={() => openPanel(user, 'view')} disabled={busy}>
+            Ver
+          </Button>
+          {canManage(me, user) ? (
+            user.is_active && (
+              <>
+                <Button variant="secondary" size="sm" onClick={() => openPanel(user, 'edit')} disabled={busy}>
+                  Editar
+                </Button>
+                {user.id !== me?.id && (
+                  <Button variant="danger" size="sm" onClick={() => setDeactivateTarget(user)} disabled={busy}>
+                    Dar de baja
+                  </Button>
+                )}
+              </>
+            )
+          ) : (
+            <span className={styles.locked}>Solo superadmin</span>
+          )}
+        </div>
+      ),
+    },
+  ]
 
   return (
     <div className={styles.root}>
@@ -119,6 +222,31 @@ export default function AdminUsers() {
         </Field>
       </div>
 
+      {flash && (
+        <Alert tone="success" onClose={() => setFlash(null)}>
+          {flash}
+        </Alert>
+      )}
+      {actionError && (
+        <Alert tone="error" onClose={() => setActionError(null)}>
+          {actionError}
+        </Alert>
+      )}
+
+      {selected && (
+        <UserPanel
+          key={`${selected.id}-${mode}`}
+          user={selected}
+          mode={mode}
+          canEdit={canManage(me, selected) && selected.is_active}
+          busy={busy}
+          error={panelError}
+          onEdit={() => setMode('edit')}
+          onSave={handleSave}
+          onClose={closePanel}
+        />
+      )}
+
       {error && <Alert tone="error">{error}</Alert>}
 
       {loading ? (
@@ -128,7 +256,7 @@ export default function AdminUsers() {
           <>
             <Table
               caption="Usuarias registradas"
-              columns={COLUMNS}
+              columns={columns}
               rows={result.items}
               emptyTitle="No hay usuarias con estos filtros"
               emptyText="Prueba con otro nombre o quita algún filtro."
@@ -137,6 +265,22 @@ export default function AdminUsers() {
           </>
         )
       )}
+
+      <Modal
+        open={Boolean(deactivateTarget)}
+        title="¿Dar de baja a esta usuaria?"
+        description={
+          deactivateTarget
+            ? `${deactivateTarget.first_name} ${deactivateTarget.last_name} no podrá entrar en Brava. Se cancelan su suscripción activa y sus reservas futuras. Sus datos y sus pagos se conservan.`
+            : undefined
+        }
+        confirmLabel="Dar de baja"
+        tone="danger"
+        busy={busy}
+        onConfirm={handleDeactivate}
+        onClose={() => setDeactivateTarget(null)}
+      />
     </div>
   )
 }
+
