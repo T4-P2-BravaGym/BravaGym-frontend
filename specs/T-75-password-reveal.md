@@ -38,3 +38,15 @@ de comprobar lo escrito, ni en el login ni en el registro. Salió al hacer "Camb
 - "Cambiar contraseña" (HU-32): se añade cuando su PR esté en `dev`, con una línea por campo.
 - Medir la fuerza de la contraseña.
 - Ocultar el texto otra vez solo al enviar el formulario.
+
+## Decisiones
+
+| Decisión | Por qué |
+| --- | --- |
+| Una prop `revealable` en `Field` en vez de un componente nuevo | Los campos de contraseña ya usan `Field`: la etiqueta, la pista y el error siguen igual (DRY). |
+| Solo hace algo con `type="password"` | Así no puede aparecer un ojo en un campo que no lo necesita. |
+| El envoltorio del botón solo existe en los campos con ojo | El HTML de todos los demás `Field` queda igual que antes; no se puede romper otro formulario. |
+| El nombre del botón es fijo ("Mostrar contraseña") y el estado va en `aria-pressed` | Es el patrón accesible de un botón de activar/desactivar: si cambiaran el nombre y el estado a la vez, el lector lo diría dos veces. |
+| `type="button"` | Si no, pulsar el ojo enviaría el formulario. |
+| Botón de 44 × 44 px dentro del campo | Es el tamaño mínimo para el dedo y coincide con la altura del campo. |
+| Iconos `eye` y `eyeOff` como trazos, igual que los demás | Toman el color del texto y se ven como el resto de iconos. |
