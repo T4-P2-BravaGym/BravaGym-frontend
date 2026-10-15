@@ -39,6 +39,45 @@
   }
 }
 
+.controlWrap {
+  position: relative;
+}
+
+// Room on the right for the eye button
+.withReveal {
+  padding-right: 44px;
+}
+
+.reveal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--ink);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+    outline-offset: -2px;
+  }
+
+  &:disabled {
+    cursor: default;
+    color: var(--ink-muted);
+  }
+}
+
 .textarea {
   min-height: 88px;
   padding: 10px 12px;
