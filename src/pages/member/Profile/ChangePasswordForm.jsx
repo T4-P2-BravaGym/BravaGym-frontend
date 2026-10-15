@@ -59,9 +59,9 @@ export default function ChangePasswordForm() {
 
       {saved && <Alert tone="success">Tu contraseña se ha cambiado.</Alert>}
 
-      <Field label="Contraseña actual" name="current_password" type="password" autoComplete="current-password" value={form.current_password} onChange={handleChange} disabled={isSaving} />
-      <Field label="Contraseña nueva" name="new_password" type="password" autoComplete="new-password" hint={`Mínimo ${MIN_LENGTH} caracteres`} value={form.new_password} onChange={handleChange} disabled={isSaving} />
-      <Field label="Repite la contraseña nueva" name="repeat_password" type="password" autoComplete="new-password" value={form.repeat_password} onChange={handleChange} disabled={isSaving} />
+      <Field label="Contraseña actual" name="current_password" type="password" revealable autoComplete="current-password" value={form.current_password} onChange={handleChange} disabled={isSaving} />
+      <Field label="Contraseña nueva" name="new_password" type="password" revealable autoComplete="new-password" hint={`Mínimo ${MIN_LENGTH} caracteres`} value={form.new_password} onChange={handleChange} disabled={isSaving} />
+      <Field label="Repite la contraseña nueva" name="repeat_password" type="password" revealable autoComplete="new-password" value={form.repeat_password} onChange={handleChange} disabled={isSaving} />
       <div className={styles.actions}>
         <Button type="submit" disabled={isSaving}>
           {isSaving ? 'Guardando…' : 'Cambiar contraseña'}
