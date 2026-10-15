@@ -1,5 +1,5 @@
 /**
- * API calls for users (HU-04, HU-05, HU-06, HU-31): my profile, the admin list, roles,
+ * API calls for users (HU-04, HU-05, HU-06, HU-31, HU-17): my profile, the admin list, roles,
  * and viewing, editing and deactivating a user.
  * Pages call these functions; components never call the API.
  */
@@ -31,4 +31,10 @@ export function deactivateUser(userId) {
 // HU-05: PATCH /users/{id}/role. The API applies RN-18 and RN-19 (403 / 409)
 export function changeRole(userId, role) {
   return apiRequest(`/users/${userId}/role`, { method: 'PATCH', body: { role } })
+}
+
+// HU-17: GET /users/members. Active members for the trainer's picker,
+// only id, first_name and last_name (no contact data)
+export function listMembers({ signal } = {}) {
+  return apiRequest('/users/members', { signal })
 }
