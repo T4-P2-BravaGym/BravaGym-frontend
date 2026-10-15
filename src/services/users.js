@@ -41,3 +41,9 @@ export function deactivateUser(userId) {
 export function changeRole(userId, role) {
   return apiRequest(`/users/${userId}/role`, { method: 'PATCH', body: { role } })
 }
+
+// HU-17: GET /users/members. Active members for the trainer's picker,
+// only id, first_name and last_name (no contact data)
+export function listMembers({ signal } = {}) {
+  return apiRequest('/users/members', { signal })
+}
