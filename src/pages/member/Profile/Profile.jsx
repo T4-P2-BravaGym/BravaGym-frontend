@@ -1,5 +1,5 @@
 /**
- * Mi perfil
+ * Mi perfil (HU-04, HU-32): my details, and below them the form to change my password.
  */
 import { useEffect, useState } from 'react'
 import Alert from '@/components/ui/Alert'
@@ -8,6 +8,7 @@ import Field from '@/components/ui/Field'
 import Spinner from '@/components/ui/Spinner'
 import { getMe } from '@/services/auth'
 import { updateMe } from '@/services/users'
+import ChangePasswordForm from './ChangePasswordForm'
 import styles from './Profile.module.scss'
 
 const EMPTY_FORM = { first_name: '', last_name: '', phone: '', email: '' }
@@ -80,6 +81,8 @@ export default function Profile() {
           </div>
         </form>
       )}
+
+      {!loading && <ChangePasswordForm />}
     </section>
   )
 }
