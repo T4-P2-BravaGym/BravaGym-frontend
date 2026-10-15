@@ -49,7 +49,7 @@ export function CartProvider({ children }) {
     if (cart.key !== storageKey) {
         setCart({ key: storageKey, items: readCart(storageKey) })
     }
-    const items = cart.key === storageKey ? cart.items : []
+    const items = useMemo(() => (cart.key === storageKey ? cart.items : []), [cart, storageKey])
 
     useEffect(() => {
         if (cart.key) writeCart(cart.key, cart.items)
