@@ -12,6 +12,13 @@ const day = (days, hourUtc) => {
   return d.toISOString()
 }
 
+// Sample photo for the demos: a tiny inline drawing, so the sandbox needs no API.
+const SAMPLE_PHOTO =
+    'data:image/svg+xml,' +
+    encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 4"><rect width="4" height="4" fill="#efd6d1"/><circle cx="2" cy="2.2" r="1.1" fill="#9b5f7a"/></svg>',
+    )
+
 export const SESSIONS = [
   { id: 1, starts_at: at(240), duration_minutes: 60, class_type_name: 'Fuerza básica', trainer_name: 'Nora', free_spots: 4, extra_price_cents: 0, status: 'scheduled' },
   { id: 2, starts_at: at(30), duration_minutes: 50, class_type_name: 'Glúteo y core', trainer_name: 'Laura', free_spots: 0, extra_price_cents: 0, status: 'scheduled' },
@@ -52,6 +59,8 @@ export const PRODUCTS = [
     id: 1,
     name: 'Proteína whey · vainilla',
     category_name: 'Suplementos',
+    description: 'Bote de 1 kg. Sin azúcares añadidos.',
+    image_url: SAMPLE_PHOTO,
     price_cents: 3490,
     stock: 12 },
   {
@@ -85,6 +94,7 @@ export const ADMIN_PRODUCT = {
   category_name: 'Suplementos',
   name: 'Proteína whey · vainilla',
   description: 'Bote de 1 kg.',
+  image_url: SAMPLE_PHOTO,
   price_cents: 3490,
   stock: 12,
   in_stock: true,

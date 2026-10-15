@@ -9,7 +9,15 @@ import Spinner from '@/components/ui/Spinner'
 import Table from '@/components/ui/Table'
 import ProductForm from '@/components/domain/ProductForm'
 import useDebouncedValue from '@/hooks/useDebouncedValue'
-import { createProduct, deactivateProduct, listAdminProducts, updateProduct } from '@/services/shop'
+import { mediaUrl } from '@/services/api'
+import {
+    createProduct,
+    deactivateProduct,
+    deleteProductImage,
+    listAdminProducts,
+    updateProduct,
+    uploadProductImage,
+} from '@/services/shop'
 import { formatEuros } from '@/utils/format'
 import { adminErrorMessage } from './errors'
 import styles from './AdminProducts.module.scss'
@@ -18,6 +26,8 @@ const PAGE_SIZE = 20
 const SEARCH_DELAY_MS = 350
 const LOAD_ERROR = 'No se han podido cargar los productos. Inténtalo de nuevo.'
 const SAVE_ERROR = 'No se ha podido guardar el producto. Inténtalo de nuevo.'
+const PHOTO_ERROR = 'No se ha podido guardar la foto. Inténtalo de nuevo.'
+const PHOTO_ERROR_TITLE = 'El producto se ha guardado, pero la foto no'
 const PRODUCT_HINT =
     'Revisa el formulario: el nombre y la categoría son obligatorios, el precio va en euros ' +
     '(por ejemplo 34,90) y ni el precio ni el stock pueden ser negativos.'
@@ -28,6 +38,13 @@ const STATUS_OPTIONS = [
     { value: 'inactive', label: 'Desactivados' },
     { value: 'out_of_stock', label: 'Sin stock' },
 ]
+
+// The photo goes in its own request, after the product is saved (HU-30).
+function savePhoto(productId, photo) {
+    if (photo?.file) return uploadProductImage(productId, photo.file)
+    if (photo?.remove) return deleteProductImage(productId)
+    return null
+}
 
 export default function ProductsTab({ categories }) {
     const [search, setSearch] = useState('')
@@ -103,17 +120,28 @@ export default function ProductsTab({ categories }) {
         setFormError(null)
     }
 
-    async function handleSave(body) {
+    async function handleSave(body, photo) {
         clearMessages()
         setBusy(true)
+        let saved
         try {
-            const saved = editing ? await updateProduct(editing.id, body) : await createProduct(body)
-            setFlash(editing ? `«${saved.name}» actualizado.` : `«${saved.name}» creado.`)
-            closeForm()
-            reload()
+            saved = editing ? await updateProduct(editing.id, body) : await createProduct(body)
         } catch (error) {
             setFormError(adminErrorMessage(error, { fallback: SAVE_ERROR, invalidHint: PRODUCT_HINT }))
+            setBusy(false)
+            return
+        }
+
+        try {
+            saved = (await savePhoto(saved.id, photo)) ?? saved
+            setFlash(editing ? `«${saved.name}» actualizado.` : `«${saved.name}» creado.`)
+            closeForm()
+        } catch (error) {
+            // The product exists now: keep the form open on it so the photo can be tried again.
+            setEditing(saved)
+            setFormError({ title: PHOTO_ERROR_TITLE, text: adminErrorMessage(error, { fallback: PHOTO_ERROR }).text })
         } finally {
+            reload()
             setBusy(false)
         }
     }
@@ -148,7 +176,30 @@ export default function ProductsTab({ categories }) {
     }
 
     const columns = [
-        { key: 'name', header: 'Producto', render: (product) => <span className={styles.cellName}>{product.name}</span> },
+        {
+            key: 'photo',
+            header: 'Foto',
+            render: (product) =>
+                product.image_url ? (
+                    <img className={styles.thumb} src={mediaUrl(product.image_url)} alt="" loading="lazy" />
+                ) : (
+                    <span className={styles.thumbEmpty} aria-hidden="true" />
+                ),
+        },
+        {
+            key: 'name',
+            header: 'Producto',
+            render: (product) => (
+                <div className={styles.cellProduct}>
+                    <span className={styles.cellName}>{product.name}</span>
+                    {product.description && (
+                        <span className={styles.cellDescription} title={product.description}>
+                            {product.description}
+                        </span>
+                    )}
+                </div>
+            ),
+        },
         { key: 'category_name', header: 'Categoría' },
         { key: 'price_cents', header: 'Precio', align: 'right', render: (product) => formatEuros(product.price_cents) },
         {

@@ -337,17 +337,29 @@ function ProductCardDemo() {
 
 function ProductFormDemo() {
     const [product, setProduct] = useState(sample.ADMIN_PRODUCT)
-    const [body, setBody] = useState(null)
+    const [result, setResult] = useState(null)
+
+    function show(nextProduct) {
+        setProduct(nextProduct)
+        setResult(null)
+    }
+
+    function describePhoto(photo) {
+        if (photo?.file) return `subir ${photo.file.name}`
+        if (photo?.remove) return 'quitarla'
+        return 'sin cambios'
+    }
+
     return (
         <>
             <div className={styles.row}>
-                <Button variant="secondary" size="sm" onClick={() => { setProduct(sample.ADMIN_PRODUCT); setBody(null) }}>
-                    Editar
+                <Button variant="secondary" size="sm" onClick={() => show(sample.ADMIN_PRODUCT)}>
+                    Editar (con foto)
                 </Button>
-                <Button variant="secondary" size="sm" onClick={() => { setProduct(null); setBody(null) }}>
+                <Button variant="secondary" size="sm" onClick={() => show(null)}>
                     Nuevo
                 </Button>
-                <Button variant="secondary" size="sm" onClick={() => { setProduct(sample.ADMIN_CLOTHING); setBody(null) }}>
+                <Button variant="secondary" size="sm" onClick={() => show(sample.ADMIN_CLOTHING)}>
                     Editar ropa
                 </Button>
             </div>
@@ -355,10 +367,14 @@ function ProductFormDemo() {
                 key={product?.id ?? 'new'}
                 product={product}
                 categories={sample.PRODUCT_CATEGORIES}
-                onSubmit={setBody}
-                onCancel={() => setBody(null)}
+                onSubmit={(body, photo) => setResult({ body, photo: describePhoto(photo) })}
+                onCancel={() => setResult(null)}
             />
-            {body && <p className={styles.muted}>onSubmit recibe: {JSON.stringify(body)}</p>}
+            {result && (
+                <p className={styles.muted}>
+                    onSubmit recibe: {JSON.stringify(result.body)} · foto: {result.photo}
+                </p>
+            )}
         </>
     )
 }
