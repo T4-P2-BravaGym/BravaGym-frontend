@@ -9,10 +9,11 @@ AI: herramienta y modelo, o "ninguno"
 
 ## Checklist
 
-- [ ] `npm run build` passes
+- [ ] `npm run lint` and `npm run build` pass
 - [ ] Only design tokens (var(--…)), no loose colors or sizes
 - [ ] Accessible: real buttons and links, labels, visible focus, keyboard works
 - [ ] Works at phone width
 - [ ] No secrets in VITE_* variables, no dangerouslySetInnerHTML with user data
 - [ ] Conventional Commit messages
 - [ ] Entrada en `docs/ai-log.md` (repo del backend) con el uso de IA de esta historia
+- [ ] I have read and tested all the code in this PR, including any AI suggestions
