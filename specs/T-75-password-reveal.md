@@ -14,7 +14,7 @@ de comprobar lo escrito, ni en el login ni en el registro. Salió al hacer "Camb
 
 1. Un campo de contraseña puede llevar un botón de ojo para ver lo escrito y volver a ocultarlo.
 2. El botón se usa con ratón, con el dedo y con el teclado, y un lector de pantalla sabe qué hace y si está activado.
-3. Se usa en el login y en el registro, y en "Cambiar contraseña" cuando la HU-32 esté en `dev`.
+3. Se usa en el login y en el registro, y en "Cambiar contraseña" (HU-32).
 4. Los demás campos de la app no cambian.
 
 ## Criterios de aceptación
@@ -35,7 +35,6 @@ de comprobar lo escrito, ni en el login ni en el registro. Salió al hacer "Camb
 
 ## Fuera de alcance
 
-- "Cambiar contraseña" (HU-32): se añade cuando su PR esté en `dev`, con una línea por campo.
 - Medir la fuerza de la contraseña.
 - Ocultar el texto otra vez solo al enviar el formulario.
 
