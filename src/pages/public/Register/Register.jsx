@@ -126,6 +126,7 @@ export default function Register() {
             label="Contraseña"
             name="password"
             type="password"
+            revealable
             autoComplete="new-password"
             hint="Mínimo 8 caracteres."
             value={values.password}

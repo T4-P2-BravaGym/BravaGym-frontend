@@ -67,6 +67,7 @@ export default function Login() {
             <Field
                 label="Contraseña"
                 type="password"
+                revealable
                 name="password"
                 autoComplete="current-password"
                 value={password}
