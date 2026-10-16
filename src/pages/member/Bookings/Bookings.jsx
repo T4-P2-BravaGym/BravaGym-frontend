@@ -5,13 +5,15 @@ import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
-import PageHeader from "@/components/ui/PageHeader/index.js";
+import Icon from '@/components/ui/Icon'
+import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import useSessionUpdates from '@/hooks/useSessionUpdates'
 import { PATHS } from '@/routes/paths'
 import { ApiError } from '@/services/api'
 import {
   bookSession,
+  bookingSession,
   bookingsBySessionId,
   bookingSessionId,
   cancelBooking,
@@ -224,7 +226,7 @@ export default function Bookings() {
               onClick={() => setWeekAnchor((current) => shiftWeek(current, -1))}
               aria-label="Semana anterior"
             >
-              Anterior
+              <Icon name="chevronLeft" size={18} />
             </Button>
             <p className={styles.weekLabel} aria-live="polite">
               {weekLabel}
@@ -235,7 +237,7 @@ export default function Bookings() {
               onClick={() => setWeekAnchor((current) => shiftWeek(current, 1))}
               aria-label="Semana siguiente"
             >
-              Siguiente
+              <Icon name="chevronRight" size={18} />
             </Button>
           </div>
         </div>
@@ -259,7 +261,7 @@ export default function Bookings() {
 }
 
 function BookingRow({ booking, now, busy, onCancel, onLeaveWaitlist }) {
-  const session = booking.session ?? null
+  const session = bookingSession(booking)
   const title =
     booking.class_type_name ??
     session?.class_type_name ??
@@ -388,7 +390,7 @@ function cancelErrorMessage(error) {
 }
 
 function compareBySessionStart(a, b) {
-  const aStart = a.starts_at ?? a.session?.starts_at ?? ''
-  const bStart = b.starts_at ?? b.session?.starts_at ?? ''
+  const aStart = a.starts_at ?? bookingSession(a)?.starts_at ?? ''
+  const bStart = b.starts_at ?? bookingSession(b)?.starts_at ?? ''
   return String(aStart).localeCompare(String(bStart))
 }

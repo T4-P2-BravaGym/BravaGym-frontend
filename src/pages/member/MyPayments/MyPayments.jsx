@@ -3,7 +3,7 @@ import PaymentCard from '@/components/domain/PaymentCard'
 import Alert from '@/components/ui/Alert'
 import EmptyState from '@/components/ui/EmptyState'
 import Modal from '@/components/ui/Modal'
-import PageHeader from "@/components/ui/PageHeader/index.js"
+import PageHeader from '@/components/ui/PageHeader'
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import Tabs from '@/components/ui/Tabs'

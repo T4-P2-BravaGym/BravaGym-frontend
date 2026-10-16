@@ -4,7 +4,8 @@ import WeekSchedule from '@/components/domain/WeekSchedule'
 import Alert from '@/components/ui/Alert'
 import Button from '@/components/ui/Button'
 import Chip from '@/components/ui/Chip'
-import PageHeader from "@/components/ui/PageHeader/index.js";
+import Icon from '@/components/ui/Icon'
+import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
 import { PATHS } from '@/routes/paths'
@@ -76,7 +77,7 @@ export default function Schedule() {
                   onClick={() => setWeekAnchor((current) => shiftWeek(current, -1))}
                   aria-label="Semana anterior"
               >
-                Anterior
+                <Icon name="chevronLeft" size={18} />
               </Button>
               <p className={styles.weekLabel} aria-live="polite">
                 {weekLabel}
@@ -87,7 +88,7 @@ export default function Schedule() {
                   onClick={() => setWeekAnchor((current) => shiftWeek(current, 1))}
                   aria-label="Semana siguiente"
               >
-                Siguiente
+                <Icon name="chevronRight" size={18} />
               </Button>
             </div>
 
