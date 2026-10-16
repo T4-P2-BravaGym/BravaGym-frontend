@@ -10,6 +10,7 @@ import Table from '@/components/ui/Table'
 import { adminErrorMessage } from '@/pages/admin/AdminProducts/errors'
 import { createCode, deactivateCode, listCodes, updateCode } from '@/services/discountCodes'
 import { formatDate } from '@/utils/format'
+import { appliesToLabel } from './appliesTo'
 import { codeStatus } from './codeStatus'
 import DiscountCodeForm from './DiscountCodeForm'
 import styles from './AdminDiscountCodes.module.scss'
@@ -110,6 +111,7 @@ export default function AdminDiscountCodes() {
   const columns = [
     { key: 'code', header: 'Código', render: (code) => <span className={styles.code}>{code.code}</span> },
     { key: 'percent_off', header: 'Descuento', align: 'right', render: (code) => `${code.percent_off} %` },
+    { key: 'applies_to', header: 'Vale para', render: (code) => appliesToLabel(code.applies_to) },
     {
       key: 'dates',
       header: 'Validez',
