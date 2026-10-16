@@ -239,7 +239,7 @@
   @include visually-hidden;
 }
 
-@media (min-width: $breakpoint-md + 1px) {
+@media (min-width: #{$breakpoint-md + 1px}) {
   .isCollapsed {
     padding: 28px 12px;
 
