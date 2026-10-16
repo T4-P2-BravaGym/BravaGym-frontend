@@ -3,6 +3,7 @@ import CancellationRequestCard from '@/components/domain/CancellationRequestCard
 import Alert from '@/components/ui/Alert'
 import EmptyState from '@/components/ui/EmptyState'
 import Modal from '@/components/ui/Modal'
+import PageHeader from "@/components/ui/PageHeader/index.js";
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import Tabs from '@/components/ui/Tabs'
@@ -13,13 +14,6 @@ import {
   rejectCancellationRequest,
 } from '@/services/cancellations'
 import styles from './AdminCancellations.module.scss'
-
-/**
- * Bandeja de bajas (HU-20.4 / RN-13)
- * Admin reviews pending cancellation requests: approve (deactivates the member and
- * cancels future bookings) or reject (requires admin_notes). Uses the HU-20 API:
- * GET /cancellation-requests, POST …/approve, POST …/reject.
- */
 
 const PAGE_SIZE = 20
 const LOAD_ERROR = 'No se han podido cargar las solicitudes de baja. Inténtalo de nuevo.'
@@ -128,14 +122,11 @@ export default function AdminCancellations() {
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <span className={styles.eyebrow}>Administración</span>
-        <h1 className={styles.title}>Solicitudes de baja</h1>
-        <p className={styles.lead}>
-          Aprueba o rechaza las bajas. Al aprobar, la suscripción se cancela, la usuaria
-          queda inactiva y se cancelan sus reservas futuras.
-        </p>
-      </header>
+      <PageHeader
+          eyebrow="Administración"
+          title="Solicitudes de baja"
+          lead="Aprueba o rechaza las bajas. Al aprobar, la suscripción se cancela, la usuaria queda inactiva y se cancelan sus reservas futuras."
+      />
 
       {flash && (
         <Alert tone="success" onClose={() => setFlash(null)}>

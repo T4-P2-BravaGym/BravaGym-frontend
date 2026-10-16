@@ -3,6 +3,7 @@ import PaymentCard from '@/components/domain/PaymentCard'
 import Alert from '@/components/ui/Alert'
 import EmptyState from '@/components/ui/EmptyState'
 import Modal from '@/components/ui/Modal'
+import PageHeader from "@/components/ui/PageHeader/index.js"
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import Tabs from '@/components/ui/Tabs'
@@ -15,14 +16,7 @@ import {
   previewFinalAmountCents,
 } from '@/services/payments'
 import { formatEuros } from '@/utils/format'
-import styles from './MyPayments.module.scss'
-
-/**
- * Mis pagos (HU-24.4)
- * Lists the socia's payments (GET /payments/me) and lets her pay pending ones
- * with an optional discount code (POST /payments/{id}/pay, RN-14 to RN-16).
- * Codes are validated first with GET /discount-codes/{code}/validate (HU-25).
- */
+import styles from './MyPayments.module.scss';
 
 const PAGE_SIZE = 20
 const LOAD_ERROR = 'No se han podido cargar tus pagos. Inténtalo de nuevo.'
@@ -147,13 +141,11 @@ export default function MyPayments() {
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <p className={styles.eyebrow}>Mi área</p>
-        <h1 className={styles.title}>Mis pagos</h1>
-        <p className={styles.lead}>
-          Revisa lo pendiente y paga con un código de descuento si tienes uno.
-        </p>
-      </header>
+      <PageHeader
+          eyebrow="Mi área"
+          title="Mis pagos"
+          lead="Revisa lo pendiente y paga con un código de descuento si tienes uno."
+      />
 
       {flash && (
         <Alert tone="success" onClose={() => setFlash(null)}>
