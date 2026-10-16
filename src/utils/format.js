@@ -46,6 +46,12 @@ export function formatDateTime(isoUtc) {
   return `${formatDate(isoUtc)}, ${formatTime(isoUtc)}`
 }
 
+/** "17:30 - 18:30" en hora de Madrid. Sin hora de fin, solo la de inicio. */
+export function formatTimeRange(startsAt, endsAt) {
+  if (!endsAt) return formatTime(startsAt)
+  return `${formatTime(startsAt)} - ${formatTime(endsAt)}`
+}
+
 export function formatRest(seconds) {
   const s = Number(seconds) || 0
   if (s < 90) return `${s} s`

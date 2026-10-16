@@ -20,6 +20,7 @@ export function toSessionCard(session) {
     id: session.id,
     starts_at: session.starts_at,
     duration_minutes: session.duration_minutes,
+    ends_at: session.ends_at ?? null,
     status: session.status,
     free_spots: session.free_spots,
     capacity: session.capacity,
