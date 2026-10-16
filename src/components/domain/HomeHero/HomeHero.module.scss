@@ -1,6 +1,5 @@
 @use "mixins" as *;
 
-// Two columns on desktop: text on the left, photo + card on the right
 .root {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -11,7 +10,7 @@
   padding: var(--space-12) var(--space-12) var(--space-20);
 
   @include mobile {
-    grid-template-columns: minmax(0, 1fr); // one column on small screens
+    grid-template-columns: minmax(0, 1fr);
     padding: var(--space-8) var(--space-4) var(--space-12);
   }
 }
@@ -22,9 +21,29 @@
   gap: var(--space-6);
 }
 
-// Pill label above the title
+.copy > * {
+  animation: fade-up 0.6s ease both;
+}
+
+.copy > :nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.copy > :nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+.copy > :nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+.copy > :nth-child(5) {
+  animation-delay: 0.32s;
+}
+
 .tag {
   align-self: flex-start;
+  margin: 0;
   padding: 6px 14px;
   border-radius: var(--radius-pill);
   background: var(--mauve-soft);
@@ -49,6 +68,27 @@
   color: var(--mauve);
 }
 
+.subtitle {
+  @include display-text(28px);
+  margin: 0;
+  max-width: 560px;
+  color: var(--ink);
+
+  @include mobile {
+    font-size: 22px;
+  }
+}
+
+.highlight {
+  color: inherit;
+  background-color: transparent;
+  background-image: linear-gradient(var(--champagne), var(--champagne));
+  background-repeat: no-repeat;
+  background-position: 0 90%;
+  background-size: 0 0.35em;
+  animation: underline 0.8s 0.6s ease forwards;
+}
+
 .intro {
   margin: 0;
   max-width: 520px;
@@ -62,25 +102,32 @@
   gap: var(--space-3);
 }
 
-// Right column: relative so the card can float over the photo
 .media {
   position: relative;
+  animation: fade-in 0.8s 0.15s ease both;
+}
+
+.photoFrame {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
 }
 
 .photo {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 5;
-  object-fit: cover; 
-  border-radius: var(--radius-lg);
-  background: var(--blush); 
+  object-fit: cover;
+  background: var(--blush);
+  transition: transform 0.8s ease;
+}
+
+.media:hover .photo {
+  transform: scale(1.04);
 }
 
 .nextCard {
   position: absolute;
-  left: calc(
-    var(--space-8) * -1
-  ); // sticks out of the photo, like the prototype
+  left: calc(var(--space-8) * -1);
   bottom: 40px;
   width: 280px;
   display: flex;
@@ -90,11 +137,12 @@
   border-radius: 20px;
   background: var(--surface-raised);
   box-shadow: var(--shadow-float);
+  animation:
+          pop-in 0.5s 0.7s ease both,
+          float 6s 1.2s ease-in-out infinite;
 
   @include mobile {
-    left: var(
-      --space-4
-    ); // no negative margin on mobile: it would overflow the screen
+    left: var(--space-4);
     bottom: var(--space-4);
   }
 }
@@ -114,4 +162,78 @@
 .nextBadge {
   align-self: flex-start;
   margin-top: 6px;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes underline {
+  to {
+    background-size: 100% 0.35em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy > *,
+  .media,
+  .nextCard {
+    animation: none;
+  }
+
+  .highlight {
+    animation: none;
+    background-size: 100% 0.35em;
+  }
+
+  .photo {
+    transition: none;
+  }
+
+  .media:hover .photo {
+    transform: none;
+  }
 }

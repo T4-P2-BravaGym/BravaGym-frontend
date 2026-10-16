@@ -1,11 +1,9 @@
-/**
- * Portada
- * TODO(HU-07): build this page from components and load data through src/services.
- */
 import { useEffect, useState } from 'react'
-import HomeHero from '@/components/domain/HomeHero'
-import { isPersonalTrainingSession, listSessions, toSessionCard } from '@/services/sessions'
 import HomeFeatures from '@/components/domain/HomeFeatures'
+import HomeHero from '@/components/domain/HomeHero'
+import HomeMarquee from '@/components/domain/HomeMarquee'
+import { isPersonalTrainingSession, listSessions, toSessionCard } from '@/services/sessions'
+import { listTrainers } from '@/services/trainers'
 
 export default function Home() {
   const [nextSession, setNextSession] = useState(null)
@@ -13,28 +11,36 @@ export default function Home() {
   useEffect(() => {
     const controller = new AbortController()
 
-    listSessions({
-      from: new Date().toISOString(),
-      only_available: true,
-      size: 10,
-      signal: controller.signal,
-    })
-      .then((data) => {
-        const groupClass = data.items.find((session) => !isPersonalTrainingSession(session))
-        setNextSession(groupClass ? toSessionCard(groupClass) : null)
-      })
-      .catch(() => {
-        setNextSession(null)
-      })
+    Promise.all([
+      listSessions({
+        from: new Date().toISOString(),
+        only_available: true,
+        size: 10,
+        signal: controller.signal,
+      }),
+      listTrainers({ signal: controller.signal }).catch(() => []),
+    ])
+        .then(([data, trainers]) => {
+          const groupClass = data.items.find((session) => !isPersonalTrainingSession(session))
+          if (!groupClass) {
+            setNextSession(null)
+            return
+          }
+          const trainer = trainers.find((item) => item.id === groupClass.trainer_id)
+          setNextSession({ ...toSessionCard(groupClass), trainer_name: trainer?.name ?? null })
+        })
+        .catch(() => {
+          setNextSession(null)
+        })
 
     return () => controller.abort()
   }, [])
-  
+
   return (
-  <>
-    <HomeHero nextSession={nextSession} />
-    <HomeFeatures />
-  </>
-    
+      <>
+        <HomeHero nextSession={nextSession} />
+        <HomeMarquee />
+        <HomeFeatures />
+      </>
   )
 }
