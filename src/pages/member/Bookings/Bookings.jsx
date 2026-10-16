@@ -6,7 +6,7 @@ import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
 import Icon from '@/components/ui/Icon'
-import PageHeader from "@/components/ui/PageHeader/index.js";
+import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import useSessionUpdates from '@/hooks/useSessionUpdates'
 import { PATHS } from '@/routes/paths'

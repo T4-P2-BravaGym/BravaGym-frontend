@@ -6,7 +6,7 @@ import Alert from '@/components/ui/Alert'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
 import Icon from '@/components/ui/Icon'
-import PageHeader from "@/components/ui/PageHeader/index.js";
+import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import { PATHS } from '@/routes/paths'
 import { ApiError } from '@/services/api'

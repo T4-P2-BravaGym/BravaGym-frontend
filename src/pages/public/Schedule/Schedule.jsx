@@ -5,7 +5,7 @@ import Alert from '@/components/ui/Alert'
 import Button from '@/components/ui/Button'
 import Chip from '@/components/ui/Chip'
 import Icon from '@/components/ui/Icon'
-import PageHeader from "@/components/ui/PageHeader/index.js";
+import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
 import { PATHS } from '@/routes/paths'

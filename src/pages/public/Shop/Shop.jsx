@@ -6,7 +6,7 @@ import Button from '@/components/ui/Button'
 import Chip from '@/components/ui/Chip'
 import EmptyState from '@/components/ui/EmptyState'
 import Field from '@/components/ui/Field'
-import PageHeader from "@/components/ui/PageHeader/index.js";
+import PageHeader from '@/components/ui/PageHeader'
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
