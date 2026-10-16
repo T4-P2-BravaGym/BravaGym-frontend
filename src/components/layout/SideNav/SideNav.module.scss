@@ -203,3 +203,79 @@
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
+
+// T-93: the button and the narrow menu only exist on a computer
+.collapseButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: 1px solid var(--on-plum-muted);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--on-plum);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--on-plum);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--champagne);
+    outline-offset: 2px;
+  }
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.hidden {
+  @include visually-hidden;
+}
+
+@media (min-width: $breakpoint-md + 1px) {
+  .isCollapsed {
+    padding: 28px 12px;
+
+    .bar {
+      flex-direction: column;
+    }
+
+    .brand {
+      padding-left: 0;
+      align-items: center;
+    }
+
+    .link {
+      position: relative;
+      justify-content: center;
+      padding: 11px 0;
+    }
+
+    .count {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      min-width: 18px;
+      height: 18px;
+      font-size: 11px;
+      line-height: 18px;
+    }
+
+    .user {
+      flex-direction: column;
+      padding: 12px 6px;
+    }
+
+    .logout {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      width: 44px;
+    }
+  }
+}
