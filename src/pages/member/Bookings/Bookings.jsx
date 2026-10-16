@@ -5,6 +5,7 @@ import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
+import Icon from '@/components/ui/Icon'
 import PageHeader from "@/components/ui/PageHeader/index.js";
 import Spinner from '@/components/ui/Spinner'
 import useSessionUpdates from '@/hooks/useSessionUpdates'
@@ -225,7 +226,7 @@ export default function Bookings() {
               onClick={() => setWeekAnchor((current) => shiftWeek(current, -1))}
               aria-label="Semana anterior"
             >
-              Anterior
+              <Icon name="chevronLeft" size={18} />
             </Button>
             <p className={styles.weekLabel} aria-live="polite">
               {weekLabel}
@@ -236,7 +237,7 @@ export default function Bookings() {
               onClick={() => setWeekAnchor((current) => shiftWeek(current, 1))}
               aria-label="Semana siguiente"
             >
-              Siguiente
+              <Icon name="chevronRight" size={18} />
             </Button>
           </div>
         </div>

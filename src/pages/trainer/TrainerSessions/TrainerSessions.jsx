@@ -3,6 +3,7 @@ import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
+import Icon from '@/components/ui/Icon'
 import Field from '@/components/ui/Field'
 import Modal from '@/components/ui/Modal'
 import PageHeader from "@/components/ui/PageHeader/index.js";
@@ -310,7 +311,7 @@ export default function TrainerSessions() {
               onClick={() => setWeekAnchor((current) => shiftWeek(current, -1))}
               aria-label="Semana anterior"
             >
-              Anterior
+              <Icon name="chevronLeft" size={18} />
             </Button>
             <p className={styles.weekLabel} aria-live="polite">
               {weekLabel}
@@ -321,7 +322,7 @@ export default function TrainerSessions() {
               onClick={() => setWeekAnchor((current) => shiftWeek(current, 1))}
               aria-label="Semana siguiente"
             >
-              Siguiente
+              <Icon name="chevronRight" size={18} />
             </Button>
           </div>
         </div>
