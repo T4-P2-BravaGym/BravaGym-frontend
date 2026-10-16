@@ -21,7 +21,7 @@ export default function HomeHero({ nextSession = null }) {
 
                 <p className={styles.intro}>
                     Entrenadoras especializadas, grupos pequeños y técnica antes que kilos. Reserva, sigue tu
-                    rutina y paga desde la app. Empieces de cero o lleves años levantando.
+                    rutina y paga desde la app. Ideal para todos los niveles: empezando de cero o con años levantando.
                 </p>
 
                 <div className={styles.actions}>

@@ -37,8 +37,7 @@ export default function HomeFeatures() {
                     Un gimnasio de fuerza pensado para mujeres
                 </h2>
                 <p className={styles.lead}>
-                    Aquí nadie te mira raro en la zona de pesas. Entrenas con mujeres, con un plan y con alguien
-                    que te enseña a hacerlo bien.
+                    Aquí la zona de pesas es tuya. Entrenas con mujeres, con un plan y con alguien que te enseña a hacerlo bien.
                 </p>
             </div>
 
