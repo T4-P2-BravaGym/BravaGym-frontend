@@ -26,6 +26,7 @@ import RoutineEditor from '@/components/domain/RoutineEditor'
 import SessionCard from '@/components/domain/SessionCard'
 import StatCard from '@/components/domain/StatCard'
 import TrainerCard from '@/components/domain/TrainerCard'
+import WeekNav from '@/components/domain/WeekNav'
 import WeekSchedule from '@/components/domain/WeekSchedule'
 import CartLink from '@/components/layout/CartLink'
 import Footer from '@/components/layout/Footer'
@@ -291,6 +292,11 @@ function WeekScheduleDemo() {
   return <WeekSchedule sessions={sample.SESSIONS} bookings={sample.BOOKINGS} now={sample.NOW} />
 }
 
+function WeekNavDemo() {
+    const [anchor, setAnchor] = useState(() => sample.NOW)
+    return <WeekNav anchor={anchor} onChange={setAnchor} />
+}
+
 function CapacityBarDemo() {
   return (
     <div className={styles.stack}>
@@ -517,6 +523,7 @@ export const DEMOS = {
   'page-header': PageHeaderDemo,
   'session-card': SessionCardDemo,
   'week-schedule': WeekScheduleDemo,
+  'week-nav': WeekNavDemo,
   'capacity-bar': CapacityBarDemo,
   'stat-card': StatCardDemo,
   'pricing-card': PricingCardDemo,
