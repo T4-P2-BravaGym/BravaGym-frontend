@@ -4,6 +4,7 @@ import WeekSchedule from '@/components/domain/WeekSchedule'
 import Alert from '@/components/ui/Alert'
 import Button from '@/components/ui/Button'
 import Chip from '@/components/ui/Chip'
+import PageHeader from "@/components/ui/PageHeader/index.js";
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
 import { PATHS } from '@/routes/paths'
@@ -65,14 +66,11 @@ export default function Schedule() {
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <div className={styles.intro}>
-          <span className={styles.eyebrow}>Clases en grupo</span>
-          <h1 className={styles.title}>Horario de la semana</h1>
-          <p className={styles.lead}>
-            Elige el día y la hora. Verás las plazas libres y si la clase tiene precio extra.
-          </p>
-        </div>
+      <PageHeader
+          eyebrow="Clases en grupo"
+          title="Horario de la semana"
+          lead="Elige el día y la hora. Verás las plazas libres y si la clase tiene precio extra."
+      />
 
         <div className={styles.toolbar}>
           <div className={styles.weekNav} role="group" aria-label="Semana">

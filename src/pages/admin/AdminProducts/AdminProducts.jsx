@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import Alert from '@/components/ui/Alert'
+import PageHeader from '@/components/ui/PageHeader'
 import Tabs from '@/components/ui/Tabs'
 import { listProductCategories } from '@/services/shop'
 import CategoriesTab from './CategoriesTab'
@@ -40,14 +41,11 @@ export default function AdminProducts() {
 
   return (
       <div className={styles.root}>
-        <header className={styles.intro}>
-          <span className={styles.eyebrow}>Administración</span>
-          <h1 className={styles.title}>Tienda</h1>
-          <p className={styles.lead}>
-            Da de alta productos, cambia precios y stock y organiza las categorías. Un producto
-            desactivado deja de verse en la tienda, pero sus pedidos se conservan.
-          </p>
-        </header>
+          <PageHeader
+              eyebrow="Administración"
+              title="Tienda"
+              lead="Da de alta productos, cambia precios y stock y organiza las categorías. Un producto desactivado deja de verse en la tienda, pero sus pedidos se conservan."
+          />
 
         {categoriesError && <Alert tone="warning">{categoriesError}</Alert>}
 
