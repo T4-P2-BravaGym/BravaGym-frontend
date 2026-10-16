@@ -38,3 +38,14 @@ pide poder contraerlo, como opción: por defecto se ve como hasta ahora.
 
 - Contraer el menú en el móvil: ya tiene su propio menú desplegable.
 - Guardar la preferencia en la cuenta (servidor): es una comodidad de cada navegador.
+
+## Decisiones
+
+| Decisión | Por qué |
+| --- | --- |
+| Contraído se ven los iconos que ya tenía `routes/navigation.js` | El diseño no tiene una versión contraída; es el patrón habitual y no hace falta inventar iconos. |
+| El nombre del enlace queda como texto oculto y como `title` | El lector de pantalla lo sigue leyendo y con el ratón se ve al pasar por encima. |
+| El botón tiene un nombre fijo ("Contraer menú") y el estado va en `aria-pressed` | Igual que el ojo de la contraseña (#75): no se anuncia dos veces. |
+| La elección se guarda en `localStorage`, con `try/catch` | Es una comodidad de cada navegador, no un dato de la cuenta; si el almacenamiento está bloqueado, el menú funciona igual. |
+| Todo lo contraído va dentro de una media query de ordenador | En el móvil el menú es otro (botón "Menú") y no debe cambiar. |
+| `PrivateLayout` guarda el estado y `SideNav` solo lo pinta | El layout es quien decide el ancho de la columna. |
