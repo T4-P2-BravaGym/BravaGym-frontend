@@ -86,6 +86,8 @@ export default function Login() {
             </Button>
           </form>
 
+          <Link to={PATHS.forgotPassword} className={`${styles.link} ${styles.recoveryLink}`}>He olvidado mi contraseña</Link>
+
           <p className={styles.footer}>
             ¿Aún no tienes cuenta?{' '}
             <Link to={PATHS.register} className={styles.link}>
