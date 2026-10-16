@@ -15,6 +15,22 @@ npm run build               # comprobar que compila antes de una PR
 
 La API tiene que estar arrancada (repo BravaGym-backend) en `http://localhost:8000`.
 
+## Sesión y renovación automática (HU-33)
+
+Requiere el backend de HU-33 con su migración aplicada. La spec compartida está en `specs/HU-33-refresh-logout.md` del backend ([issue #182](https://github.com/T4-P2-BravaGym/BravaGym-backend/issues/182)); el uso de Codex se registra en su `docs/ai-log.md`.
+
+El access token vive solo en memoria. El refresh lo guarda el navegador en una cookie HttpOnly del backend: JavaScript no lo lee ni lo escribe. Al iniciar la app se intenta recuperar la sesión con esa cookie; las rutas privadas esperan hasta que termina. Se elimina el antiguo `brava.token` de localStorage.
+
+Si una petición autenticada devuelve 401, se renueva la sesión una vez y se reintenta una vez, también en las descargas. Las peticiones simultáneas de esta página comparten la misma renovación. La caducidad del access intenta renovar en lugar de cerrar inmediatamente. Logout espera una renovación en curso para revocar el par nuevo y evita que una respuesta tardía restaure la sesión. Una petición anterior no se repite bajo un login diferente.
+
+Login, refresh y logout usan `credentials: include`; refresh/logout envían `X-Brava-CSRF: 1`. En local usa el mismo nombre de host en ambos lados (por ejemplo, frontend `http://localhost:5173` y API `http://localhost:8000/api/v1`), con el origen del frontend en CORS. No mezcles `localhost` y `127.0.0.1`. La cookie usa SameSite=Lax y Secure fuera de local; el equipo debe confirmar que los sitios de producción son compatibles antes del despliegue.
+
+HttpOnly reduce la exposición del refresh a JavaScript, pero un XSS todavía puede ejecutar acciones y acceder al access en uso. La protección de origen/CSRF y HTTPS siguen siendo necesarias. La coordinación de renovaciones es por página; varias pestañas pueden competir por la misma cookie y una de ellas necesitar iniciar sesión otra vez.
+
+Si el servidor no confirma logout, se borra la sesión de esta página y se muestra un aviso en login con un botón para reintentar. No se presenta el borrado local como una revocación confirmada.
+
+Comprobaciones: `npm test` (Node y Vite ya incluidos), `npm run build` y `npm run lint`. Beste confirmó manualmente login, recarga conservando sesión y logout sin restauración al recargar. El flujo de servicios también se verificó contra una API real con SQLite temporal.
+
 ## Estructura
 
 ```
