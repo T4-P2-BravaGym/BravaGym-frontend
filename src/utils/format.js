@@ -39,7 +39,7 @@ export function formatDate(isoUtc) {
     day: 'numeric',
     month: 'short',
     timeZone: TIME_ZONE,
-  }).format(new Date(isoUtc))
+  }).format(parseApiDate(isoUtc))
 }
 
 export function formatDateTime(isoUtc) {

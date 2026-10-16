@@ -31,9 +31,6 @@ export default function OrderCard({ order, busy = false, onCancel }) {
                             {item.quantity} × {item.product_name}
                             {item.size ? ` · talla ${item.size}` : ''}
                         </span>
-            <span>
-              {item.quantity} × {item.product_name}
-            </span>
                         <span className={styles.amount}>{formatEuros(item.subtotal_cents)}</span>
                     </li>
                 ))}
