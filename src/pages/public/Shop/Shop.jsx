@@ -217,7 +217,7 @@ export default function Shop() {
                 </Button>
             )}
           </div>
-        </header>
+
 
         {notice && (
             <Alert tone={notice.tone} onClose={() => setNotice(null)}>
