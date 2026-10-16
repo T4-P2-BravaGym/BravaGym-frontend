@@ -5,6 +5,8 @@ import WeekSchedule from '@/components/domain/WeekSchedule'
 import Alert from '@/components/ui/Alert'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
+import Icon from '@/components/ui/Icon'
+import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import { PATHS } from '@/routes/paths'
 import { ApiError } from '@/services/api'
@@ -22,11 +24,6 @@ const NO_PT_PLAN =
 const DUPLICATE_BOOKING = 'Ya tienes una reserva en esta franja.'
 const GENERIC_BOOK_ERROR = 'No se ha podido completar la reserva. Inténtalo de nuevo.'
 
-/**
- * Entrenamiento personal (HU-14.4 / RN-08).
- * Flow: choose a trainer → list her free 60-min PT slots → book via POST /sessions/{id}/bookings.
- * Slots come from GET /sessions?trainer_id=… filtered to is_personal_training.
- */
 export default function PersonalTraining() {
   const [searchParams, setSearchParams] = useSearchParams()
   const trainerIdParam = searchParams.get(TRAINER_PARAM)
@@ -163,16 +160,11 @@ export default function PersonalTraining() {
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <div className={styles.intro}>
-          <span className={styles.eyebrow}>Sesión individual</span>
-          <h1 className={styles.title}>Entrenamiento personal</h1>
-          <p className={styles.lead}>
-            Elige entrenadora y después una franja libre de una hora. Solo disponible con un plan
-            que incluya entrenamiento personal.
-          </p>
-        </div>
-      </header>
+      <PageHeader
+          eyebrow="Sesión individual"
+          title="Entrenamiento personal"
+          lead="Elige entrenadora y después una franja libre de una hora. Solo disponible con un plan que incluya entrenamiento personal."
+      />
 
       {flash && (
         <Alert tone="success" onClose={() => setFlash(null)}>
@@ -256,7 +248,7 @@ export default function PersonalTraining() {
                 onClick={() => setWeekAnchor((current) => shiftWeek(current, -1))}
                 aria-label="Semana anterior"
               >
-                Anterior
+                <Icon name="chevronLeft" size={18} />
               </Button>
               <p className={styles.weekLabel} aria-live="polite">
                 {weekLabel}
@@ -267,7 +259,7 @@ export default function PersonalTraining() {
                 onClick={() => setWeekAnchor((current) => shiftWeek(current, 1))}
                 aria-label="Semana siguiente"
               >
-                Siguiente
+                <Icon name="chevronRight" size={18} />
               </Button>
             </div>
           </div>

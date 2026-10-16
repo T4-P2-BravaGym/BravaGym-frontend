@@ -1,11 +1,9 @@
-/**
- * Ofertas y códigos (HU-25): list, create and deactivate discount codes.
- */
 import { useEffect, useState } from 'react'
 import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
+import PageHeader from '@/components/ui/PageHeader'
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import Table from '@/components/ui/Table'
@@ -150,14 +148,11 @@ export default function AdminDiscountCodes() {
 
   return (
     <div className={styles.root}>
-      <header className={styles.intro}>
-        <span className={styles.eyebrow}>Administración</span>
-        <h1 className={styles.title}>Ofertas y códigos</h1>
-        <p className={styles.lead}>
-          Crea códigos de descuento para cuotas, clases y pedidos. Un código desactivado deja de valer, pero los
-          pagos que ya lo usaron no cambian.
-        </p>
-      </header>
+      <PageHeader
+          eyebrow="Administración"
+          title="Ofertas y códigos"
+          lead="Crea códigos de descuento para cuotas, clases y pedidos. Un código desactivado deja de valer, pero los pagos que ya lo usaron no cambian."
+      />
 
       {flash && (
         <Alert tone="success" onClose={() => setFlash(null)}>

@@ -3,8 +3,10 @@ import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
+import Icon from '@/components/ui/Icon'
 import Field from '@/components/ui/Field'
 import Modal from '@/components/ui/Modal'
+import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
 import { ApiError } from '@/services/api'
@@ -17,7 +19,7 @@ import {
   toSessionCard,
   updateSession,
 } from '@/services/sessions'
-import { formatDateTime, madridInputToUtcIso, utcIsoToMadridInput } from '@/utils/format'
+import { formatDate, formatDateTime, formatTimeRange, madridInputToUtcIso, utcIsoToMadridInput } from '@/utils/format'
 import { formatWeekLabel, getWeekRange, shiftWeek } from '@/utils/week'
 import styles from './TrainerSessions.module.scss'
 
@@ -36,12 +38,6 @@ const EMPTY_FORM = {
   capacity: '12',
 }
 
-/**
- * Mis clases (HU-11.5).
- * Trainer panel: list own group sessions for the week, create / edit / cancel.
- * Wires to GET/POST/PATCH /sessions and POST /sessions/{id}/cancel,
- * plus GET /class-types for the form. RN-09 → 409, RN-10 → 403.
- */
 export default function TrainerSessions() {
   const { user } = useAuth()
   const trainerId = user?.role === 'trainer' ? user.id : undefined
@@ -200,19 +196,16 @@ export default function TrainerSessions() {
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <div className={styles.intro}>
-          <span className={styles.eyebrow}>Panel de entrenadora</span>
-          <h1 className={styles.title}>Mis clases</h1>
-          <p className={styles.lead}>
-            Crea, edita o cancela tus clases de grupo. No pueden solaparse dos de tus
-            sesiones a la misma hora.
-          </p>
-        </div>
-        <Button variant="primary" onClick={openCreate} disabled={Boolean(formMode)}>
-          Nueva clase
-        </Button>
-      </header>
+      <PageHeader
+          eyebrow="Panel de entrenadora"
+          title="Mis clases"
+          lead="Crea, edita o cancela tus clases de grupo. No pueden solaparse dos de tus sesiones a la misma hora."
+          action={
+            <Button variant="primary" onClick={openCreate} disabled={Boolean(formMode)}>
+              Nueva clase
+            </Button>
+          }
+      />
 
       {flash && (
         <Alert tone="success" onClose={() => setFlash(null)}>
@@ -318,7 +311,7 @@ export default function TrainerSessions() {
               onClick={() => setWeekAnchor((current) => shiftWeek(current, -1))}
               aria-label="Semana anterior"
             >
-              Anterior
+              <Icon name="chevronLeft" size={18} />
             </Button>
             <p className={styles.weekLabel} aria-live="polite">
               {weekLabel}
@@ -329,7 +322,7 @@ export default function TrainerSessions() {
               onClick={() => setWeekAnchor((current) => shiftWeek(current, 1))}
               aria-label="Semana siguiente"
             >
-              Siguiente
+              <Icon name="chevronRight" size={18} />
             </Button>
           </div>
         </div>
@@ -412,7 +405,7 @@ function SessionRow({ session, busy, onEdit, onCancel }) {
       <div className={styles.itemMain}>
         <p className={styles.itemName}>{session.class_type_name}</p>
         <p className={styles.itemMeta}>
-          {formatDateTime(session.starts_at)}
+          {formatDate(session.starts_at)}, {formatTimeRange(session.starts_at, session.ends_at)}
           {session.duration_minutes ? ` · ${session.duration_minutes} min` : ''}
           {spots ? ` · ${spots}` : ''}
         </p>

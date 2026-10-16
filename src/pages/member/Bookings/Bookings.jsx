@@ -5,19 +5,22 @@ import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
+import Icon from '@/components/ui/Icon'
+import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import useSessionUpdates from '@/hooks/useSessionUpdates'
 import { PATHS } from '@/routes/paths'
 import { ApiError } from '@/services/api'
 import {
   bookSession,
+  bookingSession,
   bookingsBySessionId,
   bookingSessionId,
   cancelBooking,
   listMyBookings,
 } from '@/services/bookings'
 import { listSessions, toSessionCard } from '@/services/sessions'
-import { formatDateTime } from '@/utils/format'
+import { formatDate, formatTimeRange } from '@/utils/format'
 import { formatWeekLabel, getWeekRange, shiftWeek } from '@/utils/week'
 import styles from './Bookings.module.scss'
 
@@ -31,12 +34,6 @@ const GENERIC_CANCEL_ERROR = 'No se ha podido cancelar. Inténtalo de nuevo.'
 const CANCEL_TOO_LATE =
   'Solo puedes cancelar hasta 1 hora antes del inicio de la clase.'
 
-/**
- * Reservar y cancelar clases (HU-12.4, HU-13.4).
- * Week schedule with book / waitlist / cancel / leave-waitlist actions,
- * and "Mis reservas" from GET /bookings/me.
- * Cancel deadline (RN-05) is mirrored in the UI; the API still enforces it.
- */
 export default function Bookings() {
   const [weekAnchor, setWeekAnchor] = useState(() => new Date())
   const [sessions, setSessions] = useState(null)
@@ -97,7 +94,6 @@ export default function Bookings() {
     return () => controller.abort()
   }, [loadBookings])
 
-  // HU-16: when someone books or cancels a class on screen, reload its free spots and my bookings
   useSessionUpdates(
     (sessions ?? []).map((session) => session.id),
     () => {
@@ -158,15 +154,11 @@ export default function Bookings() {
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <div className={styles.intro}>
-          <span className={styles.eyebrow}>Clases en grupo</span>
-          <h1 className={styles.title}>Reservar clases</h1>
-          <p className={styles.lead}>
-            Elige una clase con plazas o únete a la lista de espera si está completa.
-          </p>
-        </div>
-      </header>
+      <PageHeader
+          eyebrow="Clases en grupo"
+          title="Reservar clases"
+          lead="Elige una clase con plazas o únete a la lista de espera si está completa."
+      />
 
       {flash && (
         <Alert tone="success" onClose={() => setFlash(null)}>
@@ -234,7 +226,7 @@ export default function Bookings() {
               onClick={() => setWeekAnchor((current) => shiftWeek(current, -1))}
               aria-label="Semana anterior"
             >
-              Anterior
+              <Icon name="chevronLeft" size={18} />
             </Button>
             <p className={styles.weekLabel} aria-live="polite">
               {weekLabel}
@@ -245,7 +237,7 @@ export default function Bookings() {
               onClick={() => setWeekAnchor((current) => shiftWeek(current, 1))}
               aria-label="Semana siguiente"
             >
-              Siguiente
+              <Icon name="chevronRight" size={18} />
             </Button>
           </div>
         </div>
@@ -269,7 +261,7 @@ export default function Bookings() {
 }
 
 function BookingRow({ booking, now, busy, onCancel, onLeaveWaitlist }) {
-  const session = booking.session ?? null
+  const session = bookingSession(booking)
   const title =
     booking.class_type_name ??
     session?.class_type_name ??
@@ -278,6 +270,7 @@ function BookingRow({ booking, now, busy, onCancel, onLeaveWaitlist }) {
   const trainer =
     booking.trainer_name ?? session?.trainer_name ?? session?.trainer?.name ?? null
   const startsAt = booking.starts_at ?? session?.starts_at ?? null
+  const endsAt = booking.ends_at ?? session?.ends_at ?? null
   const duration = booking.duration_minutes ?? session?.duration_minutes ?? null
   const sessionId = bookingSessionId(booking)
   const isWaitlisted = booking.status === 'waitlisted'
@@ -289,7 +282,9 @@ function BookingRow({ booking, now, busy, onCancel, onLeaveWaitlist }) {
       <div className={styles.bookingMain}>
         <p className={styles.bookingName}>{title}</p>
         <p className={styles.bookingMeta}>
-          {startsAt ? formatDateTime(startsAt) : sessionId ? `Sesión #${sessionId}` : 'Fecha por confirmar'}
+          {startsAt
+            ? `${formatDate(startsAt)}, ${formatTimeRange(startsAt, endsAt)}`
+            : sessionId ? `Sesión #${sessionId}` : 'Fecha por confirmar'}
           {trainer ? ` · ${trainer}` : ''}
           {duration ? ` · ${duration} min` : ''}
         </p>
@@ -395,7 +390,7 @@ function cancelErrorMessage(error) {
 }
 
 function compareBySessionStart(a, b) {
-  const aStart = a.starts_at ?? a.session?.starts_at ?? ''
-  const bStart = b.starts_at ?? b.session?.starts_at ?? ''
+  const aStart = a.starts_at ?? bookingSession(a)?.starts_at ?? ''
+  const bStart = b.starts_at ?? bookingSession(b)?.starts_at ?? ''
   return String(aStart).localeCompare(String(bStart))
 }

@@ -9,6 +9,7 @@ import EmptyState from '@/components/ui/EmptyState'
 import Field from '@/components/ui/Field'
 import Icon, { ICON_NAMES } from '@/components/ui/Icon'
 import Modal from '@/components/ui/Modal'
+import PageHeader from '@/components/ui/PageHeader'
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import Table from '@/components/ui/Table'
@@ -219,6 +220,20 @@ function EmptyStateDemo() {
       />
     </div>
   )
+}
+
+function PageHeaderDemo() {
+    return (
+        <div className={styles.stack}>
+            <PageHeader
+                eyebrow="Panel de entrenadora"
+                title="Mis clases"
+                lead="Crea, edita o cancela tus clases de grupo. No pueden solaparse dos de tus sesiones a la misma hora."
+                action={<Button>Nueva clase</Button>}
+            />
+            <PageHeader eyebrow="Administración" title="Pagos" lead="Filtra por estado y fechas y exporta el CSV." />
+        </div>
+    )
 }
 
 function AlertDemo() {
@@ -499,6 +514,7 @@ export const DEMOS = {
   alert: AlertDemo,
   avatar: AvatarDemo,
   icon: IconDemo,
+  'page-header': PageHeaderDemo,
   'session-card': SessionCardDemo,
   'week-schedule': WeekScheduleDemo,
   'capacity-bar': CapacityBarDemo,

@@ -4,6 +4,7 @@ import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import Field from '@/components/ui/Field'
 import Modal from '@/components/ui/Modal'
+import PageHeader from '@/components/ui/PageHeader'
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import Table from '@/components/ui/Table'
@@ -18,13 +19,6 @@ import {
 } from '@/services/payments'
 import { formatDateTime, formatEuros } from '@/utils/format'
 import styles from './AdminPayments.module.scss'
-
-/**
- * Pagos (HU-26.4)
- * Admin reviews payments (GET /payments), exports CSV with the same filters
- * (GET /payments/export) and refunds paid ones (POST /payments/{id}/refund, RN-16).
- * Contract: BE #108 / docs/api.md — filters status, from, to, user_id, concept.
- */
 
 const PAGE_SIZE = 20
 const LOAD_ERROR = 'No se han podido cargar los pagos. Inténtalo de nuevo.'
@@ -221,14 +215,11 @@ export default function AdminPayments() {
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <span className={styles.eyebrow}>Administración</span>
-        <h1 className={styles.title}>Pagos</h1>
-        <p className={styles.lead}>
-          Filtra por estado y fechas, exporta el CSV para la contabilidad y marca como reembolsados
-          los pagos ya cobrados cuando haga falta.
-        </p>
-      </header>
+      <PageHeader
+          eyebrow="Administración"
+          title="Pagos"
+          lead="Filtra por estado y fechas, exporta el CSV para la contabilidad y marca como reembolsados los pagos ya cobrados cuando haga falta."
+      />
 
       {flash && (
         <Alert tone="success" onClose={() => setFlash(null)}>

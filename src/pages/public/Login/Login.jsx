@@ -53,6 +53,8 @@ export default function Login() {
             <p className={styles.lead}>Reserva tus clases, consulta tu rutina y gestiona tus pagos.</p>
           </header>
 
+          {/* After a password change (HU-32) the profile sends her here with a notice */}
+          {location.state?.notice && <Alert tone="success">{location.state.notice}</Alert>}
           {error && <Alert tone="error">{error}</Alert>}
           {sessionError && (
             <Alert tone="error">
