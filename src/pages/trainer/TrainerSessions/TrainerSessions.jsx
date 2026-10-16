@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import WeekNav from '@/components/domain/WeekNav'
 import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
-import Icon from '@/components/ui/Icon'
 import Field from '@/components/ui/Field'
 import Modal from '@/components/ui/Modal'
 import PageHeader from '@/components/ui/PageHeader'
@@ -20,7 +20,7 @@ import {
   updateSession,
 } from '@/services/sessions'
 import { formatDate, formatDateTime, formatTimeRange, madridInputToUtcIso, utcIsoToMadridInput } from '@/utils/format'
-import { formatWeekLabel, getWeekRange, shiftWeek } from '@/utils/week'
+import { getWeekRange } from '@/utils/week'
 import styles from './TrainerSessions.module.scss'
 
 const LOAD_SESSIONS_ERROR = 'No se han podido cargar tus clases. Inténtalo de nuevo.'
@@ -103,7 +103,6 @@ export default function TrainerSessions() {
     return () => controller.abort()
   }, [])
 
-  const weekLabel = formatWeekLabel(weekAnchor)
   const loadingSessions = sessions === null && !sessionsError
   const loadingTypes = classTypes === null && !typesError
 
@@ -304,27 +303,7 @@ export default function TrainerSessions() {
           <h2 id="week-heading" className={styles.sectionTitle}>
             Semana
           </h2>
-          <div className={styles.weekNav} role="group" aria-label="Semana">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setWeekAnchor((current) => shiftWeek(current, -1))}
-              aria-label="Semana anterior"
-            >
-              <Icon name="chevronLeft" size={18} />
-            </Button>
-            <p className={styles.weekLabel} aria-live="polite">
-              {weekLabel}
-            </p>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setWeekAnchor((current) => shiftWeek(current, 1))}
-              aria-label="Semana siguiente"
-            >
-              <Icon name="chevronRight" size={18} />
-            </Button>
-          </div>
+          <WeekNav anchor={weekAnchor} onChange={setWeekAnchor} />
         </div>
 
         {sessionsError && <Alert tone="error">{sessionsError}</Alert>}

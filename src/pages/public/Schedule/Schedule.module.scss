@@ -20,22 +20,6 @@
   gap: var(--space-4);
 }
 
-.weekNav {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.weekLabel {
-  margin: 0;
-  min-width: 10rem;
-  text-align: center;
-  font-weight: 700;
-  color: var(--ink);
-  text-transform: capitalize;
-}
-
 .chips {
   display: flex;
   flex-wrap: wrap;
