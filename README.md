@@ -31,7 +31,7 @@ HttpOnly reduce la exposición del refresh a JavaScript, pero un XSS todavía pu
 
 Si el servidor no confirma logout, se borra la sesión de esta página y se muestra un aviso en login con un botón para reintentar. No se presenta el borrado local como una revocación confirmada.
 
-Comprobaciones: `npm test` (Node y Vite ya incluidos), `npm run build` y `npm run lint`. Beste confirmó manualmente login, recarga conservando sesión y logout sin restauración al recargar. El flujo de servicios también se verificó contra una API real con SQLite temporal.
+Comprobaciones: `npm test` (Vitest, incluidos los quince casos de sesión de HU-33), `npm run build` y `npm run lint`. Beste confirmó manualmente login, recarga conservando sesión y logout sin restauración al recargar. El flujo de servicios también se verificó contra una API real con SQLite temporal.
 
 ## Tests (T-10)
 
@@ -46,6 +46,7 @@ npm run test:watch          # vuelve a pasar los tests al guardar
 - Se prueba lo que ve y hace la usuaria: se buscan los elementos por su rol y su texto (`getByRole`, `getByLabelText`), no por clases.
 - `useAuth` y `fetch` se simulan con `vi.mock` y `vi.stubGlobal`: los tests no necesitan la API.
 - `build.yml` ejecuta `npm test` en cada PR y falla si falla un test.
+- Los quince casos de sesión de HU-33 viven en `src/services/session.test.js` y usan el mismo Vitest; no se inicia un servidor Vite adicional ni se ejecuta otro runner.
 
 ## Estructura
 
