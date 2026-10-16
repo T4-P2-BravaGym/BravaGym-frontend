@@ -126,6 +126,15 @@ export const COMPONENTS = [
     use: 'Iconos de línea que toman el color del texto. Nunca emojis.',
     props: 'name, size (px), label (solo si el icono va sin texto)',
   },
+  {
+    id: 'page-header',
+    name: 'PageHeader',
+    group: 'ui',
+    use: 'La cabecera de cada página: antetítulo, título (el único <h1>) y entradilla, con una acción opcional.',
+    avoid: 'Para el título de una sección dentro de la página, un <h2>. Login y Registro llevan la cabecera dentro de la tarjeta.',
+    props: 'title, eyebrow, lead, action (un Button: a la derecha en escritorio, debajo del texto en el móvil)',
+    tip: 'Una por página y lo primero de la página. Los filtros van debajo, fuera de PageHeader.',
+  },
 
   // ── Piezas de Brava ──────────────────────────────────────────
   {
@@ -317,6 +326,7 @@ export const NEEDS = [
   { need: 'Un bloque de información', ids: ['card'] },
   { need: 'El horario de clases', ids: ['week-schedule', 'session-card'] },
   { need: 'Cifras del panel de admin', ids: ['stat-card'] },
+  { need: 'La cabecera de una página', ids: ['page-header'] },
 ]
 
 /** The import line to copy for an entry. */
