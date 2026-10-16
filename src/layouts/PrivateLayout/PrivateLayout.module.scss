@@ -11,6 +11,13 @@
   }
 }
 
+// T-93: narrow menu, only on a computer (phones use their own menu)
+.isCollapsed {
+  @media (min-width: $breakpoint-md + 1px) {
+    grid-template-columns: 76px minmax(0, 1fr);
+  }
+}
+
 .content {
   min-width: 0;
   max-width: 1200px;
