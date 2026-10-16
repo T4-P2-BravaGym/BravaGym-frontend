@@ -1,9 +1,3 @@
-/**
- * Catalog of the sandbox page: one entry per component, with what it is for, when not to
- * use it and its main props. The page text is in Spanish because it is read by the team.
- * When you add a component, add its entry here and its demo in demos.jsx (same `id`).
- */
-
 export const GROUPS = [
   { id: 'ui', title: 'Piezas base', folder: 'components/ui', text: 'Sin lógica del gimnasio. Úsalas en cualquier página.' },
   { id: 'domain', title: 'Piezas de Brava', folder: 'components/domain', text: 'Conocen los datos de la API (clases, planes, rutinas…).' },
@@ -12,7 +6,6 @@ export const GROUPS = [
 ]
 
 export const COMPONENTS = [
-  // ── Piezas base ──────────────────────────────────────────────
   {
     id: 'button',
     name: 'Button',
@@ -135,8 +128,6 @@ export const COMPONENTS = [
     props: 'title, eyebrow, lead, action (un Button: a la derecha en escritorio, debajo del texto en el móvil)',
     tip: 'Una por página y lo primero de la página. Los filtros van debajo, fuera de PageHeader.',
   },
-
-  // ── Piezas de Brava ──────────────────────────────────────────
   {
     id: 'session-card',
     name: 'SessionCard',
@@ -152,6 +143,15 @@ export const COMPONENTS = [
     group: 'domain',
     use: 'El horario semanal con filtros por día y por tipo de clase.',
     props: 'sessions, bookings { [sessionId]: booking }, now, busyId, onBook, onCancel, onLeaveWaitlist',
+  },
+  {
+    id: 'week-nav',
+    name: 'WeekNav',
+    group: 'domain',
+    use: 'Pasar a la semana anterior o a la siguiente encima de un horario, con la semana en medio.',
+    avoid: 'Para elegir un día o un tipo de clase usa los filtros de WeekSchedule.',
+    props: 'anchor (una fecha de la semana que se ve), onChange(nuevaFecha)',
+    tip: 'La página guarda la fecha en su estado y con ella pide las clases de esa semana.',
   },
   {
     id: 'capacity-bar',
@@ -255,8 +255,6 @@ export const COMPONENTS = [
     props: 'request, busy, onApprove(request, notes), onReject(request, notes)',
     tip: 'Rechazar exige notas (RN-13).',
   },
-
-  // ── Navegación ───────────────────────────────────────────────
   {
     id: 'navbar',
     name: 'Navbar',
@@ -294,8 +292,6 @@ export const COMPONENTS = [
     use: 'Icono del carrito con el número de unidades. Ya está en Navbar para las socias.',
     props: 'count, className',
   },
-
-  // ── Layouts ──────────────────────────────────────────────────
   {
     id: 'public-layout',
     name: 'PublicLayout',
@@ -312,7 +308,6 @@ export const COMPONENTS = [
   },
 ]
 
-/** "I need to…" → which component. The quick guide at the top of the page. */
 export const NEEDS = [
   { need: 'Un botón o una acción', ids: ['button'] },
   { need: 'Mostrar un estado (pagado, reservada…)', ids: ['badge'] },
@@ -324,12 +319,11 @@ export const NEEDS = [
   { need: 'Esperar a la API', ids: ['spinner'] },
   { need: 'Una tabla de admin', ids: ['table', 'pagination'] },
   { need: 'Un bloque de información', ids: ['card'] },
-  { need: 'El horario de clases', ids: ['week-schedule', 'session-card'] },
+  { need: 'El horario de clases', ids: ['week-schedule', 'week-nav', 'session-card'] },
   { need: 'Cifras del panel de admin', ids: ['stat-card'] },
   { need: 'La cabecera de una página', ids: ['page-header'] },
 ]
 
-/** The import line to copy for an entry. */
 export function importLine(entry) {
   const base = entry.group === 'layouts' ? '@/layouts' : `@/components/${entry.group}`
   return `import ${entry.name} from '${base}/${entry.name}'`

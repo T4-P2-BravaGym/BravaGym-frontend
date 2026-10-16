@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
+import WeekNav from '@/components/domain/WeekNav'
 import WeekSchedule from '@/components/domain/WeekSchedule'
 import { canCancelBooking } from '@/components/domain/SessionCard/sessionState'
 import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
-import Icon from '@/components/ui/Icon'
 import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import useSessionUpdates from '@/hooks/useSessionUpdates'
@@ -21,7 +21,7 @@ import {
 } from '@/services/bookings'
 import { listSessions, toSessionCard } from '@/services/sessions'
 import { formatDate, formatTimeRange } from '@/utils/format'
-import { formatWeekLabel, getWeekRange, shiftWeek } from '@/utils/week'
+import { getWeekRange } from '@/utils/week'
 import styles from './Bookings.module.scss'
 
 const LOAD_SCHEDULE_ERROR = 'No se ha podido cargar el horario. Inténtalo de nuevo.'
@@ -148,7 +148,6 @@ export default function Bookings() {
     .slice()
     .sort(compareBySessionStart)
 
-  const weekLabel = formatWeekLabel(weekAnchor)
   const loadingSchedule = sessions === null && !scheduleError
   const loadingBookings = bookings === null && !bookingsError
 
@@ -219,27 +218,7 @@ export default function Bookings() {
           <h2 id="schedule-heading" className={styles.sectionTitle}>
             Horario de la semana
           </h2>
-          <div className={styles.weekNav} role="group" aria-label="Semana">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setWeekAnchor((current) => shiftWeek(current, -1))}
-              aria-label="Semana anterior"
-            >
-              <Icon name="chevronLeft" size={18} />
-            </Button>
-            <p className={styles.weekLabel} aria-live="polite">
-              {weekLabel}
-            </p>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setWeekAnchor((current) => shiftWeek(current, 1))}
-              aria-label="Semana siguiente"
-            >
-              <Icon name="chevronRight" size={18} />
-            </Button>
-          </div>
+          <WeekNav anchor={weekAnchor} onChange={setWeekAnchor} />
         </div>
 
         {scheduleError && <Alert tone="error">{scheduleError}</Alert>}

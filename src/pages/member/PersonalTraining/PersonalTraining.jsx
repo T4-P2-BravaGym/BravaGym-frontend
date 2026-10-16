@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import TrainerCard from '@/components/domain/TrainerCard'
+import WeekNav from '@/components/domain/WeekNav'
 import WeekSchedule from '@/components/domain/WeekSchedule'
 import Alert from '@/components/ui/Alert'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
-import Icon from '@/components/ui/Icon'
 import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import { PATHS } from '@/routes/paths'
@@ -13,7 +13,7 @@ import { ApiError } from '@/services/api'
 import { bookSession, bookingsBySessionId, listMyBookings } from '@/services/bookings'
 import { isPersonalTrainingSession, listSessions, toSessionCard } from '@/services/sessions'
 import { listTrainers } from '@/services/trainers'
-import { formatWeekLabel, getWeekRange, shiftWeek } from '@/utils/week'
+import { getWeekRange } from '@/utils/week'
 import styles from './PersonalTraining.module.scss'
 
 const TRAINER_PARAM = 'entrenadora'
@@ -149,7 +149,6 @@ export default function PersonalTraining() {
   }
 
   const bookingMap = bookingsBySessionId(bookings ?? [])
-  const weekLabel = formatWeekLabel(weekAnchor)
   const loadingTrainers = trainers === null && !trainersError
   const loadingSlots = selectedTrainerId != null && sessions === null && !slotsError
   const unknownTrainer =
@@ -241,27 +240,7 @@ export default function PersonalTraining() {
                 una clase.
               </p>
             </div>
-            <div className={styles.weekNav} role="group" aria-label="Semana">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setWeekAnchor((current) => shiftWeek(current, -1))}
-                aria-label="Semana anterior"
-              >
-                <Icon name="chevronLeft" size={18} />
-              </Button>
-              <p className={styles.weekLabel} aria-live="polite">
-                {weekLabel}
-              </p>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setWeekAnchor((current) => shiftWeek(current, 1))}
-                aria-label="Semana siguiente"
-              >
-                <Icon name="chevronRight" size={18} />
-              </Button>
-            </div>
+            <WeekNav anchor={weekAnchor} onChange={setWeekAnchor} />
           </div>
 
           {unknownTrainer && (
