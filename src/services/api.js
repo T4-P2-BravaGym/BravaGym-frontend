@@ -5,7 +5,7 @@
  * - Adds "Authorization: Bearer <token>" when there is a session.
  * - Sends JSON (body), a urlencoded form (form) or a multipart form with files (formData).
  * - Throws ApiError with the API's { detail, code } on any error.
- * - On 401 it calls the unauthorized handler (AuthContext logs out).
+ * - On an authenticated 401 it renews and retries once, then clears a rejected session.
  * - mediaUrl() turns the /media/... paths the API returns into full URLs (HU-30).
  */
 export const API_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api/v1').replace(/\/$/, '')
@@ -30,10 +30,47 @@ export class ApiError extends Error {
 // AuthContext registers these, so this file does not depend on React.
 let getToken = () => null
 let onUnauthorized = () => {}
+let onRefresh = async () => {}
+let getSessionVersion = () => null
 
-export function configureApi({ tokenGetter, unauthorizedHandler }) {
+export function configureApi({ tokenGetter, unauthorizedHandler, refreshHandler, sessionGetter }) {
   if (tokenGetter) getToken = tokenGetter
   if (unauthorizedHandler) onUnauthorized = unauthorizedHandler
+  if (refreshHandler) onRefresh = refreshHandler
+  if (sessionGetter) getSessionVersion = sessionGetter
+}
+
+async function fetchWithSession(path, options, auth) {
+  let token = auth ? getToken() : null
+  const sessionVersion = getSessionVersion()
+  async function send() {
+    const headers = { ...options.headers }
+    if (token) headers.Authorization = `Bearer ${token}`
+    try {
+      return await fetch(`${API_URL}${path}`, { ...options, headers })
+    } catch (error) {
+      if (error.name === 'AbortError') throw error
+      throw new ApiError(0, NETWORK_ERROR, 'network_error')
+    }
+  }
+  let response = await send()
+  if (response.status === 401 && auth && token) {
+    if (getSessionVersion() !== sessionVersion) return response
+    try {
+      // A late 401 may belong to a token another request has already renewed.
+      if (getToken() === token) await onRefresh()
+    } catch (error) {
+      if (getSessionVersion() === sessionVersion && getToken() === token) onUnauthorized()
+      throw error
+    }
+    const renewed = getToken()
+    if (renewed && getSessionVersion() === sessionVersion) {
+      token = renewed
+      response = await send()
+    }
+    if (response.status === 401 && getSessionVersion() === sessionVersion && getToken() === token) onUnauthorized()
+  }
+  return response
 }
 
 /**
@@ -61,8 +98,11 @@ export function buildQuery(params = {}) {
  * apiRequest('/auth/login', { method: 'POST', form: { username, password }, auth: false })
  * apiRequest('/products/3/image', { method: 'PUT', formData })
  */
-export async function apiRequest(path, { method = 'GET', body, form, formData, auth = true, signal } = {}) {
-  const headers = { Accept: 'application/json' }
+export async function apiRequest(path, {
+  method = 'GET', body, form, formData, auth = true, signal,
+  headers: extraHeaders, credentials = 'same-origin',
+} = {}) {
+  const headers = { Accept: 'application/json', ...extraHeaders }
   let payload
 
   if (formData) {
@@ -76,16 +116,7 @@ export async function apiRequest(path, { method = 'GET', body, form, formData, a
     payload = JSON.stringify(body)
   }
 
-  const token = auth ? getToken() : null
-  if (token) headers.Authorization = `Bearer ${token}`
-
-  let response
-  try {
-    response = await fetch(`${API_URL}${path}`, { method, headers, body: payload, signal })
-  } catch (error) {
-    if (error.name === 'AbortError') throw error
-    throw new ApiError(0, NETWORK_ERROR, 'network_error')
-  }
+  const response = await fetchWithSession(path, { method, headers, body: payload, signal, credentials }, auth)
 
   if (response.status === 204) return null
 
@@ -93,7 +124,6 @@ export async function apiRequest(path, { method = 'GET', body, form, formData, a
   const data = isJson ? await response.json().catch(() => null) : null
 
   if (!response.ok) {
-    if (response.status === 401 && auth) onUnauthorized()
     throw new ApiError(response.status, readDetail(data), data?.code)
   }
   return data
@@ -106,19 +136,9 @@ export async function apiRequest(path, { method = 'GET', body, form, formData, a
  */
 export async function apiDownload(path, { method = 'GET', auth = true, signal, fallbackFilename = 'download' } = {}) {
   const headers = { Accept: '*/*' }
-  const token = auth ? getToken() : null
-  if (token) headers.Authorization = `Bearer ${token}`
-
-  let response
-  try {
-    response = await fetch(`${API_URL}${path}`, { method, headers, signal })
-  } catch (error) {
-    if (error.name === 'AbortError') throw error
-    throw new ApiError(0, NETWORK_ERROR, 'network_error')
-  }
+  const response = await fetchWithSession(path, { method, headers, signal }, auth)
 
   if (!response.ok) {
-    if (response.status === 401 && auth) onUnauthorized()
     const isJson = response.headers.get('content-type')?.includes('application/json')
     const data = isJson ? await response.json().catch(() => null) : null
     throw new ApiError(response.status, readDetail(data), data?.code)

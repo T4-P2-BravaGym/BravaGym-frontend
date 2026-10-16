@@ -19,7 +19,7 @@ function safeRedirect(path) {
 }
 
 export default function Login() {
-  const { isAuthenticated, role, login } = useAuth()
+  const { isAuthenticated, role, login, logout, isLoading, isLoggingOut, sessionError } = useAuth()
   const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -54,6 +54,14 @@ export default function Login() {
           </header>
 
           {error && <Alert tone="error">{error}</Alert>}
+          {sessionError && (
+            <Alert tone="error">
+              {sessionError}
+              <Button variant="secondary" onClick={() => logout()} disabled={isLoggingOut}>
+                Reintentar cierre de sesión
+              </Button>
+            </Alert>
+          )}
 
           <form className={styles.form} onSubmit={handleSubmit} noValidate>
             <Field
@@ -73,8 +81,8 @@ export default function Login() {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
             />
-            <Button type="submit" fullWidth disabled={isSubmitting}>
-              {isSubmitting ? 'Entrando…' : 'Entrar'}
+            <Button type="submit" fullWidth disabled={isSubmitting || isLoading}>
+              {isLoading ? 'Comprobando sesión…' : isSubmitting ? 'Entrando…' : 'Entrar'}
             </Button>
           </form>
 

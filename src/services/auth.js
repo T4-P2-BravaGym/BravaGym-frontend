@@ -6,7 +6,22 @@ import { apiRequest } from './api'
  * the same format Swagger's Authorize button uses.
  */
 export function login(email, password) {
-  return apiRequest('/auth/login', { method: 'POST', form: { username: email, password }, auth: false })
+  return apiRequest('/auth/login', {
+    method: 'POST', form: { username: email, password }, auth: false, credentials: 'include',
+  })
+}
+
+export function refresh() {
+  return apiRequest('/auth/refresh', {
+    method: 'POST', auth: false, credentials: 'include', headers: { 'X-Brava-CSRF': '1' },
+  })
+}
+
+export function logout(accessToken) {
+  return apiRequest('/auth/logout', {
+    method: 'POST', auth: false, credentials: 'include',
+    headers: { 'X-Brava-CSRF': '1', Authorization: `Bearer ${accessToken}` },
+  })
 }
 
 export function register(data) {

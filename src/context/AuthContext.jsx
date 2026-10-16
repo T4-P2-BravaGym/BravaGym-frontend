@@ -1,89 +1,70 @@
-import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { configureApi } from '@/services/api'
 import * as authService from '@/services/auth'
+import { createSession } from '@/services/session'
 import { sessionFromToken } from '@/utils/token'
 
 export const AuthContext = createContext(null)
 
-const TOKEN_KEY = 'brava.token'
-
-function readToken() {
-  try {
-    return localStorage.getItem(TOKEN_KEY)
-  } catch {
-    return null
-  }
-}
-
-function writeToken(token) {
-  try {
-    if (token) localStorage.setItem(TOKEN_KEY, token)
-    else localStorage.removeItem(TOKEN_KEY)
-  } catch {
-    // Ignore quota / private-mode failures; auth still works in-memory.
-  }
-}
-
-function readValidToken() {
-  const token = readToken()
-  if (token && sessionFromToken(token)) return token
-  writeToken(null)
-  return null
-}
+// One session owner also prevents React StrictMode from rotating the cookie twice.
+const sessionStore = createSession(authService)
+configureApi({
+  tokenGetter: () => sessionStore.getSnapshot().token,
+  sessionGetter: () => sessionStore.getSnapshot().version,
+  refreshHandler: sessionStore.refresh,
+  unauthorizedHandler: sessionStore.clear,
+})
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(readValidToken)
+  const { token, isLoading, isLoggingOut, error } = useSyncExternalStore(
+    sessionStore.subscribe, sessionStore.getSnapshot,
+  )
   const [profile, setProfile] = useState(null)
   const session = useMemo(() => sessionFromToken(token), [token])
 
-  const logout = useCallback(() => {
-    writeToken(null)
-    setToken(null)
-    setProfile(null)
-  }, [])
-
   useEffect(() => {
-    configureApi({ tokenGetter: () => token, unauthorizedHandler: logout })
-  }, [token, logout])
+    try {
+      localStorage.removeItem('brava.token')
+    } catch {
+      // Storage may be unavailable; the new session never depends on it.
+    }
+    void sessionStore.initialize()
+  }, [])
 
   useEffect(() => {
     if (!session) return undefined
-    const timer = setTimeout(logout, session.expiresAt - Date.now())
+    const timer = setTimeout(() => {
+      // The session owner clears state if renewal fails.
+      void sessionStore.refresh().catch(() => {})
+    }, Math.max(0, session.expiresAt - Date.now()))
     return () => clearTimeout(timer)
-  }, [session, logout])
+  }, [session])
 
   useEffect(() => {
+    setProfile(null)
     if (!token) return undefined
     let cancelled = false
-    authService
-        .getMe()
-        .then((me) => {
-          if (!cancelled) setProfile(me)
-        })
-        .catch(() => {})
-    return () => {
-      cancelled = true
-    }
+    authService.getMe()
+      .then((me) => { if (!cancelled) setProfile(me) })
+      .catch(() => {})
+    return () => { cancelled = true }
   }, [token])
 
   const login = useCallback(async (email, password) => {
-    const result = await authService.login(email, password)
-    writeToken(result.access_token)
-    setToken(result.access_token)
+    const result = await sessionStore.login(email, password)
     return sessionFromToken(result.access_token)
   }, [])
 
-  const value = useMemo(() => {
-    const user = session ? { ...profile, id: session.id, role: session.role } : null
-    return {
-      user,
-      role: session?.role ?? null,
-      isAuthenticated: Boolean(session),
-      isLoading: false,
-      login,
-      logout,
-    }
-  }, [session, profile, login, logout])
+  const value = useMemo(() => ({
+    user: session ? { ...profile, id: session.id, role: session.role } : null,
+    role: session?.role ?? null,
+    isAuthenticated: Boolean(session),
+    isLoading: isLoading || isLoggingOut,
+    isLoggingOut,
+    sessionError: error,
+    login,
+    logout: sessionStore.logout,
+  }), [session, profile, isLoading, isLoggingOut, error, login])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
