@@ -170,6 +170,9 @@
 .userRole {
   font-size: 13px;
   color: var(--on-plum-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .logout {
