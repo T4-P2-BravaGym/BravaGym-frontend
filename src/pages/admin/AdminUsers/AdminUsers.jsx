@@ -4,6 +4,7 @@ import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import Field from '@/components/ui/Field'
 import Modal from '@/components/ui/Modal'
+import PageHeader from '@/components/ui/PageHeader'
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import Table from '@/components/ui/Table'
@@ -15,25 +16,17 @@ import { canManage, roleChoices } from './canManage'
 import UserPanel from './UserPanel'
 import styles from './AdminUsers.module.scss'
 
-/**
- * Usuarias y roles (HU-05, HU-06, HU-31)
- * Admins search users by name or email and filter by role and status.
- * HU-05: change the role from the table, after a confirmation.
- * HU-31: view, edit and deactivate a user from the table.
- */
 const PAGE_SIZE = 20
 const SEARCH_DELAY_MS = 350
 const LOAD_ERROR = 'No se han podido cargar las usuarias. Inténtalo de nuevo.'
 const SAVE_ERROR = 'No se ha podido guardar. Inténtalo de nuevo.'
 
-// Status filter: the select works with strings, the API expects true/false
 const STATUS_OPTIONS = [
   { value: '', label: 'Todos los estados' },
   { value: 'true', label: 'Activas' },
   { value: 'false', label: 'Desactivadas' },
 ]
 
-// Columns for the Table component: header text and how to draw each cell
 const COLUMNS = [
   { key: 'name', header: 'Nombre', render: (user) => `${user.first_name} ${user.last_name}` },
   { key: 'email', header: 'Email' },
@@ -57,21 +50,19 @@ export default function AdminUsers() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // HU-31: the user open in the panel, and the deactivation waiting for confirmation
   const { user: me } = useAuth()
   const [reloadKey, setReloadKey] = useState(0)
   const [selected, setSelected] = useState(null)
   const [mode, setMode] = useState('view')
   const [panelError, setPanelError] = useState(null)
   const [deactivateTarget, setDeactivateTarget] = useState(null)
-  const [roleChange, setRoleChange] = useState(null) // HU-05: { user, role } waiting for confirmation
+  const [roleChange, setRoleChange] = useState(null)
   const [busy, setBusy] = useState(false)
   const [flash, setFlash] = useState(null)
   const [actionError, setActionError] = useState(null)
 
-  // Reload whenever a filter or the page changes
   useEffect(() => {
-    const controller = new AbortController() // cancels the old request if filters change fast
+    const controller = new AbortController()
     setLoading(true)
     setError(null)
 
@@ -96,7 +87,6 @@ export default function AdminUsers() {
     return () => controller.abort()
   }, [role, isActive, q, page, reloadKey])
 
-  // Any filter change goes back to page 1, or she could land on an empty page
   function changeFilter(setter) {
     return (event) => {
       setter(event.target.value)
@@ -110,7 +100,6 @@ export default function AdminUsers() {
     setPanelError(null)
   }
 
-  // "Ver" and "Editar" load her latest data first (GET /users/{id})
   async function openPanel(user, nextMode) {
     clearMessages()
     try {
@@ -175,7 +164,6 @@ export default function AdminUsers() {
     }
   }
 
-  // HU-05: a select in the "Rol" column when she can manage that user (not herself, only active users)
   function renderRole(user) {
     const label = ROLE_LABELS[user.role] ?? user.role
     if (!canManage(me, user) || user.id === me?.id || !user.is_active) return label
@@ -229,11 +217,11 @@ export default function AdminUsers() {
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <span className={styles.eyebrow}>Administración</span>
-        <h1 className={styles.title}>Usuarias y roles</h1>
-        <p className={styles.lead}>Busca socias, entrenadoras y personal de administración.</p>
-      </header>
+      <PageHeader
+          eyebrow="Administración"
+          title="Usuarias y roles"
+          lead="Busca socias, entrenadoras y personal de administración."
+      />
 
       <div className={styles.filters}>
         <Field

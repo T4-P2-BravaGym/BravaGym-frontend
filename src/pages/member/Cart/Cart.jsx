@@ -5,6 +5,7 @@ import Alert from '@/components/ui/Alert'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
 import Modal from '@/components/ui/Modal'
+import PageHeader from "@/components/ui/PageHeader/index.js";
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import useCart from '@/hooks/useCart'
@@ -88,11 +89,11 @@ export default function Cart() {
 
   return (
       <div className={styles.root}>
-        <header className={styles.intro}>
-          <span className={styles.eyebrow}>Tienda Brava</span>
-          <h1 className={styles.title}>Carrito y pedidos</h1>
-          <p className={styles.lead}>Confirma tu pedido, págalo en Mis pagos y recógelo en recepción.</p>
-        </header>
+        <PageHeader
+            eyebrow="Tienda Brava"
+            title="Carrito y pedidos"
+            lead="Confirma tu pedido, págalo en Mis pagos y recógelo en recepción."
+        />
 
         {flash && (
             <Alert tone="success" onClose={() => setFlash(null)}>

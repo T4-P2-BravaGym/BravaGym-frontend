@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button'
 import Chip from '@/components/ui/Chip'
 import EmptyState from '@/components/ui/EmptyState'
 import Field from '@/components/ui/Field'
+import PageHeader from "@/components/ui/PageHeader/index.js";
 import Pagination from '@/components/ui/Pagination'
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
@@ -133,14 +134,11 @@ export default function Shop() {
 
   return (
       <div className={styles.root}>
-        <header className={styles.header}>
-          <div className={styles.intro}>
-            <span className={styles.eyebrow}>Tienda Brava</span>
-            <h1 className={styles.title}>Tienda</h1>
-            <p className={styles.lead}>
-              Suplementos, ropa y accesorios para entrenar. Haz tu pedido y recógelo en el gimnasio.
-            </p>
-          </div>
+        <PageHeader
+            eyebrow="Tienda Brava"
+            title="Tienda"
+            lead="Suplementos, ropa y accesorios para entrenar. Haz tu pedido y recógelo en el gimnasio."
+        />
 
           <form
               className={styles.toolbar}
@@ -219,7 +217,7 @@ export default function Shop() {
                 </Button>
             )}
           </div>
-        </header>
+
 
         {notice && (
             <Alert tone={notice.tone} onClose={() => setNotice(null)}>

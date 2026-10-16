@@ -5,6 +5,7 @@ import Alert from '@/components/ui/Alert'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
+import PageHeader from "@/components/ui/PageHeader/index.js";
 import Spinner from '@/components/ui/Spinner'
 import useSessionUpdates from '@/hooks/useSessionUpdates'
 import { PATHS } from '@/routes/paths'
@@ -31,12 +32,6 @@ const GENERIC_CANCEL_ERROR = 'No se ha podido cancelar. Inténtalo de nuevo.'
 const CANCEL_TOO_LATE =
   'Solo puedes cancelar hasta 1 hora antes del inicio de la clase.'
 
-/**
- * Reservar y cancelar clases (HU-12.4, HU-13.4).
- * Week schedule with book / waitlist / cancel / leave-waitlist actions,
- * and "Mis reservas" from GET /bookings/me.
- * Cancel deadline (RN-05) is mirrored in the UI; the API still enforces it.
- */
 export default function Bookings() {
   const [weekAnchor, setWeekAnchor] = useState(() => new Date())
   const [sessions, setSessions] = useState(null)
@@ -97,7 +92,6 @@ export default function Bookings() {
     return () => controller.abort()
   }, [loadBookings])
 
-  // HU-16: when someone books or cancels a class on screen, reload its free spots and my bookings
   useSessionUpdates(
     (sessions ?? []).map((session) => session.id),
     () => {
@@ -158,15 +152,11 @@ export default function Bookings() {
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <div className={styles.intro}>
-          <span className={styles.eyebrow}>Clases en grupo</span>
-          <h1 className={styles.title}>Reservar clases</h1>
-          <p className={styles.lead}>
-            Elige una clase con plazas o únete a la lista de espera si está completa.
-          </p>
-        </div>
-      </header>
+      <PageHeader
+          eyebrow="Clases en grupo"
+          title="Reservar clases"
+          lead="Elige una clase con plazas o únete a la lista de espera si está completa."
+      />
 
       {flash && (
         <Alert tone="success" onClose={() => setFlash(null)}>

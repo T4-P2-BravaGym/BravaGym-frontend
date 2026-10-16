@@ -5,26 +5,6 @@
   gap: var(--space-6);
 }
 
-.header {
-  display: grid;
-  gap: var(--space-2);
-}
-
-.eyebrow {
-  @include eyebrow;
-}
-
-.title {
-  margin: 0;
-  font-family: var(--font-display);
-}
-
-.lead {
-  margin: 0;
-  color: var(--ink-muted);
-}
-
-// Three filters in a row on desktop, one under the other on phones
 .filters {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
@@ -35,7 +15,6 @@
   }
 }
 
-// HU-31: the card with one user's data or the edit form
 .panel {
   display: grid;
   gap: var(--space-4);
@@ -87,19 +66,15 @@
   gap: var(--space-3);
 }
 
-// Three fixed slots, so each button sits in the same place on every row:
-// [Ver] [Editar] [Dar de baja / Solo superadmin]
-// Fixed widths: an empty slot (no "Editar") must keep its place
 .rowActions {
   display: grid;
   grid-template-columns: 4rem 5rem 8rem;
   justify-items: start;
   align-items: center;
   gap: var(--space-2);
-  padding-left: var(--space-6);   // more room after "Estado"
+  padding-left: var(--space-6);
 }
 
-// Same room before the "Acciones" header, so it stays above "Ver"
 .actionsHeader {
   padding-left: var(--space-6);
 }
@@ -111,7 +86,6 @@
   white-space: nowrap;
 }
 
-// HU-05: the role select in the table, as small as the cell text
 .roleSelect {
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);

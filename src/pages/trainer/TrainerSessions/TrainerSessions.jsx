@@ -5,6 +5,7 @@ import Button from '@/components/ui/Button'
 import EmptyState from '@/components/ui/EmptyState'
 import Field from '@/components/ui/Field'
 import Modal from '@/components/ui/Modal'
+import PageHeader from "@/components/ui/PageHeader/index.js";
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
 import { ApiError } from '@/services/api'
@@ -36,12 +37,6 @@ const EMPTY_FORM = {
   capacity: '12',
 }
 
-/**
- * Mis clases (HU-11.5).
- * Trainer panel: list own group sessions for the week, create / edit / cancel.
- * Wires to GET/POST/PATCH /sessions and POST /sessions/{id}/cancel,
- * plus GET /class-types for the form. RN-09 → 409, RN-10 → 403.
- */
 export default function TrainerSessions() {
   const { user } = useAuth()
   const trainerId = user?.role === 'trainer' ? user.id : undefined
@@ -200,19 +195,16 @@ export default function TrainerSessions() {
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <div className={styles.intro}>
-          <span className={styles.eyebrow}>Panel de entrenadora</span>
-          <h1 className={styles.title}>Mis clases</h1>
-          <p className={styles.lead}>
-            Crea, edita o cancela tus clases de grupo. No pueden solaparse dos de tus
-            sesiones a la misma hora.
-          </p>
-        </div>
-        <Button variant="primary" onClick={openCreate} disabled={Boolean(formMode)}>
-          Nueva clase
-        </Button>
-      </header>
+      <PageHeader
+          eyebrow="Panel de entrenadora"
+          title="Mis clases"
+          lead="Crea, edita o cancela tus clases de grupo. No pueden solaparse dos de tus sesiones a la misma hora."
+          action={
+            <Button variant="primary" onClick={openCreate} disabled={Boolean(formMode)}>
+              Nueva clase
+            </Button>
+          }
+      />
 
       {flash && (
         <Alert tone="success" onClose={() => setFlash(null)}>
