@@ -12,6 +12,7 @@ import { PATHS } from '@/routes/paths'
 import { ApiError } from '@/services/api'
 import {
   bookSession,
+  bookingSession,
   bookingsBySessionId,
   bookingSessionId,
   cancelBooking,
@@ -259,7 +260,7 @@ export default function Bookings() {
 }
 
 function BookingRow({ booking, now, busy, onCancel, onLeaveWaitlist }) {
-  const session = booking.session ?? null
+  const session = bookingSession(booking)
   const title =
     booking.class_type_name ??
     session?.class_type_name ??
@@ -388,7 +389,7 @@ function cancelErrorMessage(error) {
 }
 
 function compareBySessionStart(a, b) {
-  const aStart = a.starts_at ?? a.session?.starts_at ?? ''
-  const bStart = b.starts_at ?? b.session?.starts_at ?? ''
+  const aStart = a.starts_at ?? bookingSession(a)?.starts_at ?? ''
+  const bStart = b.starts_at ?? bookingSession(b)?.starts_at ?? ''
   return String(aStart).localeCompare(String(bStart))
 }

@@ -38,9 +38,14 @@ export function cancelBooking(bookingId, { signal } = {}) {
   return apiRequest(`/bookings/${bookingId}/cancel`, { method: 'POST', signal })
 }
 
+/** The session of a booking: the API nests it in `class_session` (BookingOut). */
+export function bookingSession(booking) {
+  return booking?.class_session ?? booking?.session ?? null
+}
+
 /** Session id used to key a booking against the week schedule. */
 export function bookingSessionId(booking) {
-  return booking?.class_session_id ?? booking?.session?.id ?? booking?.session_id ?? null
+  return bookingSession(booking)?.id ?? booking?.class_session_id ?? booking?.session_id ?? null
 }
 
 /**
