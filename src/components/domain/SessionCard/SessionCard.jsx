@@ -1,7 +1,7 @@
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import cx from '@/utils/cx'
-import { formatEuros, formatTime } from '@/utils/format'
+import { formatEuros, formatTimeRange } from '@/utils/format'
 import { getSessionState } from './sessionState'
 import styles from './SessionCard.module.scss'
 
@@ -12,7 +12,7 @@ import styles from './SessionCard.module.scss'
  * waitlisted (with position), extra price, past or cancelled.
  * Data objects use the API's field names (snake_case).
  *
- * Props: session { id, starts_at, duration_minutes, class_type_name, trainer_name, free_spots,
+ * Props: session { id, starts_at, duration_minutes, ends_at, class_type_name, trainer_name, free_spots,
  *                  extra_price_cents, status },
  *        booking { id, status, waitlist_position } | null, now, busy,
  *        onBook(session), onCancel(booking), onLeaveWaitlist(booking)
@@ -32,7 +32,7 @@ export default function SessionCard({ session, booking = null, now, busy = false
     >
       <div className={styles.top}>
         <time className={styles.time} dateTime={session.starts_at}>
-          {formatTime(session.starts_at)}
+          {formatTimeRange(session.starts_at, session.ends_at)}
         </time>
         {hasExtraPrice && <Badge tone="brand">+{formatEuros(session.extra_price_cents)}</Badge>}
       </div>

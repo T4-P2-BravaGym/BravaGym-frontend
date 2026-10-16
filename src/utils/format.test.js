@@ -6,6 +6,7 @@ import {
     formatDate,
     formatEuros,
     formatTime,
+    formatTimeRange,
     madridInputToUtcIso,
     parseApiDate,
     utcIsoToMadridInput,
@@ -44,6 +45,16 @@ describe('formatTime', () => {
 
     it('handles winter time', () => {
         expect(formatTime('2026-12-01T17:00:00')).toBe('18:00')
+    })
+})
+
+describe('formatTimeRange', () => {
+    it('shows start and end in Madrid time (T-238)', () => {
+        expect(formatTimeRange('2026-10-13T15:30:00', '2026-10-13T16:30:00')).toBe('17:30 - 18:30')
+    })
+
+    it('shows only the start when there is no end time', () => {
+        expect(formatTimeRange('2026-10-13T15:30:00', null)).toBe('17:30')
     })
 })
 

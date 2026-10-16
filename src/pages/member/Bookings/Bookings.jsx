@@ -18,7 +18,7 @@ import {
   listMyBookings,
 } from '@/services/bookings'
 import { listSessions, toSessionCard } from '@/services/sessions'
-import { formatDateTime } from '@/utils/format'
+import { formatDate, formatTimeRange } from '@/utils/format'
 import { formatWeekLabel, getWeekRange, shiftWeek } from '@/utils/week'
 import styles from './Bookings.module.scss'
 
@@ -268,6 +268,7 @@ function BookingRow({ booking, now, busy, onCancel, onLeaveWaitlist }) {
   const trainer =
     booking.trainer_name ?? session?.trainer_name ?? session?.trainer?.name ?? null
   const startsAt = booking.starts_at ?? session?.starts_at ?? null
+  const endsAt = booking.ends_at ?? session?.ends_at ?? null
   const duration = booking.duration_minutes ?? session?.duration_minutes ?? null
   const sessionId = bookingSessionId(booking)
   const isWaitlisted = booking.status === 'waitlisted'
@@ -279,7 +280,9 @@ function BookingRow({ booking, now, busy, onCancel, onLeaveWaitlist }) {
       <div className={styles.bookingMain}>
         <p className={styles.bookingName}>{title}</p>
         <p className={styles.bookingMeta}>
-          {startsAt ? formatDateTime(startsAt) : sessionId ? `Sesión #${sessionId}` : 'Fecha por confirmar'}
+          {startsAt
+            ? `${formatDate(startsAt)}, ${formatTimeRange(startsAt, endsAt)}`
+            : sessionId ? `Sesión #${sessionId}` : 'Fecha por confirmar'}
           {trainer ? ` · ${trainer}` : ''}
           {duration ? ` · ${duration} min` : ''}
         </p>

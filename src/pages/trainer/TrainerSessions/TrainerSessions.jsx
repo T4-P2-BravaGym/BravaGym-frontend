@@ -18,7 +18,7 @@ import {
   toSessionCard,
   updateSession,
 } from '@/services/sessions'
-import { formatDateTime, madridInputToUtcIso, utcIsoToMadridInput } from '@/utils/format'
+import { formatDate, formatDateTime, formatTimeRange, madridInputToUtcIso, utcIsoToMadridInput } from '@/utils/format'
 import { formatWeekLabel, getWeekRange, shiftWeek } from '@/utils/week'
 import styles from './TrainerSessions.module.scss'
 
@@ -404,7 +404,7 @@ function SessionRow({ session, busy, onEdit, onCancel }) {
       <div className={styles.itemMain}>
         <p className={styles.itemName}>{session.class_type_name}</p>
         <p className={styles.itemMeta}>
-          {formatDateTime(session.starts_at)}
+          {formatDate(session.starts_at)}, {formatTimeRange(session.starts_at, session.ends_at)}
           {session.duration_minutes ? ` · ${session.duration_minutes} min` : ''}
           {spots ? ` · ${spots}` : ''}
         </p>
