@@ -27,9 +27,9 @@ export default function PrivateLayout() {
       ? { name: [user.first_name, user.last_name].filter(Boolean).join(' ') || user.email || 'Mi cuenta', roleLabel: ROLE_LABELS[user.role] }
       : null
 
-  function handleLogout() {
-    logout()
-    navigate(PATHS.home)
+  async function handleLogout() {
+    const confirmed = await logout()
+    navigate(confirmed ? PATHS.home : PATHS.login)
   }
 
   return (
