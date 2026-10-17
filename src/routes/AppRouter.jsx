@@ -11,6 +11,8 @@ import Pricing from '@/pages/public/Pricing'
 import Shop from '@/pages/public/Shop'
 import Login from '@/pages/public/Login'
 import Register from '@/pages/public/Register'
+import ForgotPassword from '@/pages/public/ForgotPassword'
+import ResetPassword from '@/pages/public/ResetPassword'
 import NotFound from '@/pages/public/NotFound'
 import MemberHome from '@/pages/member/MemberHome'
 import Bookings from '@/pages/member/Bookings'
@@ -45,6 +47,8 @@ export default function AppRouter() {
       <Route element={<PublicLayout minimal />}>
         <Route path={PATHS.login} element={<Login />} />
         <Route path={PATHS.register} element={<Register />} />
+        <Route path={PATHS.forgotPassword} element={<ForgotPassword />} />
+        <Route path={PATHS.resetPassword} element={<ResetPassword />} />
       </Route>
 
       <Route element={<ProtectedRoute roles={['member']} />}>

@@ -31,7 +31,7 @@ HttpOnly reduce la exposición del refresh a JavaScript, pero un XSS todavía pu
 
 Si el servidor no confirma logout, se borra la sesión de esta página y se muestra un aviso en login con un botón para reintentar. No se presenta el borrado local como una revocación confirmada.
 
-Comprobaciones: `npm test` (Vitest, incluidos los quince casos de sesión de HU-33), `npm run build` y `npm run lint`. Beste confirmó manualmente login, recarga conservando sesión y logout sin restauración al recargar. El flujo de servicios también se verificó contra una API real con SQLite temporal.
+Comprobaciones: `npm test` (Vitest, incluidos los quince casos de sesión de HU-33), `npm run build` y `npm run lint`. Se comprobaron manualmente login, recarga conservando sesión y logout sin restauración al recargar. El flujo de servicios también se verificó contra una API real con SQLite temporal.
 
 ## Tests (T-10)
 
@@ -77,3 +77,14 @@ Todas las rutas ya existen y cada página muestra su título, así que se puede 
 ## Cómo trabajamos
 
 Todo está en [`AGENTS.md`](AGENTS.md): la IA como mentora, idioma, DRY y SOLID, componentes, SASS, seguridad, ramas, Conventional Commits y Definition of Done.
+
+
+## Recuperación de contraseña (HU-35)
+
+Desde login, «He olvidado mi contraseña» abre `/recuperar-contrasena`. El formulario muestra siempre la misma confirmación tras un 202, sin revelar si existe la cuenta. `/nueva-contrasena` permite elegir y repetir la contraseña con las reglas del backend (ocho caracteres Unicode, máximo 72 bytes UTF-8). El enlace inválido ofrece solicitar otro; un fallo de conexión permite reintentar sin perder el token en memoria.
+
+Requiere backend HU-35 y migración aplicada. La spec compartida es `specs/HU-35-password-reset.md` y la bitácora está en `docs/ai-log.md` del backend. En local, el mensaje se escribe en su outbox privado: no hay correo SMTP real. El origen `FRONTEND_URL` del backend debe coincidir con este frontend. No poner contraseñas, enlaces o tokens en variables VITE_*.
+
+Los enlaces usan `/nueva-contrasena#token=...`; el fragmento se retira del historial al montar la página y el token solo vive en memoria. Tras una recarga, volver a abrir el enlace original o solicitar otro. No se guarda en localStorage/sessionStorage. Los dos endpoints de recuperación se llaman con `auth: false`, sin intentar renovar por un error de recuperación. Al terminar, se borran contraseña/token del formulario y la sesión local; el backend ya ha invalidado las sesiones anteriores. Se ofrece iniciar sesión normalmente, sin login automático.
+
+Las páginas reutilizan PublicLayout minimal, Card, Field, Button y Alert. Los tests usan el mismo Vitest/Testing Library configurado por el equipo, sin dependencias nuevas. Capturas móviles de revisión: `docs/screenshots/hu35-request-mobile.png` y `hu35-reset-mobile.png`, sin datos ni tokens reales.
