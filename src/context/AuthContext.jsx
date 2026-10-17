@@ -64,6 +64,7 @@ export function AuthProvider({ children }) {
     sessionError: error,
     login,
     logout: sessionStore.logout,
+    clearSession: sessionStore.clear,
   }), [session, profile, isLoading, isLoggingOut, error, login])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
