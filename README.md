@@ -31,7 +31,7 @@ HttpOnly reduce la exposición del refresh a JavaScript, pero un XSS todavía pu
 
 Si el servidor no confirma logout, se borra la sesión de esta página y se muestra un aviso en login con un botón para reintentar. No se presenta el borrado local como una revocación confirmada.
 
-Comprobaciones: `npm test` (Vitest, incluidos los quince casos de sesión de HU-33), `npm run build` y `npm run lint`. Beste confirmó manualmente login, recarga conservando sesión y logout sin restauración al recargar. El flujo de servicios también se verificó contra una API real con SQLite temporal.
+Comprobaciones: `npm test` (Vitest, incluidos los quince casos de sesión de HU-33), `npm run build` y `npm run lint`. Se comprobaron manualmente login, recarga conservando sesión y logout sin restauración al recargar. El flujo de servicios también se verificó contra una API real con SQLite temporal.
 
 ## Tests (T-10)
 
