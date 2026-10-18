@@ -33,3 +33,22 @@
 .save {
   align-self: flex-end;
 }
+
+// T-291: the photo and its buttons, under the avatar
+.photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 140px;
+}
+
+.fileInput {
+  @include visually-hidden;
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--ink-muted);
+  text-align: center;
+}
