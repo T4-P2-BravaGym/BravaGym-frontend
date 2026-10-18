@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import WeekNav from '@/components/domain/WeekNav'
 import WeekSchedule from '@/components/domain/WeekSchedule'
 import Alert from '@/components/ui/Alert'
-import Button from '@/components/ui/Button'
 import Chip from '@/components/ui/Chip'
-import Icon from '@/components/ui/Icon'
 import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
 import { PATHS } from '@/routes/paths'
 import { listSessions } from '@/services/sessions'
-import { formatWeekLabel, getWeekRange, shiftWeek } from '@/utils/week'
+import { getWeekRange } from '@/utils/week'
 import styles from './Schedule.module.scss'
 
 const LOAD_ERROR = 'No se ha podido cargar el horario. Inténtalo de nuevo.'
@@ -58,8 +57,6 @@ export default function Schedule() {
     navigate(PATHS.member)
   }
 
-  const weekLabel = formatWeekLabel(weekAnchor)
-
   return (
       <div className={styles.root}>
         <div className={styles.header}>
@@ -70,27 +67,7 @@ export default function Schedule() {
           />
 
           <div className={styles.toolbar}>
-            <div className={styles.weekNav} role="group" aria-label="Semana">
-              <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setWeekAnchor((current) => shiftWeek(current, -1))}
-                  aria-label="Semana anterior"
-              >
-                <Icon name="chevronLeft" size={18} />
-              </Button>
-              <p className={styles.weekLabel} aria-live="polite">
-                {weekLabel}
-              </p>
-              <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setWeekAnchor((current) => shiftWeek(current, 1))}
-                  aria-label="Semana siguiente"
-              >
-                <Icon name="chevronRight" size={18} />
-              </Button>
-            </div>
+            <WeekNav anchor={weekAnchor} onChange={setWeekAnchor} />
 
             <div className={styles.chips} role="group" aria-label="Disponibilidad">
               <Chip selected={!onlyAvailable} onClick={() => setOnlyAvailable(false)}>

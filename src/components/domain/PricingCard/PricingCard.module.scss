@@ -1,4 +1,6 @@
 .root {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
@@ -8,12 +10,61 @@
   background: var(--surface-raised);
   color: var(--ink);
   min-width: 0;
+  transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease,
+          border-color 0.25s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+            360px circle at var(--pointer-x, 50%) var(--pointer-y, 0%),
+            color-mix(in srgb, var(--mauve) 14%, transparent),
+            transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-8px);
+    border-color: var(--mauve);
+    box-shadow: 0 20px 48px color-mix(in srgb, var(--mauve) 28%, transparent);
+  }
+
+  &:hover::before,
+  &:focus-within::before {
+    opacity: 1;
+  }
 }
 
 .featured {
   background: var(--plum);
-  border-color: var(--plum);
+  border-color: var(--champagne);
   color: var(--on-plum);
+  transform: translateY(-12px);
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--champagne) 30%, transparent);
+
+  &::before {
+    background: radial-gradient(
+            360px circle at var(--pointer-x, 50%) var(--pointer-y, 0%),
+            color-mix(in srgb, var(--champagne) 22%, transparent),
+            transparent 70%
+    );
+  }
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-18px);
+    border-color: var(--champagne);
+    box-shadow: 0 24px 64px color-mix(in srgb, var(--champagne) 45%, transparent);
+  }
 
   .description,
   .period {
@@ -71,7 +122,6 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  flex-grow: 1;
 
   li {
     display: flex;
@@ -84,4 +134,23 @@
   display: inline-flex;
   padding-top: 2px;
   color: var(--mauve);
+}
+
+.action {
+  margin-top: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .root::before {
+    transition: none;
+  }
+
+  .root:hover,
+  .root:focus-within,
+  .featured,
+  .featured:hover,
+  .featured:focus-within {
+    transform: none;
+  }
 }
