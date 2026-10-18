@@ -35,3 +35,13 @@ aunque la API deja hacerlo a cualquier rol. Se vio al hacer la HU-32. Solo toca 
 
 - Que administración cambie los datos o la contraseña de otra persona (HU-31 lo excluye para la contraseña).
 - Recuperar la contraseña olvidada (HU-35).
+
+## Decisiones
+
+| Decisión | Por qué |
+| --- | --- |
+| "Mis datos" y "Cambiar contraseña" en `pages/shared/Account`, usados por las tres áreas | Los mismos formularios para todos los roles (DRY). Van en `pages` y no en `components` porque llaman a la API. |
+| La entrenadora lo tiene en la misma página que su perfil público, bajo el título "Mi cuenta" | No hace falta otra entrada de menú; el título y "Solo tú ves estos datos." separan lo público de lo privado. |
+| El menú de la entrenadora pasa a "Mi perfil y cuenta" | Dice las dos cosas y cabe en una línea del menú lateral. |
+| Administración tiene una página propia, "Mi cuenta" (`/admin/cuenta`) | No tiene perfil público; una ruta dentro de su área reutiliza la protección y el menú que ya existen. |
+| Sin cambios en el backend | `PATCH /users/me` y `POST /users/me/password` ya aceptaban cualquier rol. |
