@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Avatar from '@/components/ui/Avatar'
+import { mediaUrl } from '@/services/api'
 import styles from './TrainerCard.module.scss'
 
 /**
@@ -7,12 +8,12 @@ import styles from './TrainerCard.module.scss'
  * A trainer with avatar, specialty and bio. Contact data (email, phone) is never shown.
  * With `to`, it links to her free personal-training slots.
  *
- * Props: trainer { id, name, specialty, bio }, to, linkLabel
+ * Props: trainer { id, name, specialty, bio, photo_url }, to, linkLabel
  */
 export default function TrainerCard({ trainer, to, linkLabel = 'Ver sus franjas libres' }) {
   return (
     <article className={styles.root}>
-      <Avatar name={trainer.name} size="lg" />
+      <Avatar name={trainer.name} size="lg" src={mediaUrl(trainer.photo_url)} />
       <div className={styles.text}>
         <h3 className={styles.name}>{trainer.name}</h3>
         {trainer.specialty && <span className={styles.specialty}>{trainer.specialty}</span>}
