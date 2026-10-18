@@ -37,3 +37,8 @@
   background: var(--champagne);
   color: var(--plum);
 }
+
+// T-291: a photo fills the same circle as the initials
+.photo {
+  object-fit: cover;
+}

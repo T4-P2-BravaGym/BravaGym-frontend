@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import Alert from '@/components/ui/Alert'
 import EmptyState from '@/components/ui/EmptyState'
 import Spinner from '@/components/ui/Spinner'
+import PageHeader from '@/components/ui/PageHeader'
 
 export default function Trainers() {
   const [trainers, setTrainers] = useState([])     
@@ -22,7 +23,11 @@ export default function Trainers() {
   }, [])
   return (
     <section>
-      <h1>Entrenadoras</h1>
+      <PageHeader
+        eyebrow="El equipo"
+        title="Entrenadoras"
+        lead="Conoce a nuestras entrenadoras y elige con quién entrenar."
+      />
       {loading && <Spinner />}
 
       {error && <Alert tone="error" title="No hemos podido cargar las entrenadoras">{error}</Alert>}
