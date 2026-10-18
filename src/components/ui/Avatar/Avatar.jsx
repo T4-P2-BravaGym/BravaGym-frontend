@@ -7,7 +7,7 @@ import styles from './Avatar.module.scss'
  * Initials in a circle for members and trainers, or their photo when there is one (T-291).
  * Decorative: the name is always written next to it, so screen readers skip it.
  *
- * Props: name, size ('sm' | 'md' | 'lg'), tone ('mauve' | 'champagne'), src (photo URL)
+ * Props: name, size ('sm' | 'md' | 'lg' | 'xl'), tone ('mauve' | 'champagne'), src (photo URL)
  */
 export default function Avatar({ name, size = 'md', tone = 'mauve', src }) {
   if (src) {

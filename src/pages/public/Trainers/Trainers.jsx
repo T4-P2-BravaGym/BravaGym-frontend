@@ -22,7 +22,7 @@ export default function Trainers() {
       .finally(() => setLoading(false))
   }, [])
   return (
-    <section>
+    <section className={styles.root}>
       <PageHeader
         eyebrow="El equipo"
         title="Entrenadoras"

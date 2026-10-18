@@ -13,7 +13,7 @@ import styles from './TrainerCard.module.scss'
 export default function TrainerCard({ trainer, to, linkLabel = 'Ver sus franjas libres' }) {
   return (
     <article className={styles.root}>
-      <Avatar name={trainer.name} size="lg" src={mediaUrl(trainer.photo_url)} />
+      <Avatar name={trainer.name} size="xl" src={mediaUrl(trainer.photo_url)} />
       <div className={styles.text}>
         <h3 className={styles.name}>{trainer.name}</h3>
         {trainer.specialty && <span className={styles.specialty}>{trainer.specialty}</span>}

@@ -1,5 +1,12 @@
 @use 'mixins' as *;
 
+// Same spacing as the other pages: header, messages and cards apart
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
