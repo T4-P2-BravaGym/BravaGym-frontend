@@ -1,6 +1,6 @@
 # T-101 · Mi perfil y contraseña para entrenadoras y administración
 
-Issue:#101 · Entrega 2 · Tamaño S
+Issue: #101 · Entrega 2 · Tamaño S
 
 ## Contexto
 
@@ -11,14 +11,14 @@ aunque la API deja hacerlo a cualquier rol. Se vio al hacer la HU-32. Solo toca 
 
 ## Requisitos
 
-1. Una entrenadora ve en "Mi perfil público", debajo de lo que ven las socias, una sección "Mi cuenta" con sus datos y el cambio de contraseña.
+1. Una entrenadora ve en "Mi perfil y cuenta", debajo de lo que ven las socias, una sección "Mi cuenta" con sus datos y el cambio de contraseña.
 2. Administración y superadmin tienen "Mi cuenta" en su menú, con sus datos y el cambio de contraseña.
 3. Los formularios son los mismos para todos los roles: mismos campos, mensajes y comportamiento (tras cambiar la contraseña, vuelve a entrar).
 4. "Mi perfil" de la socia sigue funcionando igual.
 
 ## Criterios de aceptación
 
-- **Dado** que soy entrenadora, **cuando** abro "Mi perfil público", **entonces** veo mi tarjeta pública y, debajo, "Mi cuenta" con "Mis datos" y "Cambiar contraseña".
+- **Dado** que soy entrenadora, **cuando** abro "Mi perfil y cuenta", **entonces** veo mi tarjeta pública y, debajo, "Mi cuenta" con "Mis datos" y "Cambiar contraseña".
 - **Dado** que soy admin o superadmin, **cuando** abro "Mi cuenta" (`/admin/cuenta`), **entonces** veo "Mis datos" y "Cambiar contraseña".
 - **Dado** cualquier rol, **cuando** guardo mis datos, **entonces** veo "Tus datos se han guardado."
 - **Dado** cualquier rol, **cuando** cambio mi contraseña, **entonces** se cierra la sesión y el login me lo dice.
@@ -28,7 +28,7 @@ aunque la API deja hacerlo a cualquier rol. Se vio al hacer la HU-32. Solo toca 
 
 - Nuevo bloque compartido `pages/shared/Account`: `MyDataForm` ("Mis datos") y `ChangePasswordForm` (movido desde la socia), juntos en `AccountSections`.
 - Socia: "Mi perfil" usa `PageHeader` y `AccountSections`.
-- Entrenadora: "Mi perfil público" no cambia de nombre; debajo de la tarjeta pública aparece la sección "Mi cuenta" ("Solo tú ves estos datos.") con `AccountSections`.
+- Entrenadora: el menú pasa a "Mi perfil y cuenta"; la página empieza por la tarjeta "Mi perfil público" y debajo aparece la sección "Mi cuenta" ("Solo tú ves estos datos.") con `AccountSections`.
 - Administración: nueva página "Mi cuenta" en `/admin/cuenta`, con `PageHeader` y `AccountSections`.
 
 ## Fuera de alcance
