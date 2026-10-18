@@ -2,9 +2,10 @@ import { useId, useState } from 'react'
 import Alert from '@/components/ui/Alert'
 import Button from '@/components/ui/Button'
 import Field from '@/components/ui/Field'
+import { APPLIES_TO_OPTIONS } from './appliesTo'
 import styles from './AdminDiscountCodes.module.scss'
 
-const EMPTY_FORM = { code: '', percent_off: '', valid_from: '', valid_until: '', max_uses: '' }
+const EMPTY_FORM = { code: '', percent_off: '', valid_from: '', valid_until: '', max_uses: '', applies_to: '' }
 
 /**
  * Form to create a discount code. The API checks everything (percent 1-100, dates in order,
@@ -26,6 +27,7 @@ export default function DiscountCodeForm({ busy = false, error, onSubmit }) {
       valid_from: form.valid_from,
       valid_until: form.valid_until,
       max_uses: form.max_uses === '' ? null : Number(form.max_uses),
+      applies_to: form.applies_to || null,
     })
     if (created) setForm(EMPTY_FORM)
   }
@@ -49,6 +51,13 @@ export default function DiscountCodeForm({ busy = false, error, onSubmit }) {
           <Field label="Válido desde" name="valid_from" type="date" value={form.valid_from} onChange={handleChange} disabled={busy} />
           <Field label="Válido hasta" name="valid_until" type="date" value={form.valid_until} onChange={handleChange} disabled={busy} />
           <Field label="Usos máximos (opcional)" name="max_uses" type="number" inputMode="numeric" hint="Vacío = sin límite" value={form.max_uses} onChange={handleChange} disabled={busy} />
+          <Field label="Vale para" name="applies_to" as="select" value={form.applies_to} onChange={handleChange} disabled={busy}>
+            {APPLIES_TO_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Field>
         </div>
         <div className={styles.actions}>
           <Button type="submit" disabled={busy}>
@@ -56,7 +65,9 @@ export default function DiscountCodeForm({ busy = false, error, onSubmit }) {
           </Button>
         </div>
       </form>
-      <p className={styles.note}>Los códigos valen para cuotas, clases adicionales y pedidos de la tienda.</p>
+      <p className={styles.note}>
+        Con «Todo», el código vale para cuotas, clases adicionales y pedidos de la tienda.
+      </p>
     </section>
   )
 }

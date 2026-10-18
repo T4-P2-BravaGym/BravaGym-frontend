@@ -81,11 +81,12 @@ export default function MyPayments() {
     setActionError(null)
   }
 
-  async function handleApplyDiscount(paymentId, code) {
-    const validated = await validateCode(code)
+  // T-240: the API also checks that the code is valid for this kind of payment
+  async function handleApplyDiscount(payment, code) {
+    const validated = await validateCode(code, payment.concept)
     setDiscounts((current) => ({
       ...current,
-      [paymentId]: {
+      [payment.id]: {
         code: validated.code ?? code,
         percent_off: validated.percent_off,
       },
@@ -174,7 +175,7 @@ export default function MyPayments() {
                   payment={payment}
                   discount={discounts[payment.id] ?? null}
                   busy={busyId === payment.id}
-                  onApplyDiscount={(code) => handleApplyDiscount(payment.id, code)}
+                  onApplyDiscount={(code) => handleApplyDiscount(payment, code)}
                   onRemoveDiscount={() => handleRemoveDiscount(payment.id)}
                   onPay={() => handleAskPay(payment)}
                 />

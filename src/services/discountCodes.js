@@ -20,7 +20,8 @@ export function deactivateCode(codeId) {
   return apiRequest(`/discount-codes/${codeId}`, { method: 'DELETE' })
 }
 
-// For HU-24: the member checks her code before paying (RN-14). 422 if it is not valid.
-export function validateCode(code) {
-  return apiRequest(`/discount-codes/${encodeURIComponent(code.trim())}/validate`)
+// For HU-24: the member checks her code before paying (RN-14). 422 if it is not valid,
+// also when the code is limited to another kind of payment (T-240)
+export function validateCode(code, concept) {
+  return apiRequest(`/discount-codes/${encodeURIComponent(code.trim())}/validate${buildQuery({ concept })}`)
 }
