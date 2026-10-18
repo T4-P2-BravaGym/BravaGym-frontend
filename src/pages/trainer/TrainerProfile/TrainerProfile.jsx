@@ -1,6 +1,7 @@
 /**
  * Mi perfil público (HU-15): the trainer changes the specialty and bio that visitors see,
  * and her photo (T-291). The photo is uploaded as soon as she picks it.
+ * Below, under "Mi cuenta", her own details and password: the same forms as the member area (#101).
  */
 import { useEffect, useRef, useState } from 'react'
 import Alert from '@/components/ui/Alert'
@@ -9,6 +10,7 @@ import Button from '@/components/ui/Button'
 import Field from '@/components/ui/Field'
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
+import AccountSections from '@/pages/shared/Account'
 import { mediaUrl } from '@/services/api'
 import {
   deleteMyTrainerPhoto,
@@ -165,6 +167,14 @@ export default function TrainerProfile() {
           </Button>
         </form>
       )}
+      {/* #101: private, unlike the card above */}
+      <section className={styles.account} aria-labelledby="my-account-title">
+        <h2 id="my-account-title" className={styles.accountTitle}>
+          Mi cuenta
+        </h2>
+        <p className={styles.accountLead}>Solo tú ves estos datos.</p>
+        <AccountSections />
+      </section>
     </section>
   )
 }

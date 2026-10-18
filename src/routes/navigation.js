@@ -42,6 +42,7 @@ export const NAVIGATION = {
       { to: PATHS.adminUsers, label: 'Usuarias y roles', icon: 'users' },
       { to: PATHS.adminPlans, label: 'Planes', icon: 'list' },
       { to: PATHS.adminProducts, label: 'Tienda', icon: 'bag' },
+      { to: PATHS.adminAccount, label: 'Mi cuenta', icon: 'user' },
     ],
   },
 }

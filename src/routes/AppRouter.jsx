@@ -30,6 +30,7 @@ import AdminDiscountCodes from '@/pages/admin/AdminDiscountCodes'
 import AdminUsers from '@/pages/admin/AdminUsers'
 import AdminPlans from '@/pages/admin/AdminPlans'
 import AdminProducts from '@/pages/admin/AdminProducts'
+import AdminAccount from '@/pages/admin/AdminAccount'
 
 export default function AppRouter() {
   return (
@@ -77,6 +78,7 @@ export default function AppRouter() {
           <Route path={PATHS.adminUsers} element={<AdminUsers />} />
           <Route path={PATHS.adminPlans} element={<AdminPlans />} />
           <Route path={PATHS.adminProducts} element={<AdminProducts />} />
+          <Route path={PATHS.adminAccount} element={<AdminAccount />} />
         </Route>
       </Route>
 
