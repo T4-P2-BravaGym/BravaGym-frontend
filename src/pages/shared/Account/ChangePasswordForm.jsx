@@ -1,5 +1,5 @@
 /**
- * Cambiar contraseña (HU-32): the second card of "Mi perfil".
+ * Cambiar contraseña (HU-32), for every role (#101).
  * "Repite la nueva" is only checked here; the API gets the current and the new password.
  * After a change the API closes every session, this one too, so she goes to the login.
  */
@@ -11,7 +11,7 @@ import Field from '@/components/ui/Field'
 import useAuth from '@/hooks/useAuth'
 import { PATHS } from '@/routes/paths'
 import { changeMyPassword } from '@/services/users'
-import styles from './Profile.module.scss'
+import styles from './Account.module.scss'
 
 const EMPTY_FORM = { current_password: '', new_password: '', repeat_password: '' }
 const MIN_LENGTH = 8
