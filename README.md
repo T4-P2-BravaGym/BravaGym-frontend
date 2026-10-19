@@ -1,181 +1,106 @@
-# Brava · Web
+# Brava · Frontend
 
-Web de Brava, gimnasio de fuerza para mujeres: web pública, área de socia, panel de entrenadora y panel de administración.
+Brava is a full-stack application for a women's strength-training gym, built as a team bootcamp project. Members can book classes, follow their routines and manage purchases, while trainers and administrators have dedicated workspaces.
 
-**Stack:** React 19 con JavaScript, Vite, React Router y SASS (CSS Modules). Los estilos salen del sistema de diseño de Brava (`src/styles/_tokens.scss`).
+This repository contains the React application. It connects to the [Brava backend](https://github.com/T4-P2-BravaGym/BravaGym-backend/tree/dev), which provides the API and database. The application interface is in Spanish.
 
-## Documentación de entrega
+## Features
 
-Esta guía cubre el frontend completo del equipo, tarea [#283](https://github.com/T4-P2-BravaGym/BravaGym-backend/issues/283), dentro de [D-07 · #200](https://github.com/T4-P2-BravaGym/BravaGym-backend/issues/200). El [README del backend](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/README.md) mantiene la instalación de Python, Alembic, seed y uso de la API.
+- Public class schedule, trainer profiles, membership pricing and shop.
+- Registration, login, password recovery and automatic session renewal.
+- Member bookings, personal training, routines, cart and payment history.
+- Trainer class management, routines and profile photos.
+- Administration of users, plans, products, discounts, payments and cancellation requests.
 
-| Recurso | Enlace |
+The integrated demo uses simulated payments. Password-recovery links are available in the backend's private local `outbox/`, rather than delivered by email.
+
+## Tech stack
+
+| Technology | Version in package-lock.json |
 | --- | --- |
-| Web local | [http://localhost:5173](http://localhost:5173) |
-| Swagger de la API local | [http://localhost:8000/docs](http://localhost:8000/docs) |
-| ReDoc de la API local | [http://localhost:8000/redoc](http://localhost:8000/redoc) |
-| Colección de Bruno | [Backend: `collections/brava/`](https://github.com/T4-P2-BravaGym/BravaGym-backend/tree/dev/collections/brava) |
-| Specs compartidas | [Backend: `specs/`](https://github.com/T4-P2-BravaGym/BravaGym-backend/tree/dev/specs) |
-| Spec de esta documentación | [`specs/D-07-frontend-readme.md`](specs/D-07-frontend-readme.md) |
-| Bitácora de IA común | [Backend: `docs/ai-log.md`](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/docs/ai-log.md) |
-| Modelo entidad-relación | [Backend: `docs/er.md`](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/docs/er.md) |
-| Reglas de negocio y permisos | [Reglas](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/docs/business-rules.md) y [API](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/docs/api.md) |
-| Retrospectiva | Pendiente de publicación y enlace en [#200](https://github.com/T4-P2-BravaGym/BravaGym-backend/issues/200) |
-| URL desplegada del frontend | Pendiente de confirmación en [HU-36 · #185](https://github.com/T4-P2-BravaGym/BravaGym-backend/issues/185) |
+| React / React DOM | 19.3.0 |
+| React Router | 7.18.4 |
+| Vite | 8.3.4 |
+| Sass (CSS Modules) | 1.105.1 |
+| Vitest | 5.0.5 |
 
-Los enlaces `localhost` requieren los servidores locales arrancados. La retrospectiva y las URLs públicas se actualizarán cuando el equipo las publique; no están confirmadas en `dev`.
+The application uses JavaScript. Tests use Testing Library and jsdom. [package.json](package.json) defines the dependency ranges; [package-lock.json](package-lock.json) records the installed versions.
 
-## Arrancar en local
+## Run locally
 
-Requisitos: Git, Node.js **22.12 o posterior de la rama 22** (CI usa Node 22), npm y la API local. El lockfile ya está versionado: `npm ci` instala sus versiones sin regenerarlo.
+Requirements: Git, Node.js **22.12 or later in the 22.x release line**, npm, and the running backend. CI uses Node 22.
+
+1. Set up and start the API using the [backend README](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/README.md), including migrations and demo data.
+2. In a separate terminal, install and start the frontend:
 
 ```bash
-git clone https://github.com/T4-P2-BravaGym/BravaGym-frontend.git
+git clone --branch dev https://github.com/T4-P2-BravaGym/BravaGym-frontend.git
 cd BravaGym-frontend
-git switch dev
 npm ci
 cp .env.example .env
-npm run dev                 # http://localhost:5173
+npm run dev
 ```
 
-Si ya tienes el repositorio, empieza desde su raíz, sin repetir el clone. Detén Vite con `Ctrl+C`; ejecuta los controles en otra terminal.
+Keep these values in the frontend `.env`:
 
-### Conectar con la API y preparar la demo
+```dotenv
+VITE_API_URL=http://localhost:8000/api/v1
+VITE_DEV_SKIP_AUTH=false
+```
 
-1. Sigue el [README backend](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/README.md): crear el entorno Python, instalar dependencias y configurar `.env` con una clave privada.
-2. Desde la raíz del backend, con ese entorno activado, ejecuta `alembic upgrade head`. Para una base local vacía, ejecuta también `python -m scripts.seed` con `ENVIRONMENT=local`.
-3. Arranca la API con `uvicorn app.main:app --reload`; [health](http://localhost:8000/health) debe responder y [Swagger](http://localhost:8000/docs) debe abrirse.
-4. En el `.env` del frontend deja `VITE_API_URL=http://localhost:8000/api/v1` y `VITE_DEV_SKIP_AUTH=false`. El backend debe permitir `CORS_ORIGINS=["http://localhost:5173"]`.
-5. Arranca Vite y abre `/entrar`. Usa una cuenta ficticia del seed, según el rol que quieras probar.
+Open [http://localhost:5173](http://localhost:5173). Keep both servers running and use `localhost` for both. The backend must allow `CORS_ORIGINS=["http://localhost:5173"]`. Restart Vite after changing `.env`; frontend `VITE_*` variables are public and must not contain secrets.
 
-| Rol | Email de demostración | Área inicial |
+## Usage
+
+Browse **Clases**, **Entrenadoras**, **Precios** and **Tienda**, or open [Entrar](http://localhost:5173/entrar) to try a demo account. All accounts below use `BravaDemo2026!`, unless the backend seed used a different `SEED_PASSWORD`.
+
+| Role | Demo email | Starting page |
 | --- | --- | --- |
-| Socia | `lucia@example.com`, `carmen@example.com` | `/mi-area` |
-| Entrenadora | `ana@example.com`, `marta@example.com` | `/entrenadora/clases` |
-| Administración | `admin@example.com` | `/admin` |
-| Superadministración | `superadmin@example.com` | `/admin` y área de entrenadora |
+| Member | `lucia@example.com` | `/mi-area` |
+| Trainer | `ana@example.com` | `/entrenadora/clases` |
+| Administrator | `admin@example.com` | `/admin` |
+| Superadministrator | `superadmin@example.com` | `/admin` |
 
-La contraseña ficticia por defecto del seed es `BravaDemo2026!`; si se configuró `SEED_PASSWORD`, usa ese valor de demostración. No son cuentas de producción. El seed no se repite sobre una base con datos; consulta la preparación de base temporal en el README backend.
+For a quick tour, sign in as a member to browse bookings, routines and the cart. Sign out, then use the administrator account to manage plans and products. The demo accounts require the backend seed data.
 
-### Variables públicas
+If you see a server connection error, check that [API health](http://localhost:8000/health) responds, then check `VITE_API_URL` and the backend's CORS setting.
 
-[`.env.example`](.env.example) es la referencia. Toda variable `VITE_*` acaba en el navegador: nunca añadas claves privadas, contraseñas ni secretos del backend.
+## Project structure
 
-- `VITE_API_URL`: URL base con `/api/v1`, sin barra final. Si cambias el puerto de la API, actualízala y reinicia Vite.
-- `VITE_DEV_SKIP_AUTH`: debe quedar en `false` para probar sesiones y permisos. `true` permite inspeccionar las páginas privadas solo en desarrollo; no crea una sesión ni evita los permisos de la API, y se ignora al compilar.
-
-Usa el mismo hostname en ambos servidores (`localhost` en los ejemplos). Si Vite elige otro puerto por estar ocupado el 5173, libera el puerto o actualiza CORS para el origen que muestre Vite.
-
-## Uso por áreas
-
-Las rutas reales se mantienen en [`src/routes/paths.js`](src/routes/paths.js) y sus permisos en [`src/routes/AppRouter.jsx`](src/routes/AppRouter.jsx).
-
-| Área | Pantallas y funciones |
-| --- | --- |
-| Pública | Inicio `/`, clases `/clases`, entrenadoras `/entrenadoras`, planes `/precios`, tienda `/tienda`, registro `/registro` y login `/entrar` |
-| Socia | Resumen `/mi-area`, reservas `/mi-area/reservas`, entrenamiento personal `/mi-area/entrenamiento-personal`, rutina `/mi-area/rutina`, pagos `/mi-area/pagos`, carrito `/mi-area/carrito` y perfil `/mi-area/perfil` |
-| Entrenadora y superadministración | Clases `/entrenadora/clases`, franjas `/entrenadora/franjas`, rutinas `/entrenadora/rutinas` y perfil `/entrenadora/perfil` |
-| Administración y superadministración | Resumen `/admin`, pagos `/admin/pagos`, bajas `/admin/bajas`, códigos `/admin/codigos`, usuarias `/admin/usuarias`, planes `/admin/planes` y productos `/admin/productos` |
-| Equipo | Catálogo de componentes `/sandbox` |
-
-Sin sesión, las rutas privadas redirigen al login. Con un rol sin permiso se muestra un estado de acceso denegado. La API sigue siendo quien autoriza cada operación.
-
-Para una demo, inicia sesión como socia y recorre reservas, rutina, perfil y tienda/carrito; después cierra sesión y usa las cuentas de entrenadora o administración para sus paneles. Los pagos actuales son simulados: no se presenta el flujo como un cobro real de Stripe. Las pantallas que dependen de datos necesitan el backend y el seed.
-
-## Compilar y previsualizar
-
-```bash
-npm run lint
-npm test
-npm run build               # genera dist/
-npm run preview             # normalmente http://localhost:4173
-```
-
-La previsualización necesita la API igual que el desarrollo. Añade `http://localhost:4173` a `CORS_ORIGINS` del backend para probarla y reinicia la API; conserva el origen 5173 si sigues usando Vite. `VITE_API_URL` se incorpora al compilar: si cambia, repite `npm run build`. `npm run preview` sirve para comprobar el build localmente, no para alojar producción.
-
-Al publicar `dist/`, el hosting debe devolver `index.html` para rutas de React Router (por ejemplo, al recargar `/mi-area/reservas`). El navegador necesita una API accesible y la configuración de cookies/orígenes descrita abajo.
-
-## Docker y despliegue
-
-Docker se coordina en [HU-27 · #112](https://github.com/T4-P2-BravaGym/BravaGym-backend/issues/112) y su documentación en [#115](https://github.com/T4-P2-BravaGym/BravaGym-backend/issues/115). `dev` todavía no contiene un Dockerfile ni Compose; las instrucciones verificables por ahora son las locales. La base SQLite y `media/` necesitan persistencia en el backend.
-
-La URL pública y la configuración final se incorporarán al completar [HU-36 · #185](https://github.com/T4-P2-BravaGym/BravaGym-backend/issues/185). No se añade un despliegue ni infraestructura en esta tarea de documentación.
-
-## Sesión y renovación automática (HU-33)
-
-Requiere el backend de HU-33 con su migración aplicada. La spec compartida está en `specs/HU-33-refresh-logout.md` del backend ([issue #182](https://github.com/T4-P2-BravaGym/BravaGym-backend/issues/182)); el uso de Codex se registra en su `docs/ai-log.md`.
-
-El access token vive solo en memoria. El refresh lo guarda el navegador en una cookie HttpOnly del backend: JavaScript no lo lee ni lo escribe. Al iniciar la app se intenta recuperar la sesión con esa cookie; las rutas privadas esperan hasta que termina. Se elimina el antiguo `brava.token` de localStorage.
-
-Si una petición autenticada devuelve 401, se renueva la sesión una vez y se reintenta una vez, también en las descargas. Las peticiones simultáneas de esta página comparten la misma renovación. La caducidad del access intenta renovar en lugar de cerrar inmediatamente. Logout espera una renovación en curso para revocar el par nuevo y evita que una respuesta tardía restaure la sesión. Una petición anterior no se repite bajo un login diferente.
-
-Login, refresh y logout usan `credentials: include`; refresh/logout envían `X-Brava-CSRF: 1`. En local usa el mismo nombre de host en ambos lados (por ejemplo, frontend `http://localhost:5173` y API `http://localhost:8000/api/v1`), con el origen del frontend en CORS. No mezcles `localhost` y `127.0.0.1`. La cookie usa SameSite=Lax y Secure fuera de local; el contrato de producción requiere HTTPS y frontend/API en el mismo sitio (mismo esquema y dominio registrable). Configura `VITE_API_URL` con la URL real de la API y CORS con el origen exacto del frontend. El despliegue entre sitios diferentes requiere una revisión específica; no está soportado por esta configuración.
-
-HttpOnly reduce la exposición del refresh a JavaScript, pero un XSS todavía puede ejecutar acciones y acceder al access en uso. La protección de origen/CSRF y HTTPS siguen siendo necesarias. La coordinación de renovaciones es por página; varias pestañas pueden competir por la misma cookie y una de ellas necesitar iniciar sesión otra vez.
-
-Si el servidor no confirma logout, se borra la sesión de esta página y se muestra un aviso en login con un botón para reintentar. No se presenta el borrado local como una revocación confirmada.
-
-Comprobaciones: `npm test` (Vitest, incluidos los quince casos de sesión de HU-33), `npm run build` y `npm run lint`. Se comprobaron manualmente login, recarga conservando sesión y logout sin restauración al recargar. El flujo de servicios también se verificó contra una API real con SQLite temporal.
-
-## Tests (T-10)
-
-Vitest con Testing Library y jsdom. Cada test va junto al archivo que prueba (`ProductCard.test.jsx` al lado de `ProductCard.jsx`).
-
-```bash
-npm test                    # todos los tests, una vez (lo mismo que la CI)
-npm run test:watch          # vuelve a pasar los tests al guardar
-```
-
-- Los tests se ejecutan con la hora de Madrid (`TZ` en `vite.config.js`), así en local y en GitHub Actions salen igual.
-- Se prueba lo que ve y hace la usuaria: se buscan los elementos por su rol y su texto (`getByRole`, `getByLabelText`), no por clases.
-- `useAuth` y `fetch` se simulan con `vi.mock` y `vi.stubGlobal`: los tests no necesitan la API.
-- `build.yml` ejecuta `npm test` en cada PR y falla si falla un test.
-- Los quince casos de sesión de HU-33 viven en `src/services/session.test.js` y usan el mismo Vitest; no se inicia un servidor Vite adicional ni se ejecuta otro runner.
-
-## Estructura
-
-```
+```text
 src/
-  components/ui/       # piezas del sistema de diseño: Button, Badge, Chip, Field, Card…
-  components/domain/   # piezas de Brava: SessionCard, WeekSchedule, PricingCard…
-  components/layout/   # Navbar, Footer, SideNav, MobileTabBar
-  layouts/             # PublicLayout y PrivateLayout
-  pages/               # una carpeta por pantalla: public/, member/, trainer/, admin/
-  routes/              # AppRouter, ProtectedRoute y paths.js
-  context/ hooks/      # sesión (AuthContext, useAuth)
-  services/            # llamadas a la API (api.js es el único cliente HTTP)
-  utils/               # formato de euros y fechas
-  styles/              # tokens, mixins y estilos globales
+  components/     # Shared UI, gym components and navigation
+  context/        # Session and cart state
+  hooks/          # Reusable React hooks
+  layouts/        # Public and private page layouts
+  pages/          # Public, member, trainer and admin screens
+  routes/         # Paths, navigation and access guards
+  services/       # API requests and session handling
+  styles/         # Design tokens, mixins and global styles
+  test/           # Shared test setup
+  utils/          # Formatting and other helpers
+public/           # Static assets
+specs/            # Frontend feature specifications
 ```
 
-Las páginas se organizan por área y reutilizan los componentes UI y de dominio. `ProtectedRoute` comprueba la sesión y el rol; el acceso visual de desarrollo solo se habilita explícitamente con `VITE_DEV_SKIP_AUTH=true`.
+## Checks and build
 
-**Rutas para probar:** `/`, `/clases`, `/precios`, `/tienda`, `/mi-area`, `/mi-area/reservas`, `/entrenadora/clases`, `/admin`, `/admin/pagos`.
+```bash
+npm test                 # Run Vitest once
+npm run lint             # Check JavaScript
+npm run build            # Create dist/
+```
 
-## Estilos
+Use `npm run test:watch` while developing. To preview a build, run `npm run preview` and open the URL it prints (normally `http://localhost:4173`). The API is still required; add that preview origin to the backend's `CORS_ORIGINS` and restart the API first.
 
-- En cada `.module.scss`: `@use 'mixins' as *;` y clases cortas en camelCase (`.root`, `.primary`, `.isActive`), sin BEM.
-- Siempre tokens (`var(--mauve)`, `var(--space-6)`, `var(--radius-lg)`), nunca colores o tamaños sueltos.
-- Importa con el alias `@`: `import Button from '@/components/ui/Button'`.
+## Documentation
 
-## Cómo trabajamos
+- [Backend setup and API documentation](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/README.md).
+- [Route definitions](src/routes/paths.js) and [frontend specifications](specs/).
+- [Session contract](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/specs/HU-33-refresh-logout.md), [password recovery](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/specs/HU-35-password-reset.md) and [shared AI-use log](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/docs/ai-log.md).
 
-Todo está en [`AGENTS.md`](AGENTS.md): la IA como mentora, idioma, DRY y SOLID, componentes, SASS, seguridad, ramas, Conventional Commits y Definition of Done.
+## Authors and support
 
+Built by the Brava team: Beste Özaydın, Damaris Castro, Esra Kesken, Mariana and Viviana Andrango. See the [contributors](https://github.com/T4-P2-BravaGym/BravaGym-frontend/graphs/contributors).
 
-## Recuperación de contraseña (HU-35)
-
-Desde login, «He olvidado mi contraseña» abre `/recuperar-contrasena`. El formulario muestra siempre la misma confirmación tras un 202, sin revelar si existe la cuenta. `/nueva-contrasena` permite elegir y repetir la contraseña con las reglas del backend (ocho caracteres Unicode, máximo 72 bytes UTF-8). El enlace inválido ofrece solicitar otro; un fallo de conexión permite reintentar sin perder el token en memoria.
-
-Requiere backend HU-35 y migración aplicada. La spec compartida es `specs/HU-35-password-reset.md` y la bitácora está en `docs/ai-log.md` del backend. En local, el mensaje se escribe en su outbox privado: no hay correo SMTP real. El origen `FRONTEND_URL` del backend debe coincidir con este frontend. No poner contraseñas, enlaces o tokens en variables VITE_*.
-
-Los enlaces usan `/nueva-contrasena#token=...`; el fragmento se retira del historial al montar la página y el token solo vive en memoria. Tras una recarga, volver a abrir el enlace original o solicitar otro. No se guarda en localStorage/sessionStorage. Los dos endpoints de recuperación se llaman con `auth: false`, sin intentar renovar por un error de recuperación. Al terminar, se borran contraseña/token del formulario y la sesión local; el backend ya ha invalidado las sesiones anteriores. Se ofrece iniciar sesión normalmente, sin login automático.
-
-Las páginas reutilizan PublicLayout minimal, Card, Field, Button y Alert. Los tests usan el mismo Vitest/Testing Library configurado por el equipo, sin dependencias nuevas. Capturas móviles de revisión: `docs/screenshots/hu35-request-mobile.png` y `hu35-reset-mobile.png`, sin datos ni tokens reales.
-## Si algo no funciona
-
-- **No carga la API:** comprueba `/health`, `VITE_API_URL` y que las migraciones se aplicaron a la misma base que usa el servidor.
-- **Error CORS o sesión que se pierde:** comprueba el origen completo permitido, el mismo hostname en frontend/API y las condiciones de cookies de HU-33.
-- **Cambios de `.env` sin efecto:** reinicia Vite; para preview, vuelve a compilar.
-- **Pantalla sin datos:** inicia sesión con el rol adecuado y prepara el seed en una base local vacía; el modo de inspección visual no proporciona datos ni permisos.
-
-CI ejecuta instalación con `npm ci`, lint, Vitest y build en [`.github/workflows/build.yml`](.github/workflows/build.yml). También ejecuta `npm audit --audit-level=high` como aviso con `continue-on-error`; revisa su salida aunque el workflow esté verde.
+Report bugs or ask questions through [GitHub Issues](https://github.com/T4-P2-BravaGym/BravaGym-frontend/issues).

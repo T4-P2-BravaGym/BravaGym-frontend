@@ -4,33 +4,34 @@ Issue: T4-P2-BravaGym/BravaGym-backend#283 · Parent: #200 · Entrega 2 · Tama�
 
 ## Contexto
 
-Como equipo queremos que la profesora pueda instalar y recorrer el frontend completo y localizar los documentos de entrega.
+El equipo revisó la documentación el 19 de octubre y pidió un README breve del producto, en inglés, en cada repositorio. Las instrucciones de la revisión sustituyen el índice extenso de historias y entregables pendientes de la primera versión.
 
 ## Requisitos
 
-1. Explicar instalación reproducible, variables públicas, conexión a la API, cuentas ficticias, áreas por rol, tests y build/preview existentes.
-2. Enlazar el README backend para instalación Python, Alembic y seed, y enlazar Swagger, ReDoc, Bruno, specs, bitácora y ER.
-3. Mostrar el estado real de Docker, retrospectiva y URL pública, actualizables cuando se publiquen.
-4. Conservar las instrucciones vigentes de sesión, estilos y Vitest; corregir referencias obsoletas a rutas sin protección y lockfile inexistente.
+1. Describir Brava, sus funciones principales y la relación entre frontend y backend.
+2. Mostrar tecnologías y versiones verificadas en dependencias y CI.
+3. Explicar requisitos, instalación local, configuración y primer uso con cuentas ficticias.
+4. Incluir un árbol breve de carpetas, comandos de calidad, autoras y enlace a Issues.
+5. Enlazar el README del otro repositorio y documentación técnica existente.
+6. Omitir Docker/despliegue, pendientes de entrega y narración de historias del README; conservar la guía operativa de Bruno fuera del README backend.
+7. No atribuir una licencia que no exista en el repositorio.
 
 ## Criterios de aceptación
 
-- Dado el repositorio y sus dependencias, cuando se ejecutan los comandos de calidad existentes, entonces lint, tests y build pasan.
-- Dadas las rutas documentadas, cuando se contrastan con paths.js y AppRouter.jsx, entonces coinciden sus áreas y roles.
-- Dado el índice de entrega, cuando se consulta, entonces enlaza los recursos existentes y señala los pendientes sin inventar URLs.
+- El README está en inglés, es fácil de recorrer y permite iniciar el proyecto localmente.
+- Las versiones, rutas, variables, credenciales ficticias y comandos coinciden con el código integrado en dev.
+- Los enlaces relativos apuntan a archivos existentes y ambos repositorios se enlazan entre sí.
+- La guía frontend indica que la API debe estar arrancada y usar un origen compatible para cookies/CORS.
+- La guía backend configura una clave privada, aplica migraciones y limita el seed a una base local vacía.
 
 ## Fuera de alcance
 
-Cambiar código, dependencias o tests; integrar ramas todavía en revisión; implementar Docker, desplegar o redactar la retrospectiva del equipo.
-
-## Preguntas abiertas
-
-Docker (#112/#115), retrospectiva (#200) y URLs públicas (#185) se completarán en sus tareas.
+Cambiar código, dependencias, tests, infraestructura o integrar funcionalidades pendientes.
 
 ## Decisiones
 
 | Decisión | Por qué |
 | --- | --- |
-| Rama desde dev | Documentar el estado integrado, sin incluir HU-35 aún en revisión. |
-| npm ci y Node 22 | Coincidir con el lockfile y CI existentes. |
-| Enlaces al backend | Mantener una sola referencia para instalación Python, Alembic, seed y documentos comunes. |
+| Un README en inglés por repositorio | Acuerdo explícito de la revisión del equipo. |
+| Rama de documentación creada desde origin/dev | Describir el producto integrado y separar la documentación de las ramas funcionales. |
+| Detalles en enlaces y guía de Bruno separada | Mantener una portada breve sin perder instrucciones operativas de API. |
