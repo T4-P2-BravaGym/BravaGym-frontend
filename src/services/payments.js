@@ -33,6 +33,13 @@ export function payPayment(paymentId, { discountCode, signal } = {}) {
   return apiRequest(`/payments/${paymentId}/pay`, { method: 'POST', body, signal })
 }
 
+/** Start hosted Checkout; only the signed webhook can confirm the card payment. */
+export function checkoutPayment(paymentId, { discountCode, signal } = {}) {
+  const body = {}
+  if (discountCode) body.discount_code = discountCode
+  return apiRequest(`/payments/${paymentId}/checkout`, { method: 'POST', body, signal })
+}
+
 /**
  * listPayments({ status, from, to, userId, concept, page, size, signal })
  * Admin list (GET /payments). `from` / `to` are ISO dates (YYYY-MM-DD).

@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import Button from '@/components/ui/Button'
 import PaymentCard from '@/components/domain/PaymentCard'
 import Alert from '@/components/ui/Alert'
 import EmptyState from '@/components/ui/EmptyState'
@@ -10,6 +12,7 @@ import Tabs from '@/components/ui/Tabs'
 import { ApiError } from '@/services/api'
 import { validateCode } from '@/services/discountCodes'
 import {
+  checkoutPayment,
   listMyPayments,
   payPayment,
   paymentConceptLabel,
@@ -31,6 +34,9 @@ const STATUS_TABS = [
 ]
 
 export default function MyPayments() {
+  const [searchParams] = useSearchParams()
+  const stripeReturn = searchParams.get('stripe')
+  const actionInFlight = useRef(false)
   const [status, setStatus] = useState('pending')
   const [page, setPage] = useState(1)
   const [result, setResult] = useState(null)
@@ -72,7 +78,7 @@ export default function MyPayments() {
     const controller = new AbortController()
     loadList(controller.signal)
     return () => controller.abort()
-  }, [loadList])
+  }, [loadList, stripeReturn])
 
   function changeStatus(next) {
     setStatus(next)
@@ -110,8 +116,28 @@ export default function MyPayments() {
     })
   }
 
+  async function handleCheckout(payment) {
+    if (actionInFlight.current) return
+    actionInFlight.current = true
+    setBusyId(payment.id)
+    setActionError(null)
+    setFlash(null)
+    try {
+      const { checkout_url } = await checkoutPayment(payment.id, {
+        discountCode: discounts[payment.id]?.code,
+      })
+      window.location.assign(checkout_url)
+    } catch (err) {
+      setActionError(payErrorMessage(err))
+    } finally {
+      actionInFlight.current = false
+      setBusyId(null)
+    }
+  }
+
   async function handleConfirmPay() {
-    if (!payTarget?.payment?.id) return
+    if (!payTarget?.payment?.id || actionInFlight.current) return
+    actionInFlight.current = true
     const { payment, discount } = payTarget
     setBusyId(payment.id)
     setActionError(null)
@@ -133,6 +159,7 @@ export default function MyPayments() {
       setPayTarget(null)
       setActionError(payErrorMessage(err))
     } finally {
+      actionInFlight.current = false
       setBusyId(null)
     }
   }
@@ -148,6 +175,16 @@ export default function MyPayments() {
           lead="Revisa lo pendiente y paga con un código de descuento si tienes uno."
       />
 
+      {(stripeReturn === 'success' || stripeReturn === 'cancel') && (
+        <Alert tone={stripeReturn === 'success' ? 'info' : 'warning'}>
+          <p>{stripeReturn === 'success'
+            ? 'Has vuelto de Stripe. El estado se actualizará cuando recibamos la confirmación del pago.'
+            : 'Has cancelado el proceso en Stripe. Consulta el estado antes de volver a pagar.'}</p>
+          <Button variant="secondary" disabled={loading || busyId != null} onClick={() => loadList()}>
+            Actualizar pagos
+          </Button>
+        </Alert>
+      )}
       {flash && (
         <Alert tone="success" onClose={() => setFlash(null)}>
           {flash}
@@ -174,10 +211,11 @@ export default function MyPayments() {
                 <PaymentCard
                   payment={payment}
                   discount={discounts[payment.id] ?? null}
-                  busy={busyId === payment.id}
+                  busy={busyId != null}
                   onApplyDiscount={(code) => handleApplyDiscount(payment, code)}
                   onRemoveDiscount={() => handleRemoveDiscount(payment.id)}
                   onPay={() => handleAskPay(payment)}
+                  onCheckout={() => handleCheckout(payment)}
                 />
               </li>
             ))}
@@ -258,6 +296,12 @@ function emptyMessage(status) {
 function payErrorMessage(error) {
   if (!(error instanceof ApiError)) {
     return { title: 'Error', text: GENERIC_PAY_ERROR }
+  }
+  if (error.status === 503) {
+    return {
+      title: 'Pago con tarjeta no disponible',
+      text: 'No se puede abrir Stripe en este momento. Inténtalo más tarde. El pago simulado sigue disponible.',
+    }
   }
   if (error.status === 409) {
     return { title: 'Pago ya realizado', text: error.detail || ALREADY_PAID }

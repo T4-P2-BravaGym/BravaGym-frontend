@@ -13,7 +13,7 @@ import styles from './PaymentCard.module.scss'
  * Props: payment { id, concept?, concept_label?, base_amount_cents, final_amount_cents,
  *                  status, created_at, paid_at?, discount_code?, plan_name?, … },
  *        discount ({ code, percent_off } | null) — only for pending,
- *        busy, onApplyDiscount(code), onRemoveDiscount(), onPay()
+ *        busy, onApplyDiscount(code), onRemoveDiscount(), onPay(), onCheckout()
  */
 export default function PaymentCard({
   payment,
@@ -22,6 +22,7 @@ export default function PaymentCard({
   onApplyDiscount,
   onRemoveDiscount,
   onPay,
+  onCheckout,
 }) {
   const isPending = payment.status === 'pending'
   const concept = paymentConceptLabel(payment)
@@ -72,8 +73,13 @@ export default function PaymentCard({
             onApply={onApplyDiscount}
             onRemove={onRemoveDiscount}
           />
-          <Button disabled={busy} onClick={onPay} className={styles.payButton}>
-            {busy ? 'Pagando…' : `Pagar ${formatEuros(previewCents)}`}
+          {onCheckout && (
+            <Button disabled={busy} onClick={onCheckout} className={styles.payButton}>
+              {busy ? 'Procesando…' : 'Pagar con tarjeta'}
+            </Button>
+          )}
+          <Button variant="secondary" disabled={busy} onClick={onPay} className={styles.payButton}>
+            {busy ? 'Pagando…' : `Pagar ${formatEuros(previewCents)} (simulado)`}
           </Button>
         </div>
       )}
