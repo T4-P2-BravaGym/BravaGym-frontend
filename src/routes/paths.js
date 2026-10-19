@@ -7,6 +7,8 @@ export const PATHS = {
   shop: '/tienda',
   login: '/entrar',
   register: '/registro',
+  forgotPassword: '/recuperar-contrasena',
+  resetPassword: '/nueva-contrasena',
 
   member: '/mi-area',
   bookings: '/mi-area/reservas',

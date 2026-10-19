@@ -129,7 +129,7 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
 - **Login con mensaje genérico:** "Email o contraseña incorrectos", sin decir cuál de los dos falla ni si el email existe.
 - **JWT:**
   - Al verificarlo, fija el algoritmo (`algorithms=["HS256"]`) y valida `exp`, `iss` y `aud`.
-  - El payload incluye `sub` (id), `role`, `jti`, `type` (`access` o `refresh`) y los claims estándar `exp`, `iss` y `aud`. Se puede leer, no está cifrado; no lleva contraseñas ni datos personales adicionales.
+  - El payload incluye `sub` (id), `role`, `jti`, `type` (`access` o `refresh`), `ver` (versión de sesión) y los claims estándar `exp`, `iss` y `aud`. Se puede leer, no está cifrado; no lleva contraseñas ni datos personales adicionales.
   - `SECRET_KEY` larga y aleatoria, en `.env`.
 - **Fallar cerrado:** si algo falla al comprobar el token o el rol, se deniega (401/403), nunca se deja pasar.
 
