@@ -1,0 +1,60 @@
+// Column layout like the other pages: select, states and the list
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+// No bullets or default spacing: each item is already a Card
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+// The button looks like the card header, not like a default button
+.summary {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  // Visible focus for keyboard users
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+}
+
+.name {
+  flex-grow: 1; // pushes the date and the badge to the right
+  font-weight: 600;
+}
+
+.meta {
+  color: var(--ink-muted);
+  font-size: 14px;
+}
+
+.detail {
+  margin-top: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.notes {
+  margin: 0;
+  color: var(--ink-muted);
+}

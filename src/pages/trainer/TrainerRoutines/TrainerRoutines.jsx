@@ -9,7 +9,14 @@ import Spinner from '@/components/ui/Spinner'
 import RoutineEditor from '@/components/domain/RoutineEditor'
 import { createRoutine, listExercises } from '@/services/routines'
 import { listMembers } from '@/services/users'
+import Tabs from '@/components/ui/Tabs'
+import RoutineHistory from '@/components/domain/RoutineHistory'
 import styles from './TrainerRoutines.module.scss'
+
+const VIEWS = [
+  { id: 'new', label: 'Nueva rutina'},
+  { id: 'history', label: 'Historial' },
+]
 
 export default function TrainerRoutines() {
   const [members, setMembers] = useState([])
@@ -19,7 +26,8 @@ export default function TrainerRoutines() {
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState(null)
   const [savedMessage, setSavedMessage] = useState(null)
-  const [editorKey, setEditorKey] = useState(0) // a new key gives a fresh, empty editor
+  const [editorKey, setEditorKey] = useState(0)
+  const [view, setView] = useState('new')
 
   // Load members and exercises at the same time; cancel both if the page closes first
   useEffect(() => {
@@ -76,17 +84,23 @@ export default function TrainerRoutines() {
       )}
 
       {!loading && !loadError && (
-        <RoutineEditor
-          key={editorKey}
-          members={members}
-          exercises={exercises}
-          busy={saving}
-          error={saveError}
-          onSave={handleSave}
-        />
+        <Tabs tabs={VIEWS} active={view} onChange={setView} label="Rutinas">
+          <div hidden={view !== 'new'}>
+            <RoutineEditor
+            key={editorKey}
+            members={members}
+            exercises={exercises}
+            busy={saving}
+            error={saveError}
+            onSave={handleSave}
+            />
+          </div>
+          
+          {view === 'history' && <RoutineHistory members={members} />}
+        </Tabs>
       )}
-    </section>
-  )
+      </section>
+      )
 }
 
 // The API sends first_name and last_name; the editor only needs { id, name }

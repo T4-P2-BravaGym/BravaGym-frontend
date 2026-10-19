@@ -1,5 +1,5 @@
 
-import { apiRequest } from './api'
+import { apiRequest, buildQuery } from './api'
 
 // GET /routines/me: the member's active routine with its exercises
 export function myRoutine() {
@@ -16,4 +16,9 @@ export function listExercises({ signal } = {}) {
 export function createRoutine(payload) {
   return apiRequest('/routines', { method: 'POST', body: payload })
   
+}
+
+
+export function listRoutines({ memberId, signal } = {}) {
+  return apiRequest(`/routines${buildQuery({ member_id: memberId })}`, { signal })
 }
