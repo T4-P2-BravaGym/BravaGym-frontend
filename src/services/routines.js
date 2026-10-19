@@ -20,5 +20,5 @@ export function createRoutine(payload) {
 
 
 export function listRoutines({ memberId, signal } = {}) {
-  return apiRequest(`/routines${buildQuery({ member_Id: memberId })}`, { signal })
+  return apiRequest(`/routines${buildQuery({ member_id: memberId })}`, { signal })
 }
