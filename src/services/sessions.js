@@ -101,3 +101,12 @@ export function cancelSession(id) {
 export function createPersonalTrainingSlot(body) {
   return apiRequest('/sessions/personal-training', { method: 'POST', body })
 }
+
+/**
+ * createPersonalTrainingSlotsBulk({ weekdays, times, start_date, weeks, class_type_id? })
+ * Trainer only (T-11). weekdays: 0 = Monday … 6 = Sunday; times "HH:MM" in Madrid.
+ * Returns { created: SessionOut[], skipped: [{ starts_at, reason: 'overlap' | 'past' }] }.
+ */
+export function createPersonalTrainingSlotsBulk(body) {
+  return apiRequest('/sessions/personal-training/bulk', { method: 'POST', body })
+}
