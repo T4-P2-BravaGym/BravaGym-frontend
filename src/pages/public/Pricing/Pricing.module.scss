@@ -138,10 +138,15 @@
   color: var(--ink-muted);
 }
 
+.faqSection {
+  width: 100%;
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
 .faq {
   display: flex;
   flex-direction: column;
-  max-width: 48rem;
 }
 
 .question {
