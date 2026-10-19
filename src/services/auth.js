@@ -31,3 +31,14 @@ export function register(data) {
 export function getMe() {
   return apiRequest('/users/me')
 }
+
+/** HU-35 recovery is public: an invalid link must never trigger token renewal. */
+export function requestPasswordReset(email) {
+  return apiRequest('/auth/password-reset', { method: 'POST', body: { email }, auth: false })
+}
+
+export function confirmPasswordReset(token, newPassword) {
+  return apiRequest('/auth/password-reset/confirm', {
+    method: 'POST', body: { token, new_password: newPassword }, auth: false,
+  })
+}
