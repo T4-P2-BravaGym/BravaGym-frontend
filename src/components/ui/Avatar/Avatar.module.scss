@@ -28,6 +28,15 @@
   font-weight: 800;
 }
 
+// Big cards (T-291): a trainer photo needs room to be seen
+.xl {
+  width: 120px;
+  height: 120px;
+  font-family: var(--font-display);
+  font-size: 44px;
+  font-weight: 800;
+}
+
 .mauve {
   background: var(--mauve-soft);
   color: var(--mauve-ink);
@@ -36,4 +45,9 @@
 .champagne {
   background: var(--champagne);
   color: var(--plum);
+}
+
+// T-291: a photo fills the same circle as the initials
+.photo {
+  object-fit: cover;
 }

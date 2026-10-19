@@ -12,3 +12,14 @@ export function listTrainers({ signal } = {}) {
 export function updateMyTrainerProfile(changes) {
   return apiRequest('/trainers/me/profile', { method: 'PATCH', body: changes })
 }
+
+// T-291: the logged-in trainer uploads (or replaces) and removes her photo
+export function uploadMyTrainerPhoto(file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  return apiRequest('/trainers/me/photo', { method: 'PUT', formData })
+}
+
+export function deleteMyTrainerPhoto() {
+  return apiRequest('/trainers/me/photo', { method: 'DELETE' })
+}
