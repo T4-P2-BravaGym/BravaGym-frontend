@@ -1,19 +1,21 @@
+import cx from '@/utils/cx'
+import { initials } from '@/utils/format'
 import styles from './Avatar.module.scss'
 
 /**
  * Avatar
- * Iniciales en círculo para socias y entrenadoras.
+ * Initials in a circle for members and trainers, or their photo when there is one (T-291).
+ * Decorative: the name is always written next to it, so screen readers skip it.
  *
- * Props (proposal): name, size
- * Uses: — · Stories: HU-15 · Level: Básico
- * Design reference: Brava design system and the Claude Design canvas.
- *
- * TODO: implement. Styles only with design tokens (var(--…)); accessible markup.
+ * Props: name, size ('sm' | 'md' | 'lg' | 'xl'), tone ('mauve' | 'champagne'), src (photo URL)
  */
-export default function Avatar({ children, ...rest }) {
+export default function Avatar({ name, size = 'md', tone = 'mauve', src }) {
+  if (src) {
+    return <img className={cx(styles.root, styles.photo, styles[size])} src={src} alt="" />
+  }
   return (
-    <span className={styles.root} {...rest}>
-      {children}
+    <span className={cx(styles.root, styles[size], styles[tone])} aria-hidden="true">
+      {initials(name)}
     </span>
   )
 }

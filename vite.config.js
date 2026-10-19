@@ -15,4 +15,12 @@ export default defineConfig({
     },
   },
   server: { port: 5173 },
+  // Vitest (T-10): `npm test` runs once, `npm run test:watch` re-runs on save.
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.js'],
+    include: ['src/**/*.test.{js,jsx}'],
+    // Run as a member in Madrid would, so a laptop and GitHub Actions (UTC) give the same result.
+    env: { TZ: 'Europe/Madrid' },
+  },
 })

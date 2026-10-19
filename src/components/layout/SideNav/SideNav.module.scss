@@ -1,6 +1,284 @@
-// SideNav styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
 @use 'mixins' as *;
 
 .root {
-  // TODO
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  height: 100vh;
+  padding: 28px 20px;
+  background: var(--plum);
+  color: var(--on-plum);
+
+  @include mobile {
+    z-index: 10;
+    height: auto;
+    gap: 0;
+    padding: var(--space-3) var(--space-4);
+  }
+}
+
+.isOpen {
+  @include mobile {
+    max-height: 100dvh;
+    overflow-y: auto;
+  }
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-left: 12px;
+
+  @include mobile {
+    padding-left: 0;
+  }
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--on-plum);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--on-plum);
+  }
+}
+
+.dot {
+  color: var(--champagne);
+}
+
+.eyebrow {
+  @include eyebrow;
+  color: var(--champagne);
+}
+
+.menuButton {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--on-plum-muted);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--on-plum);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--champagne);
+    outline-offset: 2px;
+  }
+
+  @include mobile {
+    display: inline-flex;
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  flex: 1;
+  min-height: 0;
+
+  @include mobile {
+    display: none;
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+  }
+}
+
+.isOpen .panel {
+  @include mobile {
+    display: flex;
+  }
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 11px 12px;
+  border-radius: 12px;
+  color: var(--on-plum-muted);
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--on-plum);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--champagne);
+    outline-offset: 2px;
+  }
+}
+
+.isActive {
+  background: var(--plum-raised);
+  color: var(--on-plum);
+  font-weight: 600;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--plum-raised);
+}
+
+.userText {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.userName {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userRole {
+  font-size: 13px;
+  color: var(--on-plum-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--on-plum-muted);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--on-plum);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--champagne);
+    outline-offset: 2px;
+  }
+}
+
+.count {
+  margin-left: auto;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--champagne);
+  color: var(--plum);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 22px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+// T-93: the button and the narrow menu only exist on a computer
+.collapseButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: 1px solid var(--on-plum-muted);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--on-plum);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--on-plum);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--champagne);
+    outline-offset: 2px;
+  }
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.hidden {
+  @include visually-hidden;
+}
+
+@media (min-width: #{$breakpoint-md + 1px}) {
+  .isCollapsed {
+    padding: 28px 12px;
+
+    .bar {
+      flex-direction: column;
+    }
+
+    .brand {
+      padding-left: 0;
+      align-items: center;
+    }
+
+    .link {
+      position: relative;
+      justify-content: center;
+      padding: 11px 0;
+    }
+
+    .count {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      min-width: 18px;
+      height: 18px;
+      font-size: 11px;
+      line-height: 18px;
+    }
+
+    .user {
+      flex-direction: column;
+      padding: 12px 6px;
+    }
+
+    .logout {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      width: 44px;
+    }
+  }
 }

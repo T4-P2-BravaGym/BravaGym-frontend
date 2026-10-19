@@ -1,6 +1,39 @@
-// ExerciseRow styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
-@use 'mixins' as *;
-
 .root {
-  // TODO
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.position {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  background: var(--mauve-soft);
+  color: var(--mauve-ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.dose {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.rest {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink-muted);
 }

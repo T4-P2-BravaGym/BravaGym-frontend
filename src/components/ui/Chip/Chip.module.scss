@@ -1,6 +1,33 @@
-// Chip styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
 @use 'mixins' as *;
 
 .root {
-  // TODO
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--line-strong);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.isSelected {
+  background: var(--plum);
+  border-color: var(--plum);
+  color: var(--on-plum);
+  font-weight: 600;
+
+  &:hover {
+    border-color: var(--plum);
+  }
 }

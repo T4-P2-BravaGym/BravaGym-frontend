@@ -1,18 +1,22 @@
+import cx from '@/utils/cx'
 import styles from './Chip.module.scss'
 
 /**
  * Chip
- * Botón de filtro con aria-pressed: día de la semana, categoría de la tienda.
+ * Filter button: day of the week, shop category, class type.
+ * Group chips in an element with role="group" and an aria-label that says what is filtered.
  *
- * Props (proposal): selected, onClick, children
- * Uses: — · Stories: HU-10, HU-21 · Level: Básico
- * Design reference: Brava design system and the Claude Design canvas.
- *
- * TODO: implement. Styles only with design tokens (var(--…)); accessible markup.
+ * Props: selected, onClick, className, children, ...rest
  */
-export default function Chip({ children, ...rest }) {
+export default function Chip({ selected = false, onClick, className, children, ...rest }) {
   return (
-    <button type="button" className={styles.root} {...rest}>
+    <button
+      type="button"
+      className={cx(styles.root, selected && styles.isSelected, className)}
+      aria-pressed={selected}
+      onClick={onClick}
+      {...rest}
+    >
       {children}
     </button>
   )

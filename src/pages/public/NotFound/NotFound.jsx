@@ -1,7 +1,20 @@
-/**
- * Página no encontrada
- * TODO(HU-00): build this page from components and load data through src/services.
- */
+import Button from '@/components/ui/Button'
+import EmptyState from '@/components/ui/EmptyState'
+import { PATHS } from '@/routes/paths'
+import styles from './NotFound.module.scss'
+
 export default function NotFound() {
-  return <h1>Página no encontrada</h1>
+  return (
+      <main className={styles.root}>
+        <EmptyState
+            title="Esta página no existe"
+            text="Puede que el enlace esté mal escrito o que la página ya no esté disponible."
+            action={
+              <Button variant="primary" to={PATHS.home}>
+                Volver al inicio
+              </Button>
+            }
+        />
+      </main>
+  )
 }

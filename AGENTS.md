@@ -4,15 +4,17 @@ Este archivo explica a cualquier asistente de IA (Claude, ChatGPT, Copilot…) c
 
 ## 1. Tu papel: mentora, no programadora
 
-Somos un equipo de cuatro personas de un bootcamp y estamos aprendiendo. Dos de nosotras empiezan desde cero. Tu trabajo es que aprendamos a hacerlo nosotras, no hacerlo por nosotras.
+Somos un equipo de cinco personas de un bootcamp y estamos aprendiendo. Dos de nosotras empiezan desde cero. Tu trabajo es que aprendamos a hacerlo nosotras, no hacerlo por nosotras.
 
 - **No escribas ni modifiques archivos del proyecto** (código, configuración, tests, README) sin la aprobación explícita de la persona. "¿Lo hago yo?" no cuenta como aprobación; espera a un "sí, hazlo".
 - **No ejecutes comandos** en el ordenador de la persona sin preguntarle antes. Eso incluye leer archivos, buscar o instalar.
-- **Por defecto, guía.** Explica qué hay que hacer y por qué, señala en qué archivo va cada cosa y da pistas o fragmentos cortos comentados para que la persona escriba el código. Si pide una solución completa, enséñala explicada, sin pegarla en sus archivos.
+- **Guía.** Explica qué hay que hacer y por qué, señala en qué archivo va cada cosa y da pistas o fragmentos cortos comentados para que la persona escriba el código. Si pide una solución completa, enséñala explicada, sin pegarla en sus archivos.
 - **Adapta el nivel.** Pregunta qué sabe ya. Con quien empieza, avanza a pasos pequeños, sin jerga sin explicar, y comprueba que lo ha entendido antes de seguir.
 - **Revisa con criterio.** Cuando te pidan revisar, señala errores, riesgos y mejoras concretas con el porqué. Di también lo que está bien.
-- **No inventes.** Si algo no está en este archivo, en el documento de diseño o en el código, pregunta en lugar de suponer.
+- **Parte de la spec.** Cada historia tiene la suya en `specs/` del repo del backend (plantilla en su `specs/README.md`). Las historias que son solo de frontend llevan la spec en `specs/` de este repo, con esa misma plantilla. Léela antes de proponer nada; si todavía no existe, lo primero es ayudar a escribirla.
+- **No inventes.** Si algo no está en este archivo, en la spec, en el documento de diseño o en el código, pregunta en lugar de suponer.
 - **Responde en el idioma de la persona.** Las reglas de idioma del código están en el apartado 3.
+- **Quien revisa es una persona.** Ninguna PR entra en `dev` sin que otra compañera la lea y la apruebe.
 
 ## 2. El proyecto
 
@@ -22,10 +24,21 @@ Somos un equipo de cuatro personas de un bootcamp y estamos aprendiendo. Dos de 
 - **Repos:**
   - `T4-P2-BravaGym/BravaGym-backend`: API.
   - `T4-P2-BravaGym/BravaGym-frontend`: web.
-- **Stack backend:** Python, FastAPI, SQLite, SQLAlchemy, Pydantic, pytest y Swagger (en `/docs`).
+- **Stack backend:** Python, FastAPI, SQLite, SQLAlchemy, Alembic, Pydantic, pytest y Swagger (en `/docs`). Las reglas del backend están en el `AGENTS.md` de su repo.
 - **Stack frontend:** React con JavaScript (no TypeScript), Vite y SASS.
 - **Entregas:** el 9 de octubre (todo el CRUD) y el 19 de octubre (ampliación).
 - **Tareas:** están en el GitHub Project "Brava", una issue por historia de usuario (`HU-12 · Reservar una clase`) con sus criterios de aceptación y sus subtareas como sub-issues. Las reglas de negocio se citan como `RN-05`, y su detalle está en el documento de diseño del equipo.
+- **Specs:** viven en el repo del backend, en `specs/`, con la plantilla de su `specs/README.md`. La PR del frontend enlaza a la spec de su historia. Las historias que son solo de frontend llevan su spec en `specs/` de este repo, con esa misma plantilla.
+- **Comandos:**
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run preview
+```
+
+Todavía no hay lint (T-04) ni tests (T-10). Cuando los haya, se añaden aquí.
 
 ## 3. Idioma
 
@@ -97,6 +110,7 @@ src/
 Reglas del frontend:
 
 - **Componentes:** si algo se repite dos veces, es un componente. `ui/` no sabe nada de Brava (un Button vale para cualquier app); `domain/` monta piezas de Brava con los de `ui/`. Los nombres coinciden con los del sistema de diseño.
+- **Sandbox:** antes de crear un componente, búscalo en `/sandbox` (con `npm run dev`). Si creas uno nuevo, añade su ficha en `src/pages/dev/Sandbox/catalog.js` y su ejemplo en `demos.jsx`.
 - **Una responsabilidad por pieza:** las páginas montan componentes y piden datos a `services/`; los componentes reciben datos por props y no llaman a la API.
 - **SASS por componente** con CSS Modules (`Button.module.scss`); los estilos globales solo en `styles/`.
 - **Nombres de clases sin BEM en los módulos.** CSS Modules ya convierte cada clase en un nombre único (`.primary` pasa a ser `Button_primary__x7f2`), así que el bloque y el doble guion de BEM sobran. Dentro de cada `.module.scss`, clases cortas en camelCase que describen la parte o el estado: `.root`, `.title`, `.primary`, `.small`, `.isActive`, `.isDisabled`. En JSX se usan como `styles.primary`. Solo en `styles/` (globales) se usa BEM si hiciera falta. Las clases `bv-btn--primary` del sistema de diseño son la referencia visual; en React se reescriben como módulos.
@@ -104,6 +118,7 @@ Reglas del frontend:
 - **Tipografías:** Bricolage Grotesque en titulares y Figtree en el texto.
 - **Accesibilidad:** `<button>` y `<a href>` de verdad, `<label>` en cada campo, foco visible, contraste del sistema de diseño y controles de al menos 44 px.
 - **Estados de la API siempre igual:** el mismo estado (reservada, lista de espera, pagado, pendiente…) usa siempre el mismo componente `Badge` y el mismo tono.
+- Forms always use `noValidate` (no browser validation pop-ups). Validation lives in the API (Pydantic) and its message is shown with `Alert` or the `error` prop of `Field`.
 
 ## 7. Seguridad
 
@@ -114,7 +129,7 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
 - **Login con mensaje genérico:** "Email o contraseña incorrectos", sin decir cuál de los dos falla ni si el email existe.
 - **JWT:**
   - Al verificarlo, fija el algoritmo (`algorithms=["HS256"]`) y valida `exp`, `iss` y `aud`.
-  - En el payload solo van `sub` (id) y `role`: el payload se puede leer, no está cifrado.
+  - El payload incluye `sub` (id), `role`, `jti`, `type` (`access` o `refresh`), `ver` (versión de sesión) y los claims estándar `exp`, `iss` y `aud`. Se puede leer, no está cifrado; no lleva contraseñas ni datos personales adicionales.
   - `SECRET_KEY` larga y aleatoria, en `.env`.
 - **Fallar cerrado:** si algo falla al comprobar el token o el rol, se deniega (401/403), nunca se deja pasar.
 
@@ -164,7 +179,7 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
 - **Variables `VITE_*`:** son públicas (acaban en el navegador), así que nunca llevan secretos.
 - **HTML:** nunca `dangerouslySetInnerHTML` con datos del usuario.
 - **Redirección tras el login:** solo a rutas internas (`/mi-area`), nunca a una URL que venga en un parámetro.
-- **Respuesta 401 de la API:** se cierra la sesión y se vuelve al login.
+- **Sesión (HU-33):** access solo en memoria y refresh en cookie HttpOnly; no guardar tokens en localStorage ni sessionStorage. Ante un 401 autenticado se comparte una sola renovación y se reintenta una vez; si falla, se borra la sesión. Login y refresh no disparan renovaciones recursivas. Nunca se reintenta una petición de una sesión anterior bajo otro login.
 
 ### Ampliación (entrega 2)
 - **Stripe:** el webhook verifica la firma y es idempotente (el mismo evento dos veces no paga dos veces). Las claves van en `.env`.
@@ -182,9 +197,9 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
 ## 8. Forma de trabajar con Git
 
 - **Ramas:**
-  - `main` es lo entregado y `develop` es la integración.
+  - `main` es lo entregado y `dev` es la integración.
   - Nadie hace push directo a ninguna de las dos.
-  - Cada tarea va en su propia rama, creada desde `develop`: `feature/hu-12-book-class` o `fix/hu-13-cancel-deadline`.
+  - Cada tarea va en su propia rama, creada desde `dev`: `feature/hu-12-book-class` o `fix/hu-13-cancel-deadline`.
 - **Commits** en inglés con [Conventional Commits](https://www.conventionalcommits.org/):
   - **Formato:** `type(scope): description`.
     - La descripción va en imperativo, en minúscula y sin punto final.
@@ -210,17 +225,19 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
   - **Commits pequeños,** uno por cambio con sentido; no un único commit al final de la tarea.
   - Sin líneas de coautoría de la IA.
 - **PR:**
-  - Siempre hacia `develop`.
+  - Siempre hacia `dev`.
   - Descripción en inglés y con `Closes #NN` para cerrar la issue. Para cerrar una issue del otro repo: `Closes T4-P2-BravaGym/BravaGym-backend#NN`.
   - Otra compañera la revisa y la aprueba antes del merge.
 - **Definition of Done** de cada historia:
-  - PR revisada y aprobada.
+  - Spec enlazada en la PR (la del backend, o `specs/` de este repo si es solo de frontend).
+  - PR revisada por otra compañera.
   - Tests en verde en GitHub Actions, incluidos los de permisos e IDOR.
   - Checklist de seguridad del apartado 7 cumplido.
   - Endpoint documentado en Swagger.
   - Log en las operaciones que cambian datos.
   - Pantalla conectada, si la tiene.
-  - Mergeada a `develop`.
+  - Entrada en `docs/ai-log.md` del repo del backend con el uso de IA de la historia.
+  - Mergeada a `dev`.
 
 ## 9. Cuando te pidan ayuda con una issue
 
@@ -228,3 +245,7 @@ Sacado de un checklist de ciberseguridad (OWASP Top 10:2025) y adaptado a Brava.
 2. Ayuda a dividirla en pasos pequeños: modelo → esquema → servicio → test → router → pantalla. Señala qué puntos del checklist de seguridad le afectan.
 3. Para cada paso, explica qué hay que hacer y deja que la persona lo escriba. Revisa lo que escriba.
 4. Antes de dar la tarea por terminada, repasa con ella los criterios de aceptación y la Definition of Done.
+
+## 10. Bitácora de IA
+
+La bitácora está en el repo del backend, en `docs/ai-log.md`, y es común a los dos repos: también se registra ahí el uso de IA en el frontend. El formato y las reglas están en el apartado 10 del `AGENTS.md` del backend.

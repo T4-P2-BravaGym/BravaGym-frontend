@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  flex-direction: column;   
+  gap: var(--space-4);
+}
+
+.header {
+  display: flex;               
+  align-items: baseline;      
+  flex-wrap: wrap;             
+  gap: var(--space-3);         
+}
+
+.title {
+  flex-grow: 1;                
+  margin: 0;
+}
+
+.meta {
+  color: var(--ink-muted);    
+  font-size: 14px;
+}

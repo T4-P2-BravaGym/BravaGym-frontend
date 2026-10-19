@@ -1,6 +1,31 @@
-// CapacityBar styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
-@use 'mixins' as *;
-
 .root {
-  // TODO
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 140px;
+}
+
+.track {
+  flex: 1;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--success-strong);
+}
+
+.isFull {
+  background: var(--champagne-strong);
+}
+
+.label {
+  min-width: 44px;
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }

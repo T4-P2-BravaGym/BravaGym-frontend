@@ -1,6 +1,96 @@
-// Field styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
 @use 'mixins' as *;
 
 .root {
-  // TODO
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.control {
+  min-height: 44px;
+  width: 100%;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-strong);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+
+  &:focus-visible {
+    @include focus-ring;
+    outline-offset: 1px;
+  }
+
+  &[aria-invalid='true'] {
+    border-color: var(--danger-ink);
+  }
+
+  &:disabled {
+    background: var(--surface-sunken);
+    color: var(--ink-muted);
+  }
+}
+
+.controlWrap {
+  position: relative;
+}
+
+// Room on the right for the eye button
+.withReveal {
+  padding-right: 44px;
+}
+
+.reveal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--ink);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+    outline-offset: -2px;
+  }
+
+  &:disabled {
+    cursor: default;
+    color: var(--ink-muted);
+  }
+}
+
+.textarea {
+  min-height: 88px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+.error {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--danger-ink);
 }

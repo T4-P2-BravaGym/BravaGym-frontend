@@ -1,0 +1,21 @@
+@use 'mixins' as *;
+
+.root {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer {
+  display: grid;
+  gap: var(--space-3);
+}

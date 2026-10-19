@@ -1,19 +1,20 @@
+import cx from '@/utils/cx'
 import styles from './Card.module.scss'
 
 /**
  * Card
- * Contenedor plano: default, tint, dark. Con eyebrow, título y meta.
+ * Flat container (no shadow): it separates by background color, not by elevation.
+ * default = surface-raised; tint = mauve-soft, for what needs attention (one per row at most);
+ * dark = plum, to highlight a figure on a light page.
  *
- * Props (proposal): variant, eyebrow, title, children
- * Uses: — · Stories: HU-04 · Level: Básico
- * Design reference: Brava design system and the Claude Design canvas.
- *
- * TODO: implement. Styles only with design tokens (var(--…)); accessible markup.
+ * Props: variant ('default' | 'tint' | 'dark'), eyebrow, title, titleAs, as, className, children
  */
-export default function Card({ children, ...rest }) {
+export default function Card({ variant = 'default', eyebrow, title, titleAs: Title = 'h3', as: Tag = 'section', className, children }) {
   return (
-    <div className={styles.root} {...rest}>
+    <Tag className={cx(styles.root, styles[variant], className)}>
+      {eyebrow && <span className={styles.eyebrow}>{eyebrow}</span>}
+      {title && <Title className={styles.title}>{title}</Title>}
       {children}
-    </div>
+    </Tag>
   )
 }

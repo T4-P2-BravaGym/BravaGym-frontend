@@ -1,6 +1,66 @@
-// Alert styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
 @use 'mixins' as *;
 
 .root {
-  // TODO
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+}
+
+.info {
+  background: var(--mauve-soft);
+  color: var(--mauve-ink);
+}
+
+.success {
+  background: var(--success-soft);
+  color: var(--success-ink);
+}
+
+.warning {
+  background: var(--champagne-soft);
+  color: var(--champagne-ink);
+}
+
+.error {
+  background: var(--danger-soft);
+  color: var(--danger-ink);
+}
+
+.icon {
+  display: inline-flex;
+  padding-top: 2px;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-weight: 700;
+}
+
+.text {
+  font-size: 15px;
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin: -6px -8px -6px 0;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
 }

@@ -1,0 +1,43 @@
+@use 'mixins' as *;
+
+.root {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.toolbar {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-4);
+
+  @include mobile {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.export {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.member {
+  font-weight: 600;
+}
+
+.memberMeta {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.footer {
+  display: grid;
+  gap: var(--space-3);
+}

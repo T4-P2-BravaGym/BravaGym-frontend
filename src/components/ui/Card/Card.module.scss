@@ -1,6 +1,46 @@
-// Card styles. Short camelCase class names (no BEM): .root, .primary, .isActive…
 @use 'mixins' as *;
 
 .root {
-  // TODO
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  min-width: 0;
+}
+
+.default {
+  background: var(--surface-raised);
+  color: var(--ink);
+}
+
+.tint {
+  background: var(--mauve-soft);
+  color: var(--mauve-ink);
+
+  .eyebrow {
+    color: var(--mauve-ink);
+  }
+}
+
+.dark {
+  background: var(--plum);
+  color: var(--on-plum);
+
+  .eyebrow {
+    color: var(--champagne);
+  }
+}
+
+.eyebrow {
+  @include eyebrow;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+  color: inherit;
 }

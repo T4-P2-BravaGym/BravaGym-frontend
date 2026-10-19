@@ -1,0 +1,71 @@
+@use 'mixins' as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+// Same block as the design: avatar, fields and the button, side by side
+.card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+}
+
+.fields {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 260px;
+}
+
+.title {
+  @include display-text(22px);
+  margin: 0;
+}
+
+.save {
+  align-self: flex-end;
+}
+
+// T-291: the photo and its buttons, under the avatar
+.photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 140px;
+}
+
+.fileInput {
+  @include visually-hidden;
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+// #101: "Mi cuenta", her private details and password, under the public card
+.account {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.accountTitle {
+  @include display-text(22px);
+  margin: 0;
+}
+
+.accountLead {
+  margin: 0;
+  color: var(--ink-muted);
+}

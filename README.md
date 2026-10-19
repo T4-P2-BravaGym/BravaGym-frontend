@@ -1,46 +1,106 @@
-# Brava · Web
+# Brava · Frontend
 
-Web de Brava, gimnasio de fuerza para mujeres: web pública, área de socia, panel de entrenadora y panel de administración.
+Brava is a full-stack application for a women's strength-training gym, built as a team bootcamp project. Members can book classes, follow their routines and manage purchases, while trainers and administrators have dedicated workspaces.
 
-**Stack:** React 19 con JavaScript, Vite, React Router y SASS (CSS Modules). Los estilos salen del sistema de diseño de Brava (`src/styles/_tokens.scss`).
+This repository contains the React application. It connects to the [Brava backend](https://github.com/T4-P2-BravaGym/BravaGym-backend/tree/dev), which provides the API and database. The application interface is in Spanish.
 
-## Arrancar en local
+## Features
+
+- Public class schedule, trainer profiles, membership pricing and shop.
+- Registration, login, password recovery and automatic session renewal.
+- Member bookings, personal training, routines, cart and payment history.
+- Trainer class management, routines and profile photos.
+- Administration of users, plans, products, discounts, payments and cancellation requests.
+
+The integrated demo uses simulated payments. Password-recovery links are available in the backend's private local `outbox/`, rather than delivered by email.
+
+## Tech stack
+
+| Technology | Version in package-lock.json |
+| --- | --- |
+| React / React DOM | 19.3.0 |
+| React Router | 7.18.4 |
+| Vite | 8.3.4 |
+| Sass (CSS Modules) | 1.105.1 |
+| Vitest | 5.0.5 |
+
+The application uses JavaScript. Tests use Testing Library and jsdom. [package.json](package.json) defines the dependency ranges; [package-lock.json](package-lock.json) records the installed versions.
+
+## Run locally
+
+Requirements: Git, Node.js **22.12 or later in the 22.x release line**, npm, and the running backend. CI uses Node 22.
+
+1. Set up and start the API using the [backend README](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/README.md), including migrations and demo data.
+2. In a separate terminal, install and start the frontend:
 
 ```bash
-npm install                 # la primera vez: genera package-lock.json, súbelo al repo
-cp .env.example .env        # apunta a la API local
-npm run dev                 # http://localhost:5173
-npm run build               # comprobar que compila antes de una PR
+git clone --branch dev https://github.com/T4-P2-BravaGym/BravaGym-frontend.git
+cd BravaGym-frontend
+npm ci
+cp .env.example .env
+npm run dev
 ```
 
-La API tiene que estar arrancada (repo BravaGym-backend) en `http://localhost:8000`.
+Keep these values in the frontend `.env`:
 
-## Estructura
-
+```dotenv
+VITE_API_URL=http://localhost:8000/api/v1
+VITE_DEV_SKIP_AUTH=false
 ```
+
+Open [http://localhost:5173](http://localhost:5173). Keep both servers running and use `localhost` for both. The backend must allow `CORS_ORIGINS=["http://localhost:5173"]`. Restart Vite after changing `.env`; frontend `VITE_*` variables are public and must not contain secrets.
+
+## Usage
+
+Browse **Clases**, **Entrenadoras**, **Precios** and **Tienda**, or open [Entrar](http://localhost:5173/entrar) to try a demo account. All accounts below use `BravaDemo2026!`, unless the backend seed used a different `SEED_PASSWORD`.
+
+| Role | Demo email | Starting page |
+| --- | --- | --- |
+| Member | `lucia@example.com` | `/mi-area` |
+| Trainer | `ana@example.com` | `/entrenadora/clases` |
+| Administrator | `admin@example.com` | `/admin/usuarias` |
+| Superadministrator | `superadmin@example.com` | `/admin/usuarias` |
+
+For a quick tour, sign in as a member to browse bookings, routines and the cart. Sign out, then use the administrator account to manage plans and products. The demo accounts require the backend seed data.
+
+If you see a server connection error, check that [API health](http://localhost:8000/health) responds, then check `VITE_API_URL` and the backend's CORS setting.
+
+## Project structure
+
+```text
 src/
-  components/ui/       # piezas del sistema de diseño: Button, Badge, Chip, Field, Card…
-  components/domain/   # piezas de Brava: SessionCard, WeekSchedule, PricingCard…
-  components/layout/   # Navbar, Footer, SideNav, MobileTabBar
-  layouts/             # PublicLayout y PrivateLayout
-  pages/               # una carpeta por pantalla: public/, member/, trainer/, admin/
-  routes/              # AppRouter, ProtectedRoute y paths.js
-  context/ hooks/      # sesión (AuthContext, useAuth)
-  services/            # llamadas a la API (api.js es el único cliente HTTP)
-  utils/               # formato de euros y fechas
-  styles/              # tokens, mixins y estilos globales
+  components/     # Shared UI, gym components and navigation
+  context/        # Session and cart state
+  hooks/          # Reusable React hooks
+  layouts/        # Public and private page layouts
+  pages/          # Public, member, trainer and admin screens
+  routes/         # Paths, navigation and access guards
+  services/       # API requests and session handling
+  styles/         # Design tokens, mixins and global styles
+  test/           # Shared test setup
+  utils/          # Formatting and other helpers
+public/           # Static assets
+specs/            # Frontend feature specifications
 ```
 
-Todas las rutas ya existen y cada página muestra su título, así que se puede navegar desde el primer día. Cada componente tiene un comentario con qué hace, sus props propuestas, de qué otros depende, en qué historias se usa y su nivel. Mientras no haya login, `ProtectedRoute` deja pasar a todas las rutas.
+## Checks and build
 
-**Rutas para probar:** `/`, `/clases`, `/precios`, `/tienda`, `/mi-area`, `/mi-area/reservas`, `/entrenadora/clases`, `/admin`, `/admin/pagos`.
+```bash
+npm test                 # Run Vitest once
+npm run lint             # Check JavaScript
+npm run build            # Create dist/
+```
 
-## Estilos
+Use `npm run test:watch` while developing. To preview a build, run `npm run preview` and open the URL it prints (normally `http://localhost:4173`). The API is still required; add that preview origin to the backend's `CORS_ORIGINS` and restart the API first.
 
-- En cada `.module.scss`: `@use 'mixins' as *;` y clases cortas en camelCase (`.root`, `.primary`, `.isActive`), sin BEM.
-- Siempre tokens (`var(--mauve)`, `var(--space-6)`, `var(--radius-lg)`), nunca colores o tamaños sueltos.
-- Importa con el alias `@`: `import Button from '@/components/ui/Button'`.
+## Documentation
 
-## Cómo trabajamos
+- [Backend setup and API documentation](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/README.md).
+- [Route definitions](src/routes/paths.js) and [frontend specifications](specs/).
+- [Session contract](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/specs/HU-33-refresh-logout.md), [password recovery](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/specs/HU-35-password-reset.md) and [shared AI-use log](https://github.com/T4-P2-BravaGym/BravaGym-backend/blob/dev/docs/ai-log.md).
 
-Todo está en [`AGENTS.md`](AGENTS.md): la IA como mentora, idioma, DRY y SOLID, componentes, SASS, seguridad, ramas, Conventional Commits y Definition of Done.
+## Authors and support
+
+Built by the Brava team: Beste Özaydın, Damaris Castro, Esra Kesken, Mariana and Viviana Andrango. See the [contributors](https://github.com/T4-P2-BravaGym/BravaGym-frontend/graphs/contributors).
+
+Report bugs or ask questions through [GitHub Issues](https://github.com/T4-P2-BravaGym/BravaGym-frontend/issues).

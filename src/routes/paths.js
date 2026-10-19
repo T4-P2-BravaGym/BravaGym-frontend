@@ -7,6 +7,8 @@ export const PATHS = {
   shop: '/tienda',
   login: '/entrar',
   register: '/registro',
+  forgotPassword: '/recuperar-contrasena',
+  resetPassword: '/nueva-contrasena',
 
   member: '/mi-area',
   bookings: '/mi-area/reservas',
@@ -28,4 +30,8 @@ export const PATHS = {
   adminUsers: '/admin/usuarias',
   adminPlans: '/admin/planes',
   adminProducts: '/admin/productos',
+  adminAccount: '/admin/cuenta',
+
+  // Sandbox with every component, for the team (see pages/dev/Sandbox).
+  sandbox: '/sandbox',
 }
