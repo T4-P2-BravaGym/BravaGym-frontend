@@ -163,7 +163,7 @@ export default function Pricing() {
             </section>
         )}
 
-        <section aria-labelledby="pricing-faq-title">
+        <section className={styles.faqSection} aria-labelledby="pricing-faq-title">
           <h2 id="pricing-faq-title" className={styles.sectionTitle}>
             Preguntas frecuentes
           </h2>
