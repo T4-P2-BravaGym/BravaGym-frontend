@@ -35,7 +35,6 @@ export const NAVIGATION = {
     eyebrow: 'Administración',
     label: 'Panel de administración',
     items: [
-      { to: PATHS.admin, label: 'Resumen', icon: 'home', end: true },
       { to: PATHS.adminPayments, label: 'Pagos', icon: 'card' },
       { to: PATHS.adminCancellations, label: 'Bajas', icon: 'door' },
       { to: PATHS.adminDiscountCodes, label: 'Ofertas y códigos', icon: 'tag' },
