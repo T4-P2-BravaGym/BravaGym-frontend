@@ -31,9 +31,9 @@ No Stripe secret belongs in Vite configuration. Use a separate test database.
 
 ## Verification performed
 
-- Full frontend suite: 99 tests passed; one additional discount-to-checkout test passed in the subsequent targeted run (6 page tests).
+- Frontend CI passed (build, lint and full test suite). Local suite: 99 passed before adding the final discount case; all 6 page tests passed after that addition.
 - Frontend lint and production build passed. Dependency audit: zero vulnerabilities.
-- Backend checkout/webhook tests: 12 passed.
+- Backend checkout/webhook tests: 12 passed. Full backend suite after fixing existing Stripe OpenAPI error schemas: 754 passed, coverage 96.51%.
 - Stripe CLI connected in test mode and obtained a signing secret, saved only to ignored local configuration.
 - Real test-mode Checkout creation through the running API: HTTP 200; payment remained pending.
 - Invalid webhook signature through the running API: HTTP 400.
@@ -41,7 +41,7 @@ No Stripe secret belongs in Vite configuration. Use a separate test database.
 
 ## Pending hosted-checkout smoke
 
-Browser control was disabled in Work settings. The 4242 card submission and the resulting real webhook delivery have **not** been verified. Automated webhook tests are not evidence of a completed hosted Checkout.
+Browser control continued returning `Local browser use is disabled in Work settings` even after the user enabled it and the tool session was reset. The 4242 card submission and the resulting real webhook delivery have **not** been verified. Automated webhook tests are not evidence of a completed hosted Checkout.
 
 After enabling browser access, log in as a synthetic member, open **Mis pagos**, choose **Pagar con tarjeta**, and pay with `4242 4242 4242 4242`, a future expiration date and any test CVC. Verify:
 
