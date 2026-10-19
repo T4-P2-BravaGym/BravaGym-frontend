@@ -14,7 +14,7 @@ import {
   cancelSession,
   createPersonalTrainingSlot,
   isPersonalTrainingSession,
-  listSessions,
+  listSessionsAll,
   toSessionCard,
 } from '@/services/sessions'
 import { formatDate, formatDateTime, formatTimeRange, madridInputToUtcIso } from '@/utils/format'
@@ -50,7 +50,7 @@ export default function TrainerSlots() {
   const loadSlots = useCallback(
       (signal) => {
         const { from, to } = getWeekRange(weekAnchor)
-        return listSessions({ from, to, trainer_id: trainerId, signal })
+        return listSessionsAll({ from, to, trainer_id: trainerId, signal })
             .then((data) => {
               const items = Array.isArray(data) ? data : (data?.items ?? [])
               const personalOnly = items

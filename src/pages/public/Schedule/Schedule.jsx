@@ -8,7 +8,7 @@ import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import useAuth from '@/hooks/useAuth'
 import { PATHS } from '@/routes/paths'
-import { listSessions } from '@/services/sessions'
+import { listSessionsAll } from '@/services/sessions'
 import { getWeekRange } from '@/utils/week'
 import styles from './Schedule.module.scss'
 
@@ -28,7 +28,7 @@ export default function Schedule() {
     setSessions(null)
     setError(null)
 
-    listSessions({
+    listSessionsAll({
       from,
       to,
       only_available: onlyAvailable || undefined,

@@ -15,7 +15,7 @@ import {
   cancelSession,
   createSession,
   isPersonalTrainingSession,
-  listSessions,
+  listSessionsAll,
   toSessionCard,
   updateSession,
 } from '@/services/sessions'
@@ -59,7 +59,7 @@ export default function TrainerSessions() {
   const loadSessions = useCallback(
     (signal) => {
       const { from, to } = getWeekRange(weekAnchor)
-      return listSessions({ from, to, trainer_id: trainerId, signal })
+      return listSessionsAll({ from, to, trainer_id: trainerId, signal })
         .then((data) => {
           const items = Array.isArray(data) ? data : (data?.items ?? [])
           const groupOnly = items

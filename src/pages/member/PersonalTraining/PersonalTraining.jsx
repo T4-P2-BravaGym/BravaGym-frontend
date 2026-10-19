@@ -10,8 +10,8 @@ import PageHeader from '@/components/ui/PageHeader'
 import Spinner from '@/components/ui/Spinner'
 import { PATHS } from '@/routes/paths'
 import { ApiError } from '@/services/api'
-import { bookSession, bookingsBySessionId, listMyBookings } from '@/services/bookings'
-import { isPersonalTrainingSession, listSessions, toSessionCard } from '@/services/sessions'
+import { bookSession, bookingsBySessionId, listMyBookingsAll } from '@/services/bookings'
+import { isPersonalTrainingSession, listSessionsAll, toSessionCard } from '@/services/sessions'
 import { listTrainers } from '@/services/trainers'
 import { getWeekRange } from '@/utils/week'
 import styles from './PersonalTraining.module.scss'
@@ -61,7 +61,7 @@ export default function PersonalTraining() {
   }, [])
 
   const loadBookings = useCallback((signal) => {
-    return listMyBookings({ upcoming: true, signal })
+    return listMyBookingsAll({ upcoming: true, signal })
       .then((data) => {
         const items = Array.isArray(data) ? data : (data?.items ?? [])
         setBookings(items)
@@ -80,7 +80,7 @@ export default function PersonalTraining() {
         return Promise.resolve([])
       }
       const { from, to } = getWeekRange(weekAnchor)
-      return listSessions({ from, to, trainer_id: selectedTrainerId, signal })
+      return listSessionsAll({ from, to, trainer_id: selectedTrainerId, signal })
         .then((data) => {
           const items = Array.isArray(data) ? data : (data?.items ?? [])
           const personal = items.filter(isPersonalTrainingSession).map((session) => {
