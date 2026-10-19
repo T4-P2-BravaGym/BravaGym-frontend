@@ -92,3 +92,7 @@ export function createSession(auth) {
     initialize, login, logout, refresh, clear,
   }
 }
+
+export function createPersonalTrainingSlotsBulk(body) {
+  return apiRequest('/sessions/personal-training/bulk', { method: 'POST', body })
+}
