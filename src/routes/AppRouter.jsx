@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import PublicLayout from '@/layouts/PublicLayout'
 import PrivateLayout from '@/layouts/PrivateLayout'
 import ProtectedRoute from './ProtectedRoute'
@@ -25,7 +25,6 @@ import TrainerSessions from '@/pages/trainer/TrainerSessions'
 import TrainerSlots from '@/pages/trainer/TrainerSlots'
 import TrainerRoutines from '@/pages/trainer/TrainerRoutines'
 import TrainerProfile from '@/pages/trainer/TrainerProfile'
-import AdminDashboard from '@/pages/admin/AdminDashboard'
 import AdminPayments from '@/pages/admin/AdminPayments'
 import AdminCancellations from '@/pages/admin/AdminCancellations'
 import AdminDiscountCodes from '@/pages/admin/AdminDiscountCodes'
@@ -75,7 +74,7 @@ export default function AppRouter() {
 
       <Route element={<ProtectedRoute roles={['admin', 'superadmin']} />}>
         <Route element={<PrivateLayout />}>
-          <Route path={PATHS.admin} element={<AdminDashboard />} />
+          <Route path={PATHS.admin} element={<Navigate to={PATHS.adminUsers} replace />} />
           <Route path={PATHS.adminPayments} element={<AdminPayments />} />
           <Route path={PATHS.adminCancellations} element={<AdminCancellations />} />
           <Route path={PATHS.adminDiscountCodes} element={<AdminDiscountCodes />} />

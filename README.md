@@ -58,8 +58,8 @@ Browse **Clases**, **Entrenadoras**, **Precios** and **Tienda**, or open [Entrar
 | --- | --- | --- |
 | Member | `lucia@example.com` | `/mi-area` |
 | Trainer | `ana@example.com` | `/entrenadora/clases` |
-| Administrator | `admin@example.com` | `/admin` |
-| Superadministrator | `superadmin@example.com` | `/admin` |
+| Administrator | `admin@example.com` | `/admin/usuarias` |
+| Superadministrator | `superadmin@example.com` | `/admin/usuarias` |
 
 For a quick tour, sign in as a member to browse bookings, routines and the cart. Sign out, then use the administrator account to manage plans and products. The demo accounts require the backend seed data.
 
