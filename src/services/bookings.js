@@ -1,3 +1,4 @@
+import { collectPages } from './pagination'
 import { apiRequest, buildQuery } from './api'
 
 /**
@@ -65,4 +66,9 @@ export function bookingsBySessionId(bookings = []) {
     }
   }
   return map
+}
+
+/** Complete listing for calendar views; preserves filters and cancellation. */
+export function listMyBookingsAll(options = {}) {
+  return collectPages((page) => listMyBookings({ ...options, page }))
 }

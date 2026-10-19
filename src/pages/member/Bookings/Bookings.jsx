@@ -17,9 +17,9 @@ import {
   bookingsBySessionId,
   bookingSessionId,
   cancelBooking,
-  listMyBookings,
+  listMyBookingsAll,
 } from '@/services/bookings'
-import { listSessions, toSessionCard } from '@/services/sessions'
+import { listSessionsAll, toSessionCard } from '@/services/sessions'
 import { formatDate, formatTimeRange } from '@/utils/format'
 import { getWeekRange } from '@/utils/week'
 import styles from './Bookings.module.scss'
@@ -46,7 +46,7 @@ export default function Bookings() {
   const [now] = useState(() => new Date())
 
   const loadBookings = useCallback((signal) => {
-    return listMyBookings({ upcoming: true, signal })
+    return listMyBookingsAll({ upcoming: true, signal })
       .then((data) => {
         const items = Array.isArray(data) ? data : (data?.items ?? [])
         setBookings(items)
@@ -63,7 +63,7 @@ export default function Bookings() {
   const loadSessions = useCallback(
     (signal) => {
       const { from, to } = getWeekRange(weekAnchor)
-      return listSessions({ from, to, signal })
+      return listSessionsAll({ from, to, signal })
         .then((data) => {
           const items = Array.isArray(data) ? data : (data?.items ?? [])
           setSessions(items.map(toSessionCard))

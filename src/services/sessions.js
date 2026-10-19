@@ -1,3 +1,4 @@
+import { collectPages } from './pagination'
 import { apiRequest, buildQuery } from './api'
 
 /**
@@ -100,4 +101,8 @@ export function cancelSession(id) {
  */
 export function createPersonalTrainingSlot(body) {
   return apiRequest('/sessions/personal-training', { method: 'POST', body })
+}
+/** Complete listing for calendar views; preserves filters and cancellation. */
+export function listSessionsAll(options = {}) {
+  return collectPages((page) => listSessions({ ...options, page }))
 }
