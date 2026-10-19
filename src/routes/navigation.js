@@ -28,7 +28,7 @@ export const NAVIGATION = {
       { to: PATHS.trainerSessions, label: 'Mis clases', icon: 'calendar' },
       { to: PATHS.trainerSlots, label: 'Entrenamiento personal', icon: 'user' },
       { to: PATHS.trainerRoutines, label: 'Rutinas', icon: 'dumbbell' },
-      { to: PATHS.trainerProfile, label: 'Mi perfil público', icon: 'user' },
+      { to: PATHS.trainerProfile, label: 'Mi perfil y cuenta', icon: 'user' },
     ],
   },
   admin: {
@@ -42,6 +42,7 @@ export const NAVIGATION = {
       { to: PATHS.adminUsers, label: 'Usuarias y roles', icon: 'users' },
       { to: PATHS.adminPlans, label: 'Planes', icon: 'list' },
       { to: PATHS.adminProducts, label: 'Tienda', icon: 'bag' },
+      { to: PATHS.adminAccount, label: 'Mi cuenta', icon: 'user' },
     ],
   },
 }
