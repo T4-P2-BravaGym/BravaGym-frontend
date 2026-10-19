@@ -92,3 +92,12 @@ export function updateSession(id, body) {
 export function cancelSession(id) {
   return apiRequest(`/sessions/${id}/cancel`, { method: 'POST' })
 }
+
+/**
+ * createPersonalTrainingSlot({ starts_at, class_type_id? })
+ * Trainer only (HU-14). The server fixes 60 min and capacity 1 (RN-08).
+ * RN-09 overlap → 409; no active PT class type → 404.
+ */
+export function createPersonalTrainingSlot(body) {
+  return apiRequest('/sessions/personal-training', { method: 'POST', body })
+}
