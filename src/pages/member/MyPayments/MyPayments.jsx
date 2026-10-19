@@ -260,7 +260,7 @@ function payErrorMessage(error) {
     return { title: 'Error', text: GENERIC_PAY_ERROR }
   }
   if (error.status === 409) {
-    return { title: 'Pago ya realizado', text: error.detail || ALREADY_PAID }
+    return { title: 'Pago no disponible', text: error.detail || ALREADY_PAID }
   }
   if (error.status === 422) {
     return { title: 'Código no válido', text: error.detail || INVALID_CODE }

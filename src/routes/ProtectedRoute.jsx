@@ -29,7 +29,7 @@ export default function ProtectedRoute({ roles }) {
 
   if (!user) {
     // Only an internal path is remembered for after login (never a URL from outside).
-    return <Navigate to={PATHS.login} replace state={{ from: location.pathname }} />
+    return <Navigate to={PATHS.login} replace state={{ from: location.pathname + location.search + location.hash }} />
   }
 
   if (roles && !roles.includes(user.role)) {
