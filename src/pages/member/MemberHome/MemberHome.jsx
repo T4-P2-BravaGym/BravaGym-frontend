@@ -21,7 +21,6 @@ const SUCCESS_MESSAGE =
 /**
  * Inicio de la socia ("Mi área").
  * HU-09: subscription block. HU-19.3: cancellation request form and status.
- * TODO(HU-04): profile summary.
  */
 export default function MemberHome() {
   const location = useLocation()
